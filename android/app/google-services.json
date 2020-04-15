@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "858369127304",
+    "firebase_url": "https://azmy-qatra-blood-donation.firebaseio.com",
+    "project_id": "azmy-qatra-blood-donation",
+    "storage_bucket": "azmy-qatra-blood-donation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858369127304:android:f6b4b3589f73ff35a0403d",
+        "android_client_info": {
+          "package_name": "com.abdallahazmy.icandoit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "858369127304-ilnltpcrh2be95p5a692ch4iecql42p9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBN09s7JQlIuh4sX0pGGFVOJFbbIm4eyjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858369127304-ilnltpcrh2be95p5a692ch4iecql42p9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
