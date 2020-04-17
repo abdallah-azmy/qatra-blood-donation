@@ -238,7 +238,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
                         .collection("bank")
                         .document(widget.city)
                         .collection('doners')
-                        .orderBy('date', descending: true)
+                        .orderBy('fasila', descending: false)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {

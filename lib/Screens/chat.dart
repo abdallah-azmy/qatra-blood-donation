@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart' as intl;
 import '../user.dart';
 import 'user_profile_page.dart';
+import 'package:icandoit/message_model.dart';
 
 final _auth = FirebaseAuth.instance;
 final _fireStore = Firestore.instance;
@@ -29,6 +30,7 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   final messageController = TextEditingController();
+  MessageModel messageModel ;
 
   @override
   void initState() {
@@ -36,18 +38,16 @@ class _ChatState extends State<Chat> {
     getCurrentUser();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading:
-        IconButton(
-          icon: Icon(
-            null
-          ),
-          onPressed: () {
-          },
+        leading: IconButton(
+          icon: Icon(null),
+          onPressed: () {},
         ),
         automaticallyImplyLeading: false,
         actions: <Widget>[
@@ -61,7 +61,6 @@ class _ChatState extends State<Chat> {
             },
           )
         ],
-
         backgroundColor: Colors.red[900],
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,18 +125,29 @@ class _ChatState extends State<Chat> {
                       colorBrightness: Brightness.dark,
 
                       highlightColor: Colors.red,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 3.0, vertical: 4.0),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 3.0, vertical: 4.0),
                       // gi
 
                       onPressed: () {
+                        var now = new DateTime.now();
+                        setState(() {
+
+                          messageModel = MessageModel(
+                            messageText: messageText,
+                            sender: loggedInUser.email,
+                            now: now,
+
+                          );
+                        });
+
+
                         if (messageController.text != "") {
-                          var now = new DateTime.now();
-                          _fireStore.collection("messages").add({
-                            "text": messageText,
-                            "sender": loggedInUser.email,
-                            'date': now,
-                          });
+
+                          _fireStore
+                              .collection("messages").document(now.toString()).
+                        setData(messageModel.toMap(messageModel));
+
                           messageController.clear();
                         }
                       },
@@ -233,10 +243,9 @@ class _MessageBubbleState extends State<MessageBubble> {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
-                          builder: (context) =>
-                          new UserProfile(
-                            user: user,
-                          )));
+                          builder: (context) => new UserProfile(
+                                user: user,
+                              )));
                 },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -288,7 +297,7 @@ class _MessageBubbleState extends State<MessageBubble> {
       padding: const EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment:
-        widget.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            widget.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             widget.sender,
@@ -310,13 +319,13 @@ class _MessageBubbleState extends State<MessageBubble> {
             child: Material(
               borderRadius: widget.isMe
                   ? BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                  topLeft: Radius.circular(30))
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                      topLeft: Radius.circular(30))
                   : BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                  topRight: Radius.circular(30)),
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                      topRight: Radius.circular(30)),
               elevation: 5,
               color: widget.isMe ? Colors.blue : Colors.white,
               child: Padding(

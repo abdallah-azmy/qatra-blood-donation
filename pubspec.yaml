@@ -38,6 +38,10 @@ dependencies:
   geolocator: ^5.2.1
   geocoder: ^0.2.1
   flutter_linkify: ^3.1.0
+  social_share_plugin: ^0.3.1+1
+  flutter_share_me: ^0.9.1
+
+
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +78,8 @@ flutter:
     - assets/intro1.jpg
     - assets/drop.png
     - assets/boardingDrop.jpg
+    - assets/72.jpg
+    - assets/73.jpg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

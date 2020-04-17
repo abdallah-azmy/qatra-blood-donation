@@ -14,6 +14,9 @@ import 'package:expand_widget/expand_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
+import 'package:social_share_plugin/social_share_plugin.dart';
+import 'package:flutter_share_me/flutter_share_me.dart';
+
 
 final _fireStore = Firestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -155,8 +158,7 @@ class _FirstPageState extends State<FirstPage>
                             ],
                           ),
                         ),
-                      )
-                  ),
+                      )),
                   drawer: Drawer(
                     child: ListView(
                       children: [
@@ -165,13 +167,13 @@ class _FirstPageState extends State<FirstPage>
                           color: Colors.white,
                           child: DrawerHeader(
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Image.asset(
-                                    "assets/fainallogo.png",
-                                  )
-                                ],
-                              )),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset(
+                                "assets/fainallogo.png",
+                              )
+                            ],
+                          )),
                         ),
                         Container(
                           color: Colors.white,
@@ -189,7 +191,7 @@ class _FirstPageState extends State<FirstPage>
                                           context,
                                           new MaterialPageRoute(
                                               builder: (context) =>
-                                              new BloodBank()));
+                                                  new BloodBank()));
                                     },
                                     title: Text(
                                       "بنك الدم",
@@ -216,7 +218,7 @@ class _FirstPageState extends State<FirstPage>
                                           context,
                                           new MaterialPageRoute(
                                               builder: (context) =>
-                                              new ProfilePage()));
+                                                  new ProfilePage()));
                                     },
                                     title: Text(
                                       "الصفحة الشخصية",
@@ -269,7 +271,7 @@ class _FirstPageState extends State<FirstPage>
                                           context,
                                           new MaterialPageRoute(
                                               builder: (context) =>
-                                              new Articles()));
+                                                  new Articles()));
                                     },
                                     title: Text(
                                       "مقالات",
@@ -296,7 +298,7 @@ class _FirstPageState extends State<FirstPage>
                                           context,
                                           new MaterialPageRoute(
                                               builder: (context) =>
-                                              new AboutTheApp()));
+                                                  new AboutTheApp()));
                                     },
                                     title: Text(
                                       "عن التطبيق",
@@ -320,10 +322,10 @@ class _FirstPageState extends State<FirstPage>
                                   child: ListTile(
                                     onTap: () {
                                       _auth.signOut();
-                                      Navigator.push(
+                                      Navigator.pushReplacement(
                                           context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
+                                          new MaterialPageRoute(
+                                              builder: (BuildContext context) =>
                                                   LoginPage()));
                                     },
                                     title: Text(
@@ -361,7 +363,6 @@ class _FirstPageState extends State<FirstPage>
                           child: DropdownButtonFormField<String>(
                             isDense: true,
                             decoration: InputDecoration(
-
                                 isDense: true,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20.0)),
@@ -370,8 +371,7 @@ class _FirstPageState extends State<FirstPage>
                                   color: Colors.red[900],
                                   size: 24,
                                 )),
-                            validator: (value) =>
-                            value == "حدد فصيلتك"
+                            validator: (value) => value == "حدد فصيلتك"
                                 ? 'برجاء اختيار الفصيلة'
                                 : null,
                             items: _fasila.map((String dropDownStringItem) {
@@ -379,14 +379,14 @@ class _FirstPageState extends State<FirstPage>
                                 value: dropDownStringItem,
                                 child: Center(
                                     child: Text(
-                                      dropDownStringItem,
-                                      textDirection: TextDirection.ltr,
-                                      style: TextStyle(
-                                        color: Colors.red[900],
-                                        fontSize: 18,
-                                        fontFamily: 'Tajawal',
-                                      ),
-                                    )),
+                                  dropDownStringItem,
+                                  textDirection: TextDirection.ltr,
+                                  style: TextStyle(
+                                    color: Colors.red[900],
+                                    fontSize: 18,
+                                    fontFamily: 'Tajawal',
+                                  ),
+                                )),
                               );
                             }).toList(),
                             onChanged: (String newValueSelected) {
@@ -412,7 +412,7 @@ class _FirstPageState extends State<FirstPage>
                             for (var post in posts) {
                               final date = post.data["date"].toDate();
                               final dateThatSignsThePost =
-                              post.data["dateThatSignsThePost"];
+                                  post.data["dateThatSignsThePost"];
                               final name = post.data["name"];
                               final fasila = post.data["fasila"];
                               final akias = post.data["akias"];
@@ -420,7 +420,7 @@ class _FirstPageState extends State<FirstPage>
                               final city = post.data["city"];
                               final hospital = post.data["hospital"];
                               final hospitalAddress =
-                              post.data["hospitalAddress"];
+                                  post.data["hospitalAddress"];
                               final phone = post.data["phone"];
                               final note = post.data["note"];
                               final postSender = post.data["postSender"];
@@ -524,13 +524,26 @@ class PostBubble extends StatelessWidget {
         .updateData({'postColor': true});
   }
 
+  var fasilaTwiter;
+
   @override
   Widget build(BuildContext context) {
+    if (fasila == "A+") {
+      fasilaTwiter = "$fasilaموجب";
+    } else if (fasila == "AB+") {
+      fasilaTwiter = "$fasilaموجب";
+    } else if (fasila == "O+") {
+      fasilaTwiter = "$fasilaموجب";
+    } else if (fasila == "B+") {
+      fasilaTwiter = "$fasilaموجب";
+    }else{
+      fasilaTwiter = fasila ;
+    }
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25), color: changeColor()),
       width: double.infinity,
-      height: 159,
+//      height: 159,
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 13),
       child: Stack(
@@ -632,56 +645,56 @@ class PostBubble extends StatelessWidget {
                                       children: <Widget>[
                                         postColor == true
                                             ? InkWell(
-                                          onTap: () {
-                                            call();
-                                          },
-                                          child: Row(
-                                            children: <Widget>[
-                                              Icon(
-                                                Icons.phone,
-                                                color: Colors
-                                                    .lightBlueAccent,
-                                                size: 20,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Flexible(
-                                                child: Text("$phone",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold,
-                                                        color: Colors
-                                                            .lightBlueAccent,
-                                                        fontSize: 16,
-                                                        letterSpacing:
-                                                        .3)),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                            : Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.phone,
-                                              color:
-                                              Colors.lightBlueAccent,
-                                              size: 20,
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Flexible(
-                                              child: Text("-----------",
-                                                  style: TextStyle(
+                                                onTap: () {
+                                                  call();
+                                                },
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Icon(
+                                                      Icons.phone,
                                                       color: Colors
                                                           .lightBlueAccent,
-                                                      fontSize: 16,
-                                                      letterSpacing: .3)),
-                                            ),
-                                          ],
-                                        ),
+                                                      size: 20,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Flexible(
+                                                      child: Text("$phone",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Colors
+                                                                  .lightBlueAccent,
+                                                              fontSize: 16,
+                                                              letterSpacing:
+                                                                  .3)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Row(
+                                                children: <Widget>[
+                                                  Icon(
+                                                    Icons.phone,
+                                                    color:
+                                                        Colors.lightBlueAccent,
+                                                    size: 20,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Flexible(
+                                                    child: Text("-----------",
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .lightBlueAccent,
+                                                            fontSize: 16,
+                                                            letterSpacing: .3)),
+                                                  ),
+                                                ],
+                                              ),
                                         SizedBox(
                                           height: 3,
                                         ),
@@ -777,6 +790,59 @@ class PostBubble extends StatelessWidget {
                                             ),
                                           ],
                                         ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Text("_ شارك طلب التبرع :",
+                                        style: TextStyle(
+                                            fontFamily: 'Tajawal',
+                                            color: Colors.red[500],
+                                            fontSize: 16,
+                                            letterSpacing: .3)
+                                            ),
+                                            SizedBox(width: 5,),
+                                            InkWell(
+                                                onTap: () async {
+                                                  await SocialSharePlugin.shareToTwitterLink(
+                                                      text: "مطلوب متبرع بالدم .. \n"
+                                                          " الفصيلة : + $fasilaTwiter\n"
+                                                          "$government -- $city\n"
+                                                          "$name\n"
+                                                          " رقم المرافق :   $phone\n",
+                                                      url: '\nتطبيق * قطرة * للتبرع بالدم');
+                                                },
+                                                child: Tab(
+                                                  icon:
+                                                  ClipRRect(
+
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                      child: Image.asset("assets/72.jpg",height: 40,width: 40,)),
+                                                )),
+                                            SizedBox(width: 5,),
+
+                                            InkWell(onTap: (){
+                                              FlutterShareMe()
+                                                  .shareToWhatsApp( msg:
+                                              "مطلوب متبرع بالدم .. \n"
+                                                  " الفصيلة :  $fasila\n"
+                                                  "$government -- $city\n"
+                                                  "$name\n"
+                                                  " رقم المرافق :  $phone\n"
+                                                  '\nتطبيق * قطرة * للتبرع بالدم'
+                                              );
+                                            },
+                                              child: Tab(
+                                                icon:
+                                                ClipRRect(
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    child: Image.asset("assets/73.jpg",height: 40,width: 40,))),
+                                            ),
+
+
+                                          ],
+                                        ),
                                       ],
                                     )),
                               ],
@@ -787,21 +853,21 @@ class PostBubble extends StatelessWidget {
                     ),
                     postSender == _loggedInUser.email
                         ? Positioned(
-                      left: -28,
-                      top: -8,
-                      child: MaterialButton(
-                          height: 27,
-                          onPressed: () {
-                            editTlabState(context);
-                          },
-                          color: Colors.red[700],
-                          shape: CircleBorder(),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 20,
-                          )),
-                    )
+                            left: -28,
+                            top: -8,
+                            child: MaterialButton(
+                                height: 27,
+                                onPressed: () {
+                                  editTlabState(context);
+                                },
+                                color: Colors.red[700],
+                                shape: CircleBorder(),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 20,
+                                )),
+                          )
                         : Container(),
                   ],
                 ),
@@ -812,6 +878,8 @@ class PostBubble extends StatelessWidget {
       ),
     );
   }
+
+
 
   call() {
     String phoneNumber = "tel:" + phone;
