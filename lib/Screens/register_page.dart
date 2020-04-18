@@ -42,7 +42,8 @@ class _RegisterPageState extends State<RegisterPage> {
     "B+",
     "B-",
     "O+",
-    "O-"
+    "O-",
+    "لا اعرف"
   ];
   var _currentFasilaSelected = 'حدد فصيلتك';
 

@@ -151,7 +151,6 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                         child: DropdownButtonFormField<String>(
                           isDense: true,
                           decoration: InputDecoration(
-
                               isDense: true,
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20.0)),

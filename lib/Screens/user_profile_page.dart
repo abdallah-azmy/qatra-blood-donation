@@ -195,16 +195,14 @@ class _UserInfoState extends State<UserInfo> {
                                 ? Text(
                               "---",
                             )
-                                : InkWell(
-                              onTap: () {
-                                call();
-                              },
-                              child: Text(widget.user.phone,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue,
-                                      fontSize: 18)),
-                            ),
+                                : SelectableText(widget.user.phone,
+                                    onTap: (){
+                                      call();
+                                    },
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue,
+                                        fontSize: 18)),
                           ),
                           ListTile(
                             leading: Icon(Icons.my_location),

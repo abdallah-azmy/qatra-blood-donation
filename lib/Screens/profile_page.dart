@@ -9,10 +9,26 @@ import 'package:intl/intl.dart' as intl;
 final _auth = FirebaseAuth.instance;
 final _fireStore = Firestore.instance;
 FirebaseUser loggedInUser;
-var _dateOfDonation = "---";
 var dateOfDonation = "---";
 var _newAddress;
 var newAddress = "---";
+var newFasila = "---";
+
+Future<User> retrieveUserDetails(FirebaseUser user) async {
+  DocumentSnapshot _documentSnapshot =
+      await _fireStore.collection('users').document(user.uid).get();
+  if (_documentSnapshot.data != null) {
+    print('there is data ');
+
+    dateOfDonation = _documentSnapshot.data["dateOfDonation"];
+    newAddress = _documentSnapshot.data["address"];
+    newFasila = _documentSnapshot.data["fasila"];
+
+    return User.fromMap(_documentSnapshot.data);
+  } else {
+    return null;
+  }
+}
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -21,22 +37,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   User user;
-
-  Future<User> retrieveUserDetails(FirebaseUser user) async {
-    DocumentSnapshot _documentSnapshot =
-        await _fireStore.collection('users').document(user.uid).get();
-    if (_documentSnapshot.data != null) {
-      print('there is data ');
-      setState(() {
-        dateOfDonation = _documentSnapshot.data["dateOfDonation"];
-        newAddress = _documentSnapshot.data["address"];
-      });
-
-      return User.fromMap(_documentSnapshot.data);
-    } else {
-      return null;
-    }
-  }
 
   Future<FirebaseUser> getCurrentUser() async {
     return loggedInUser = await _auth.currentUser();
@@ -187,21 +187,29 @@ class _ProfilePageState extends State<ProfilePage> {
                                           child: Column(
                                         children: <Widget>[
                                           ListTile(
+                                            trailing: InkWell(
+                                                onTap: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return MyDialog();
+                                                    },
+                                                  );
+                                                },
+                                                child: Icon(
+                                                  Icons.settings,
+                                                  color: Colors.blue,
+                                                )),
                                             leading:
                                                 Icon(Icons.accessibility_new),
                                             title: Text("فصيلة الدم",
                                                 style: TextStyle(
                                                   fontFamily: 'Tajawal',
                                                 )),
-                                            subtitle: user == null
-                                                ? Text(
-                                                    "---",
-                                                  )
-                                                : Text(user.fasila,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18)),
+                                            subtitle: Text(newFasila,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18)),
                                           ),
                                           ListTile(
                                             leading: Icon(Icons.phone),
@@ -225,7 +233,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   editAddress(context);
                                                 },
                                                 child: Icon(
-                                                  Icons.border_color,
+                                                  Icons.settings,
                                                   color: Colors.blue,
                                                 )),
                                             leading: Icon(Icons.my_location),
@@ -265,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     editDateOfDonation(context);
                                                   },
                                                   child: Icon(
-                                                    Icons.border_color,
+                                                    Icons.settings,
                                                     color: Colors.blue,
                                                   )),
                                               subtitle: Text(dateOfDonation,
@@ -295,10 +303,17 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  final _donationDateFormKey = GlobalKey<FormState>();
   final _addressFormKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   var myFormat = intl.DateFormat('d-MM-yyyy');
+
+  uploadFasila() async {
+    FirebaseUser firebaseUser = await _auth.currentUser();
+    await _fireStore
+        .collection('users')
+        .document(firebaseUser.uid)
+        .updateData({'dateOfDonation': myFormat.format(selectedDate)});
+  }
 
   editDateOfDonation(BuildContext contex) {
     return showDialog(
@@ -357,8 +372,7 @@ class _ProfilePageState extends State<ProfilePage> {
               elevation: 10,
               content: RaisedButton(
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(20)),
                 child: Text(
                   "التاريخ",
                   style: TextStyle(
@@ -492,5 +506,126 @@ class _ProfilePageState extends State<ProfilePage> {
         .collection('users')
         .document(firebaseUser.uid)
         .updateData({'address': _newAddress});
+  }
+}
+
+class MyDialog extends StatefulWidget {
+  @override
+  _MyDialogState createState() => _MyDialogState();
+}
+
+class _MyDialogState extends State<MyDialog> {
+  var _fasilaDropDown = ['AB+', "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
+  String _fasila = 'AB+';
+
+  void _onDropDownItemSelected(String newValueSelected) {
+    setState(() {
+      _fasila = newValueSelected;
+    });
+  }
+
+  uploadFasila() async {
+    FirebaseUser firebaseUser = await _auth.currentUser();
+
+    await _fireStore
+        .collection('users')
+        .document(firebaseUser.uid)
+        .updateData({'fasila': _fasila});
+  }
+
+  var __dateOfDonation = "---";
+  var __newAddress = "---";
+  var __newFasila = "---";
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      actions: <Widget>[
+        RaisedButton(
+          child: Text(
+            'حفظ',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
+          onPressed: () {
+            upFasila() async {
+              print("in the fn");
+              try {
+                final result = await InternetAddress.lookup('google.com');
+                if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                  print("Connected to Mobile Network");
+                  uploadFasila();
+                }
+              } on SocketException catch (_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  EasyLoading.showError('لا يوجد اتصال بالانترنت');
+                });
+              }
+
+              print("اتتتتتتتتتتتتتتتتتتتتتتتضغط علي حففففظ");
+
+              retrieveUserDetails(loggedInUser);
+              Navigator.pop(context);
+            }
+
+            upFasila();
+          },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          color: Colors.green,
+        ),
+      ],
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+      title: Center(
+        child: Text(
+          "تعديل الفصيلة",
+          style: TextStyle(
+            fontFamily: 'Tajawal',
+            color: Colors.red[900],
+            fontSize: 20,
+          ),
+        ),
+      ),
+      elevation: 10,
+      content: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: DropdownButtonFormField<String>(
+          isDense: true,
+          decoration: InputDecoration(
+              labelText: "حدد فصيلتك",
+              isDense: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+              labelStyle: TextStyle(
+                fontFamily: 'Tajawal',
+              )),
+          iconSize: 32,
+          isExpanded: true,
+          items: _fasilaDropDown.map((String dropDownStringItem) {
+            return DropdownMenuItem<String>(
+              value: dropDownStringItem,
+              child: Center(
+                child: Text(
+                  dropDownStringItem,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Tajawal',
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: (String newValueSelected) {
+            // Your code to execute, when a menu item is selected from drop down
+            _onDropDownItemSelected(newValueSelected);
+          },
+          value: _fasila,
+        ),
+      ),
+    );
   }
 }

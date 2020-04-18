@@ -16,7 +16,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
 import 'package:social_share_plugin/social_share_plugin.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
-
+import 'package:wave/config.dart';
+import 'package:wave/wave.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 final _fireStore = Firestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -92,8 +94,23 @@ class _FirstPageState extends State<FirstPage>
     getCurrentUser();
   }
 
+  static IconData backIcon(BuildContext context) {
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+        return Icons.arrow_back;
+      case TargetPlatform.iOS:
+        return Icons.arrow_back_ios;
+    }
+    assert(false);
+    return null;
+  }
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
+
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Colors.red[900]);
     return FlutterEasyLoading(
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -101,32 +118,84 @@ class _FirstPageState extends State<FirstPage>
             return Directionality(
               textDirection: TextDirection.rtl,
               child: Scaffold(
+                  key: _key,
                   resizeToAvoidBottomPadding: false,
-                  appBar: AppBar(
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(null),
+                  appBar: PreferredSize(
+                    preferredSize: Size(null, 100),
+                    child: SafeArea(
+                        child: Container(
+                      color: Colors.red[900],
+                      width: MediaQuery.of(context).size.width,
+                      // Set Appbar wave height
+                      child: Container(
+                        height: 80,
+                        color: Colors.red[900],
+                        child: Container(
+                            color: Colors.grey[300],
+                            child: Stack(
+                              children: <Widget>[
+                                RotatedBox(
+                                    quarterTurns: 2,
+                                    child: WaveWidget(
+                                      config: CustomConfig(
+                                        colors: [Colors.red[900]],
+                                        durations: [10000],
+                                        heightPercentages: [-0.1],
+                                      ),
+                                      size: Size(
+                                          double.infinity, double.infinity),
+                                      waveAmplitude: 1,
+                                    )),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Stack(
+                                          children: <Widget>[
+                                            Positioned(right: 10,top: 2,
+                                              child: IconButton(
+                                                onPressed: () => _key.currentState.openDrawer(),
+                                                icon: Icon(
+                                                  Icons.arrow_back_ios,
+                                                  color: Colors.white,
+                                                  textDirection:
+                                                      TextDirection.ltr,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(right: 1,top: 2,
+                                              child: IconButton(
+                                                onPressed: () => _key.currentState.openDrawer(),
+                                                icon: Icon(
+                                                  Icons.arrow_back_ios,
+                                                  color: Colors.white,
+                                                  textDirection:
+                                                      TextDirection.ltr,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 15, right: 50),
+                                                child: Text(
+                                                  "طلبات التبرع",
+                                                  style: TextStyle(
+                                                      fontFamily: 'Tajawal',
+                                                      fontSize: 20,
+                                                      color: Colors.white),
+                                                )),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )),
                       ),
-                    ],
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(right: 0),
-                          child: Text(
-                            "طلبات التبرع",
-                            style: new TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Tajawal',
-                              fontSize: 20.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    centerTitle: true,
-                    backgroundColor: Colors.red[900],
+                    )),
                   ),
                   floatingActionButton: Padding(
                       padding: const EdgeInsets.only(right: 20, top: 20),
@@ -536,8 +605,8 @@ class PostBubble extends StatelessWidget {
       fasilaTwiter = "$fasilaموجب";
     } else if (fasila == "B+") {
       fasilaTwiter = "$fasilaموجب";
-    }else{
-      fasilaTwiter = fasila ;
+    } else {
+      fasilaTwiter = fasila;
     }
     return Container(
       decoration: BoxDecoration(
@@ -591,6 +660,7 @@ class PostBubble extends StatelessWidget {
                               Flexible(
                                 child: Text("$government -- $city",
                                     style: TextStyle(
+                                        fontFamily: 'Tajawal',
                                         fontWeight: FontWeight.bold,
                                         color: Colors.red[500],
                                         fontSize: 16,
@@ -644,35 +714,31 @@ class PostBubble extends StatelessWidget {
                                     child: Column(
                                       children: <Widget>[
                                         postColor == true
-                                            ? InkWell(
-                                                onTap: () {
-                                                  call();
-                                                },
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Icon(
-                                                      Icons.phone,
-                                                      color: Colors
-                                                          .lightBlueAccent,
-                                                      size: 20,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Flexible(
-                                                      child: Text("$phone",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: Colors
-                                                                  .lightBlueAccent,
-                                                              fontSize: 16,
-                                                              letterSpacing:
-                                                                  .3)),
-                                                    ),
-                                                  ],
-                                                ),
+                                            ? Row(
+                                                children: <Widget>[
+                                                  Icon(
+                                                    Icons.phone,
+                                                    color:
+                                                        Colors.lightBlueAccent,
+                                                    size: 20,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Flexible(
+                                                    child: SelectableText(
+                                                        "$phone", onTap: () {
+                                                      call();
+                                                    },
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors
+                                                                .lightBlueAccent,
+                                                            fontSize: 16,
+                                                            letterSpacing: .3)),
+                                                  ),
+                                                ],
                                               )
                                             : Row(
                                                 children: <Widget>[
@@ -796,13 +862,14 @@ class PostBubble extends StatelessWidget {
                                         Row(
                                           children: <Widget>[
                                             Text("_ شارك طلب التبرع :",
-                                        style: TextStyle(
-                                            fontFamily: 'Tajawal',
-                                            color: Colors.red[500],
-                                            fontSize: 16,
-                                            letterSpacing: .3)
+                                                style: TextStyle(
+                                                    fontFamily: 'Tajawal',
+                                                    color: Colors.red[500],
+                                                    fontSize: 16,
+                                                    letterSpacing: .3)),
+                                            SizedBox(
+                                              width: 5,
                                             ),
-                                            SizedBox(width: 5,),
                                             InkWell(
                                                 onTap: () async {
                                                   await SocialSharePlugin.shareToTwitterLink(
@@ -814,33 +881,40 @@ class PostBubble extends StatelessWidget {
                                                       url: '\nتطبيق * قطرة * للتبرع بالدم');
                                                 },
                                                 child: Tab(
-                                                  icon:
-                                                  ClipRRect(
-
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                      child: Image.asset("assets/72.jpg",height: 40,width: 40,)),
+                                                  icon: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      child: Image.asset(
+                                                        "assets/72.jpg",
+                                                        height: 40,
+                                                        width: 40,
+                                                      )),
                                                 )),
-                                            SizedBox(width: 5,),
-
-                                            InkWell(onTap: (){
-                                              FlutterShareMe()
-                                                  .shareToWhatsApp( msg:
-                                              "مطلوب متبرع بالدم .. \n"
-                                                  " الفصيلة :  $fasila\n"
-                                                  "$government -- $city\n"
-                                                  "$name\n"
-                                                  " رقم المرافق :  $phone\n"
-                                                  '\nتطبيق * قطرة * للتبرع بالدم'
-                                              );
-                                            },
-                                              child: Tab(
-                                                icon:
-                                                ClipRRect(
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                    child: Image.asset("assets/73.jpg",height: 40,width: 40,))),
+                                            SizedBox(
+                                              width: 5,
                                             ),
-
-
+                                            InkWell(
+                                              onTap: () {
+                                                FlutterShareMe().shareToWhatsApp(
+                                                    msg: "مطلوب متبرع بالدم .. \n"
+                                                        " الفصيلة :  $fasila\n"
+                                                        "$government -- $city\n"
+                                                        "$name\n"
+                                                        " رقم المرافق :  $phone\n"
+                                                        '\nتطبيق * قطرة * للتبرع بالدم');
+                                              },
+                                              child: Tab(
+                                                  icon: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      child: Image.asset(
+                                                        "assets/73.jpg",
+                                                        height: 40,
+                                                        width: 40,
+                                                      ))),
+                                            ),
                                           ],
                                         ),
                                       ],
@@ -878,8 +952,6 @@ class PostBubble extends StatelessWidget {
       ),
     );
   }
-
-
 
   call() {
     String phoneNumber = "tel:" + phone;
@@ -980,5 +1052,71 @@ class PostBubble extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+List<PopMenuItem> getPopMenus() {
+  List<PopMenuItem> popMenus = new List();
+  popMenus.add(PopMenuItem(title: "", id: 1));
+  popMenus.add(PopMenuItem(title: "", id: 2));
+  return popMenus;
+}
+
+PopMenuItem activePopMenu = getPopMenus()[0];
+
+List<PopupMenuEntry<Object>> getChildPopUpWidgets(BuildContext context) {
+  var childrenPopMenu = List<PopupMenuEntry<Object>>();
+  for (PopMenuItem popUpMenu in getPopMenus()) {
+    childrenPopMenu.add(PopupMenuItem(
+      value: popUpMenu.id,
+      child: Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: Icon(Icons.brightness_1,
+                  size: 12,
+                  color: popUpMenu.id == activePopMenu.id
+                      ? Colors.white
+                      : Colors.transparent),
+            ),
+            Container(
+              width: 90,
+              child: Text(
+                popUpMenu.title,
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ));
+  }
+  return childrenPopMenu;
+}
+
+class PopMenuItem {
+  String title;
+  int id;
+
+  PopMenuItem({this.title, this.id});
+
+  PopMenuItem.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    id = json['id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['id'] = this.id;
+    return data;
   }
 }
