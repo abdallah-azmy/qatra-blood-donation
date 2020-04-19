@@ -154,31 +154,48 @@ class _FirstPageState extends State<FirstPage>
                                       children: [
                                         Stack(
                                           children: <Widget>[
-                                            Positioned(right: 10,top: 2,
+                                            Positioned(
+                                              right: 12,top: 2,
                                               child: IconButton(
                                                 onPressed: () => _key.currentState.openDrawer(),
                                                 icon: Icon(
                                                   Icons.arrow_back_ios,
+                                                  size: 25,
                                                   color: Colors.white,
                                                   textDirection:
                                                       TextDirection.ltr,
                                                 ),
                                               ),
                                             ),
-                                            Positioned(right: 1,top: 2,
+                                            Positioned(
+                                              right: 1,top: 2,
                                               child: IconButton(
                                                 onPressed: () => _key.currentState.openDrawer(),
                                                 icon: Icon(
                                                   Icons.arrow_back_ios,
+                                                  size: 25,
                                                   color: Colors.white,
                                                   textDirection:
                                                       TextDirection.ltr,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              right: 22,top: 2,
+                                              child: IconButton(
+                                                onPressed: () => _key.currentState.openDrawer(),
+                                                icon: Icon(
+                                                  Icons.arrow_back_ios,
+                                                  size: 25,
+                                                  color: Colors.red[900],
+                                                  textDirection:
+                                                  TextDirection.ltr,
                                                 ),
                                               ),
                                             ),
                                             Padding(
                                                 padding: EdgeInsets.only(
-                                                    top: 15, right: 50),
+                                                    top: 15, right: 55),
                                                 child: Text(
                                                   "طلبات التبرع",
                                                   style: TextStyle(
