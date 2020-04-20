@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../user.dart';
+import '../appBar_widget.dart';
+import '../user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
@@ -125,27 +126,14 @@ class _AddDonerToBankState extends State<AddDonerToBank> {
         home: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              backgroundColor: Colors.red[900],
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-
-                    child: Text(
-                      "أضف متبرع الي بنك الدم",
-                      style: new TextStyle(
-                        fontFamily: 'Tajawal',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            appBar: WaveAppBar(
+              title: "أضف متبرع الي بنك الدم",
+              backGroundColor: Colors.white,
+              leftIcon: null,
+              onPressedLeft: null,
+              directionOfRightIcon: TextDirection.rtl,
+              onPressedRight: null,
+              rightIcon: null,
             ),
             floatingActionButton: Padding(
                 padding: const EdgeInsets.only(right: 20, top: 20),
@@ -190,8 +178,6 @@ class _AddDonerToBankState extends State<AddDonerToBank> {
                         elevation: 10,
                         isDense: true,
                         decoration: InputDecoration(
-
-
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0)),
                             prefixIcon: Icon(

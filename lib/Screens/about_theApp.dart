@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../appBar_widget.dart';
+
 class AboutTheApp extends StatefulWidget {
   @override
   _AboutTheAppState createState() => _AboutTheAppState();
@@ -16,27 +18,14 @@ class _AboutTheAppState extends State<AboutTheApp> {
       home: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: true,
-                centerTitle: true,
-                backgroundColor: Colors.red[900],
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-
-                      child: Text(
-                        "عن التطبيق",
-                        style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Tajawal',
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              appBar: WaveAppBar(
+                title: "عن التطبيق",
+                backGroundColor: Colors.white,
+                leftIcon: null,
+                onPressedLeft: null,
+                onPressedRight: null,
+                directionOfRightIcon: TextDirection.rtl,
+                rightIcon: null,
               ),
               floatingActionButton: Padding(
                   padding: const EdgeInsets.only(right: 20, top: 20),

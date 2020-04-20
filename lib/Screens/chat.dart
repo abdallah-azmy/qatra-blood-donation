@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart' as intl;
-import '../user.dart';
+import '../appBar_widget.dart';
+import '../user_model.dart';
 import 'user_profile_page.dart';
 import 'package:icandoit/message_model.dart';
 
@@ -30,7 +31,7 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   final messageController = TextEditingController();
-  MessageModel messageModel ;
+  MessageModel messageModel;
 
   @override
   void initState() {
@@ -38,48 +39,20 @@ class _ChatState extends State<Chat> {
     getCurrentUser();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(null),
-          onPressed: () {},
-        ),
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              textDirection: TextDirection.rtl,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-        backgroundColor: Colors.red[900],
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Text(
-                "الشات العام",
-                style: new TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Tajawal',
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
+      appBar: WaveAppBar(
+        title: "الشات العام  ",
+        backGroundColor: Colors.white,
+        leftIcon: null,
+        onPressedLeft: null,
+        onPressedRight: () {
+          Navigator.pop(context);
+        },
+        directionOfRightIcon: TextDirection.rtl,
+        rightIcon: Icons.arrow_back_ios,
       ),
       body: SafeArea(
         child: Column(
@@ -132,21 +105,18 @@ class _ChatState extends State<Chat> {
                       onPressed: () {
                         var now = new DateTime.now();
                         setState(() {
-
                           messageModel = MessageModel(
                             messageText: messageText,
                             sender: loggedInUser.email,
                             now: now,
-
                           );
                         });
 
-
                         if (messageController.text != "") {
-
                           _fireStore
-                              .collection("messages").document(now.toString()).
-                        setData(messageModel.toMap(messageModel));
+                              .collection("messages")
+                              .document(now.toString())
+                              .setData(messageModel.toMap(messageModel));
 
                           messageController.clear();
                         }

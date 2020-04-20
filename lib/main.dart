@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'Screens/splash.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-
-
 void main() {
-  runApp(MyApp(),);
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -15,7 +15,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

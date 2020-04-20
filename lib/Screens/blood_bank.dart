@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../appBar_widget.dart';
 import 'governrate_bank.dart';
-
 
 class BloodBank extends StatefulWidget {
   @override
@@ -36,12 +36,10 @@ class _BloodBankState extends State<BloodBank> {
   var wadigdid = "الوادي الجديد";
   var ganobsina = "جنوب سيناء";
 
-
   Widget governrateCard(String city) {
     return Card(
       elevation: 5,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       color: null,
       child: Container(
         child: ListTile(
@@ -49,10 +47,9 @@ class _BloodBankState extends State<BloodBank> {
             Navigator.push(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) =>
-                    new GovernrateBank(
-                      city: city,
-                    )));
+                    builder: (context) => new GovernrateBank(
+                          city: city,
+                        )));
           },
           title: Center(
             child: Text(
@@ -68,7 +65,6 @@ class _BloodBankState extends State<BloodBank> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -76,41 +72,25 @@ class _BloodBankState extends State<BloodBank> {
       home: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          appBar: AppBar(
-            actions: <Widget>[IconButton(icon: Icon(null))],
-            leading: IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(context: context, delegate: DataSearch());
-              },
-            ),
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            backgroundColor: Colors.red[900],
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 7),
-                  child: Text(
-                    "بنك الدم",
-                    style: new TextStyle(
-                      fontFamily: 'Tajawal',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          appBar: WaveAppBar(
+            title: "بنك الدم",
+            backGroundColor: Colors.white,
+            leftIcon: null,
+            onPressedLeft: null,
+            directionOfRightIcon: TextDirection.rtl,
+            onPressedRight: () {
+              showSearch(context: context, delegate: DataSearch());
+            },
+            rightIcon: Icons.search,
           ),
           floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
-              child: GestureDetector(onTap: () {
-                Navigator.pop(context);
-              },
-                child: Align(alignment: Alignment.bottomRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Align(
+                  alignment: Alignment.bottomRight,
                   child: Stack(
                     children: <Widget>[
                       Image.asset(
@@ -121,9 +101,12 @@ class _BloodBankState extends State<BloodBank> {
                       Positioned(
                         bottom: 18,
                         right: 24,
-
                         child: Icon(
-                          Icons.arrow_back, color: Colors.white, size: 28,),),
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -134,7 +117,6 @@ class _BloodBankState extends State<BloodBank> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: <Widget>[
-
                     governrateCard(cairo),
                     governrateCard(giza),
                     governrateCard(sharqia),
@@ -173,9 +155,7 @@ class _BloodBankState extends State<BloodBank> {
   }
 }
 
-
 class DataSearch extends SearchDelegate<String> {
-
   final cities = [
     "القاهرة",
     "الجيزة",
@@ -236,10 +216,8 @@ class DataSearch extends SearchDelegate<String> {
           ),
         ),
       )
-
     ];
   }
-
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -265,35 +243,32 @@ class DataSearch extends SearchDelegate<String> {
         ? recentCities
         : cities.where((p) => p.startsWith(query)).toList();
     return ListView.builder(
-      itemBuilder: (context, index) =>
-          Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15)),
-            color: null,
-            child: Container(
-              child: ListTile(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) =>
-                          new GovernrateBank(
+      itemBuilder: (context, index) => Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        color: null,
+        child: Container(
+          child: ListTile(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new GovernrateBank(
                             city: suggestedList[index],
                           )));
-                },
-                title: Center(
-                  child: Text(
-                    suggestedList[index],
-                    style: TextStyle(
-                        fontFamily: 'Tajawal',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  ),
-                ),
+            },
+            title: Center(
+              child: Text(
+                suggestedList[index],
+                style: TextStyle(
+                    fontFamily: 'Tajawal',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
               ),
             ),
           ),
+        ),
+      ),
       itemCount: suggestedList.length,
     );
   }

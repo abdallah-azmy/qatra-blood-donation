@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../appBar_widget.dart';
 import 'first_page.dart';
-import '../location.dart';
+import '../get_Location.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,7 +35,7 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
 
     final coordinates = new Coordinates(latitude, longitude);
     var addresses =
-    await Geocoder.local.findAddressesFromCoordinates(coordinates);
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
     print(" ${first.locality}");
     print(" ${first.adminArea}");
@@ -106,20 +107,23 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
         home: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "طلب تبرع",
-                style: TextStyle(fontFamily: 'Tajawal', fontSize: 20),
-              ),
-              centerTitle: true,
-              backgroundColor: Colors.red[900],
+            appBar: WaveAppBar(
+              title: "طلب تبرع",
+              backGroundColor: Colors.white,
+              leftIcon: null,
+              onPressedLeft: null,
+              onPressedRight: null,
+              directionOfRightIcon: TextDirection.ltr,
+              rightIcon: null,
             ),
             floatingActionButton: Padding(
                 padding: const EdgeInsets.only(right: 20, top: 20),
-                child: GestureDetector(onTap: () {
-                  Navigator.pop(context);
-                },
-                  child: Align(alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Align(
+                    alignment: Alignment.bottomRight,
                     child: Stack(
                       children: <Widget>[
                         Image.asset(
@@ -130,9 +134,12 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                         Positioned(
                           bottom: 18,
                           right: 24,
-
-                          child: Icon(Icons.arrow_back, color: Colors.white,
-                            size: 28,),),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -161,7 +168,7 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                           iconSize: 32,
                           isExpanded: true,
                           items:
-                          _fasilaDropDown.map((String dropDownStringItem) {
+                              _fasilaDropDown.map((String dropDownStringItem) {
                             return DropdownMenuItem<String>(
                               value: dropDownStringItem,
                               child: Center(
@@ -255,7 +262,7 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                           children: <Widget>[
                             Padding(
                               padding:
-                              const EdgeInsets.only(top: 10, bottom: 10),
+                                  const EdgeInsets.only(top: 10, bottom: 10),
                               child: Container(
                                 height: 2,
                                 color: Colors.grey,
@@ -502,8 +509,8 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                         onPressed: _isLoading
                             ? null
                             : () {
-                          validation();
-                        },
+                                validation();
+                              },
                       ),
                       SizedBox(
                         height: 10,
@@ -533,8 +540,7 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
     var now = new DateTime.now();
     bool postColor = true;
 
-    Map<String, dynamic> postMap() =>
-        {
+    Map<String, dynamic> postMap() => {
           'name': name,
           'fasila': fasila,
           'akias': akias,
@@ -579,6 +585,4 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
       });
     }
   }
-
-
 }

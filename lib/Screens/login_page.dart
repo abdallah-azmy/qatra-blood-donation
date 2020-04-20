@@ -24,64 +24,114 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: ModalProgressHUD(
-          inAsyncCall: showSpinner,
-          child: Center(
-            child: ListView(
-                shrinkWrap: true,
-                padding: EdgeInsets.all(23.0),
-                children: <Widget>[
-                  SizedBox(
-                    height: 28,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                        top: 5.0, right: 20.0, left: 20.0, bottom: 30),
-                    child: new Column(
-                      children: <Widget>[
-                        Form(
-                          key: _loginFormKey,
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.only(bottom: 20.00),
-                                child: Image.asset(
-                                  "assets/fainallogo.png",
-                                  height: 140,
-                                  width: 150,
-                                  fit: BoxFit.fill,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: ModalProgressHUD(
+            inAsyncCall: showSpinner,
+            child: Center(
+              child: ListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(23.0),
+                  children: <Widget>[
+                    SizedBox(
+                      height: 28,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(
+                          top: 5.0, right: 20.0, left: 20.0, bottom: 30),
+                      child: new Column(
+                        children: <Widget>[
+                          Form(
+                            key: _loginFormKey,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.only(bottom: 20.00),
+                                  child: Image.asset(
+                                    "assets/fainallogo.png",
+                                    height: 140,
+                                    width: 150,
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(top: 17),
-                                child: new TextFormField(
-                                  validator: (text) {
-                                    if (text.isEmpty) {
-                                      return "برجاء كتابة البريد الالكتروني";
-                                    }
-                                    if (text.length < 2) {
-                                      return "البريد الالكتروني قصير جدا";
-                                    }
-                                  },
-                                  onChanged: (text) {
-                                    setState(() {
-                                      email = text;
-                                    });
-                                  },
-                                  keyboardType: TextInputType.emailAddress,
-                                  textAlign: TextAlign.center,
-                                  controller: _emailController,
-                                  decoration: InputDecoration(
-                                      labelText: 'البريد الالكتروني',
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(top: 17),
+                                  child: new TextFormField(
+                                    validator: (text) {
+                                      if (text.isEmpty) {
+                                        return "برجاء كتابة البريد الالكتروني";
+                                      }
+                                      if (text.length < 2) {
+                                        return "البريد الالكتروني قصير جدا";
+                                      }
+                                    },
+                                    onChanged: (text) {
+                                      setState(() {
+                                        email = text;
+                                      });
+                                    },
+                                    keyboardType: TextInputType.emailAddress,
+                                    textAlign: TextAlign.center,
+                                    controller: _emailController,
+                                    decoration: InputDecoration(
+                                        labelText: 'البريد الالكتروني',
+                                        labelStyle: TextStyle(
+                                          fontFamily: 'Tajawal',
+                                        ),
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 16.0,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        prefixIcon: Icon(Icons.email)),
+                                  ),
+                                ),
+                                new Container(
+                                  padding: EdgeInsets.only(top: 17),
+                                  child: new TextFormField(
+                                    validator: (text) {
+                                      if (text.isEmpty) {
+                                        return "برجاء كتابة كلمة المرور";
+                                      }
+                                      if (text.length <= 5) {
+                                        return "كلمة المرور يجب ان لا تقل عن 6 حروف";
+                                      }
+                                    },
+                                    onChanged: (text) {
+                                      setState(() {
+                                        password = text;
+                                      });
+                                    },
+                                    textAlign: TextAlign.center,
+                                    controller: _passwordController,
+                                    obscureText: !this._showPassword,
+                                    decoration: new InputDecoration(
+                                      prefixIcon: Icon(Icons.lock_outline),
+                                      labelText: 'كلمة المرور',
                                       labelStyle: TextStyle(
                                         fontFamily: 'Tajawal',
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          Icons.remove_red_eye,
+                                          color: this._showPassword
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          setState(() => this._showPassword =
+                                              !this._showPassword);
+                                        },
                                       ),
                                       hintStyle: TextStyle(
                                         color: Colors.grey,
@@ -89,141 +139,94 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius:
-                                        BorderRadius.circular(20.0),
+                                            BorderRadius.circular(20.0),
                                       ),
-                                      prefixIcon: Icon(Icons.email)),
-                                ),
-                              ),
-                              new Container(
-                                padding: EdgeInsets.only(top: 17),
-                                child: new TextFormField(
-                                  validator: (text) {
-                                    if (text.isEmpty) {
-                                      return "برجاء كتابة كلمة المرور";
-                                    }
-                                    if (text.length <= 5) {
-                                      return "كلمة المرور يجب ان لا تقل عن 6 حروف";
-                                    }
-                                  },
-                                  onChanged: (text) {
-                                    setState(() {
-                                      password = text;
-                                    });
-                                  },
-                                  textAlign: TextAlign.center,
-                                  controller: _passwordController,
-                                  obscureText: !this._showPassword,
-                                  decoration: new InputDecoration(
-                                    prefixIcon: Icon(Icons.lock_outline),
-                                    labelText: 'كلمة المرور',
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'Tajawal',
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        Icons.remove_red_eye,
-                                        color: this._showPassword
-                                            ? Colors.blue
-                                            : Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        setState(() =>
-                                        this._showPassword =
-                                        !this._showPassword);
-                                      },
-                                    ),
-                                    hintStyle: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 16.0,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(top: 15),
-                                child: new Column(
-                                  children: <Widget>[
-                                    SizedBox(height: 10.0),
-                                    Container(
-                                      padding:
-                                      EdgeInsets.only(top: 2, bottom: 15),
-                                      child: SizedBox(
-                                        width: 300,
-                                        height: 37,
-                                        child: RaisedButton(
-                                          child: Text(
-                                            'تسجيل الدخول',
-                                            style: TextStyle(
-                                              fontFamily: 'Tajawal',
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
+                                Container(
+                                  padding: EdgeInsets.only(top: 15),
+                                  child: new Column(
+                                    children: <Widget>[
+                                      SizedBox(height: 10.0),
+                                      Container(
+                                        padding:
+                                            EdgeInsets.only(top: 2, bottom: 15),
+                                        child: SizedBox(
+                                          width: 300,
+                                          height: 37,
+                                          child: RaisedButton(
+                                            child: Text(
+                                              'تسجيل الدخول',
+                                              style: TextStyle(
+                                                fontFamily: 'Tajawal',
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
+                                            onPressed: () async {
+                                              _loginFormKey.currentState
+                                                      .validate()
+                                                  ? signIn()
+                                                  : print("not valid");
+                                            },
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            color: Colors.red[900],
                                           ),
-                                          onPressed: () async {
-                                            _loginFormKey.currentState
-                                                .validate()
-                                                ? signIn()
-                                                : print("not valid");
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(20)),
-                                          color: Colors.red[900],
                                         ),
                                       ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 2),
-                                      child: SizedBox(
-                                        width: 300,
-                                        height: 37,
-                                        child: RaisedButton(
-                                          child: Text(
-                                            'إنشاء حساب',
-                                            style: TextStyle(
-                                              fontFamily: 'Tajawal',
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
+                                      Container(
+                                        padding: EdgeInsets.only(top: 2),
+                                        child: SizedBox(
+                                          width: 300,
+                                          height: 37,
+                                          child: RaisedButton(
+                                            child: Text(
+                                              'إنشاء حساب',
+                                              style: TextStyle(
+                                                fontFamily: 'Tajawal',
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  new MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          new RegisterPage()));
+                                            },
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            color: Colors.green,
                                           ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                new MaterialPageRoute(
-                                                    builder: (context) =>
-                                                    new RegisterPage()));
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(20)),
-                                          color: Colors.green,
                                         ),
                                       ),
-                                    ),
-                                    new FlatButton(
-                                      child: new Text(
-                                        'نسيت كلمة المرور ؟',
-                                        style: TextStyle(
-                                          fontFamily: 'Tajawal',
+                                      new FlatButton(
+                                        child: new Text(
+                                          'نسيت كلمة المرور ؟',
+                                          style: TextStyle(
+                                            fontFamily: 'Tajawal',
+                                          ),
                                         ),
-                                      ),
-                                      onPressed: () {
-                                        forgotPassword(context);
-                                      },
-                                    )
-                                  ],
+                                        onPressed: () {
+                                          forgotPassword(context);
+                                        },
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ]),
+                  ]),
+            ),
           ),
         ),
       ),
@@ -299,14 +302,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-
-
-
   signIn() async {
     setState(() {
       showSpinner = true;
     });
-
 
     try {
       final result = await InternetAddress.lookup('google.com');

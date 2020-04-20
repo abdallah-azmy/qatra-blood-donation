@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../user.dart';
+import '../appBar_widget.dart';
+import '../user_model.dart';
 import 'user_profile_page.dart';
 import 'add_doner_to_bank.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,7 +91,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
 
   Future<User> retrieveUserDetails(FirebaseUser user) async {
     DocumentSnapshot _documentSnapshot =
-    await _fireStore.collection('users').document(user.uid).get();
+        await _fireStore.collection('users').document(user.uid).get();
     print(user.uid);
     if (_documentSnapshot.data != null) {
       print('there is data ');
@@ -135,31 +136,23 @@ class _GovernrateBankState extends State<GovernrateBank> {
           textDirection: TextDirection.rtl,
           child: Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              backgroundColor: Colors.red[900],
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    widget.city,
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Tajawal',
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
+            appBar: WaveAppBar(
+              title: widget.city,
+              backGroundColor: Colors.white,
+              leftIcon: null,
+              onPressedLeft: null,
+              onPressedRight: null,
+              directionOfRightIcon: TextDirection.ltr,
+              rightIcon: null,
             ),
             floatingActionButton: Padding(
                 padding: const EdgeInsets.only(right: 20, top: 20),
-                child: GestureDetector(onTap: () {
-                  Navigator.pop(context);
-                },
-                  child: Align(alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Align(
+                    alignment: Alignment.bottomRight,
                     child: Stack(
                       children: <Widget>[
                         Image.asset(
@@ -170,9 +163,12 @@ class _GovernrateBankState extends State<GovernrateBank> {
                         Positioned(
                           bottom: 18,
                           right: 24,
-
-                          child: Icon(Icons.arrow_back, color: Colors.white,
-                            size: 28,),),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -188,27 +184,27 @@ class _GovernrateBankState extends State<GovernrateBank> {
                     ),
                     addedToBank == 0
                         ? RaisedButton(
-                      child: Text(
-                        'اضف حسابك الي بنك الدم',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Tajawal',
-                        ),
-                      ),
-                      onPressed: _isLoading
-                          ? null
-                          : () {
-                        makeUserObject();
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      color: Colors.red,
-                    )
+                            child: Text(
+                              'اضف حسابك الي بنك الدم',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Tajawal',
+                              ),
+                            ),
+                            onPressed: _isLoading
+                                ? null
+                                : () {
+                                    makeUserObject();
+                                  },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            color: Colors.red,
+                          )
                         : SizedBox(
-                      height: 1,
-                    ),
+                            height: 1,
+                          ),
                     RaisedButton(
                       child: Text(
                         'أضف متبرع الي بنك الدم',
@@ -222,8 +218,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
-                                builder: (context) =>
-                                    AddDonerToBank(
+                                builder: (context) => AddDonerToBank(
                                       city: widget.city,
                                     )));
                       },
@@ -242,7 +237,8 @@ class _GovernrateBankState extends State<GovernrateBank> {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Row(mainAxisAlignment: MainAxisAlignment.center,
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Center(
@@ -291,12 +287,13 @@ class _GovernrateBankState extends State<GovernrateBank> {
 }
 
 class Doner extends StatefulWidget {
-  Doner({this.fasila,
-    this.address,
-    this.displayName,
-    this.phone,
-    this.email,
-    this.dateOfDonation});
+  Doner(
+      {this.fasila,
+      this.address,
+      this.displayName,
+      this.phone,
+      this.email,
+      this.dateOfDonation});
 
   final String fasila;
   final String address;
@@ -358,10 +355,9 @@ class _DonerState extends State<Doner> {
               Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (context) =>
-                      new UserProfile(
-                        user: _user,
-                      )));
+                      builder: (context) => new UserProfile(
+                            user: _user,
+                          )));
             },
             title: Center(
               child: Column(

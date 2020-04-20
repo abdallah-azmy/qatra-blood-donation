@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../user.dart';
+import '../appBar_widget.dart';
+import '../user_model.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
 import 'package:intl/intl.dart' as intl;
@@ -68,25 +69,14 @@ class _ProfilePageState extends State<ProfilePage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            backgroundColor: Colors.red[900],
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "الصفحة الشخصية",
-                  style: new TextStyle(
-                    fontFamily: 'Tajawal',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
+          appBar: WaveAppBar(
+            title: "الصفحة الشخصية",
+            backGroundColor: Colors.red[800],
+            leftIcon: null,
+            onPressedLeft: null,
+            onPressedRight: null,
+            directionOfRightIcon: TextDirection.ltr,
+            rightIcon: null,
           ),
           floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
@@ -124,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       width: double.infinity,
                       height: 238,
-                      color: Colors.red[900],
+                      color: Colors.red[800],
                     ),
                     Column(
                       children: <Widget>[
@@ -195,13 +185,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ListTile(
                                             trailing: InkWell(
                                                 onTap: () {
-//                                                  showDialog(
-//                                                    context: context,
-//                                                    builder: (context) {
-//                                                      return MyDialog();
-//                                                    },
-//                                                  );
-
                                                   showCupertinoModalPopup(
                                                       context: context,
                                                       builder: (context) =>
@@ -481,9 +464,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             ),
                                                           ));
                                                 },
-                                                child: Icon(
-                                                  Icons.settings,
-                                                  color: Colors.blue,
+                                                child: Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  color: Colors.white,
+                                                  child: Icon(
+                                                    Icons.settings,
+                                                    color: Colors.blue,
+                                                  ),
                                                 )),
                                             leading:
                                                 Icon(Icons.accessibility_new),
@@ -526,9 +514,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 onTap: () {
                                                   editAddress(context);
                                                 },
-                                                child: Icon(
-                                                  Icons.settings,
-                                                  color: Colors.blue,
+                                                child: Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  color: Colors.white,
+                                                  child: Icon(
+                                                    Icons.settings,
+                                                    color: Colors.blue,
+                                                  ),
                                                 )),
                                             leading: Icon(Icons.my_location),
                                             title: Text("العنوان",
@@ -566,9 +559,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   onTap: () {
                                                     editDateOfDonation(context);
                                                   },
-                                                  child: Icon(
-                                                    Icons.settings,
-                                                    color: Colors.blue,
+                                                  child: Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    color: Colors.white,
+                                                    child: Icon(
+                                                      Icons.settings,
+                                                      color: Colors.blue,
+                                                    ),
                                                   )),
                                               subtitle: Text(dateOfDonation,
                                                   style: TextStyle(

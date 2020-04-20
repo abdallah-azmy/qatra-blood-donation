@@ -8,8 +8,6 @@ import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -19,7 +17,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   var alertMessage = "برجاء التحقق من الاتصال بشبكة الانترنت";
   bool refreshButton = false;
-
 
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,15 +59,14 @@ class _SplashScreenState extends State<SplashScreen> {
       loggedCheck() async {
         await FirebaseAuth.instance.currentUser() != null
             ? Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => FirstPage()))
+                MaterialPageRoute(builder: (context) => FirstPage()))
             : Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => LoginPage()));
+                MaterialPageRoute(builder: (context) => LoginPage()));
       }
 
       loggedCheck();
     });
   }
-
 
   @override
   void initState() {
@@ -121,37 +117,37 @@ class _SplashScreenState extends State<SplashScreen> {
               refreshButton == false
                   ? Container()
                   : Positioned(
-                bottom: 50,
-                child: RaisedButton(
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.refresh,
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        width: 7,
-                      ),
-                      Text(
-                        'اعادة المحاولة',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                      bottom: 50,
+                      child: RaisedButton(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.refresh,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 7,
+                            ),
+                            Text(
+                              'اعادة المحاولة',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  onPressed: () async {
-                    EasyLoading.show(status: 'loading...');
+                        onPressed: () async {
+                          EasyLoading.show(status: 'loading...');
 
 //                          checkInternetConnection();
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  color: Colors.red[900],
-                ),
-              ),
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: Colors.red[900],
+                      ),
+                    ),
             ],
           ),
         ),

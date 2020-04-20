@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../user.dart';
+import '../appBar_widget.dart';
+import '../user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserProfile extends StatefulWidget {
@@ -17,34 +18,23 @@ class _UserProfileState extends State<UserProfile> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            backgroundColor: Colors.red[900],
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-
-                  child: Text(
-                    "الصفحة الشخصية",
-                    style: new TextStyle(
-                      fontFamily: 'Tajawal',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          appBar: WaveAppBar(
+            title: "الصفحة الشخصية",
+            backGroundColor: Colors.red[800],
+            leftIcon: null,
+            onPressedLeft: null,
+            onPressedRight: null,
+            directionOfRightIcon: TextDirection.ltr,
+            rightIcon: null,
           ),
           floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
-              child: GestureDetector(onTap: () {
-                Navigator.pop(context);
-              },
-                child: Align(alignment: Alignment.bottomRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Align(
+                  alignment: Alignment.bottomRight,
                   child: Stack(
                     children: <Widget>[
                       Image.asset(
@@ -55,9 +45,12 @@ class _UserProfileState extends State<UserProfile> {
                       Positioned(
                         bottom: 18,
                         right: 24,
-
                         child: Icon(
-                          Icons.arrow_back, color: Colors.white, size: 28,),),
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -70,7 +63,7 @@ class _UserProfileState extends State<UserProfile> {
                     Container(
                       width: double.infinity,
                       height: 238,
-                      color: Colors.red[900],
+                      color: Colors.red[800],
                     ),
                     Column(
                       children: <Widget>[
@@ -79,34 +72,34 @@ class _UserProfileState extends State<UserProfile> {
                             margin: EdgeInsets.only(top: 30),
                             child: ClipOval(
                                 child: Image.asset(
-                                  "assets/abcd.jpg",
-                                  fit: BoxFit.cover,
-                                  width: 95.0,
-                                  height: 100.0,
-                                ))),
+                              "assets/abcd.jpg",
+                              fit: BoxFit.cover,
+                              width: 95.0,
+                              height: 100.0,
+                            ))),
                         Padding(
                           padding: EdgeInsets.all(4),
                         ),
                         widget.user == null
                             ? Text(
-                          "---",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20),
-                          textAlign: TextAlign.center,
-                        )
+                                "---",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20),
+                                textAlign: TextAlign.center,
+                              )
                             : Center(
-                          child: Text(
-                            widget.user.displayName,
-                            style: TextStyle(
-                                fontFamily: 'Tajawal',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 27),
+                                child: Text(
+                                  widget.user.displayName,
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 27),
 //                          textAlign: TextAlign.center,
-                          ),
-                        ),
+                                ),
+                              ),
                         Padding(
                           padding: EdgeInsets.all(2),
                         ),
@@ -170,82 +163,81 @@ class _UserInfoState extends State<UserInfo> {
                   ),
                   Container(
                       child: Column(
-                        children: <Widget>[
-                          ListTile(
-                            leading: Icon(Icons.accessibility_new),
-                            title: Text("فصيلة الدم",
-                                style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                )),
-                            subtitle: widget.user == null
-                                ? Text(
-                              "---",
-                            )
-                                : Text(widget.user.fasila,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18)),
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.phone),
-                            title: Text("رقم الهاتف",
-                                style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                )),
-                            subtitle: widget.user == null
-                                ? Text(
-                              "---",
-                            )
-                                : SelectableText(widget.user.phone,
-                                    onTap: (){
-                                      call();
-                                    },
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blue,
-                                        fontSize: 18)),
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.my_location),
-                            title: Text("العنوان",
-                                style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                )),
-                            subtitle: widget.user == null
-                                ? Text(
-                              "---",
-                            )
-                                : Text(widget.user.address,
+                    children: <Widget>[
+                      ListTile(
+                        leading: Icon(Icons.accessibility_new),
+                        title: Text("فصيلة الدم",
+                            style: TextStyle(
+                              fontFamily: 'Tajawal',
+                            )),
+                        subtitle: widget.user == null
+                            ? Text(
+                                "---",
+                              )
+                            : Text(widget.user.fasila,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18)),
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.email),
-                            title: Text("البريد الالكترونى",
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.phone),
+                        title: Text("رقم الهاتف",
+                            style: TextStyle(
+                              fontFamily: 'Tajawal',
+                            )),
+                        subtitle: widget.user == null
+                            ? Text(
+                                "---",
+                              )
+                            : SelectableText(widget.user.phone, onTap: () {
+                                call();
+                              },
                                 style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                )),
-                            subtitle: widget.user == null
-                                ? Text(
-                              "---",
-                            )
-                                : Text(widget.user.email,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue,
+                                    fontSize: 18)),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.my_location),
+                        title: Text("العنوان",
+                            style: TextStyle(
+                              fontFamily: 'Tajawal',
+                            )),
+                        subtitle: widget.user == null
+                            ? Text(
+                                "---",
+                              )
+                            : Text(widget.user.address,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18)),
-                          ),
-                          ListTile(
-                              leading: Icon(Icons.person),
-                              title: Text("موعد أخر تبرع",
-                                  style: TextStyle(
-                                    fontFamily: 'Tajawal',
-                                  )),
-                              subtitle: widget.user == null
-                                  ? Text("---")
-                                  : Text(widget.user.dateOfDonation,
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.email),
+                        title: Text("البريد الالكترونى",
+                            style: TextStyle(
+                              fontFamily: 'Tajawal',
+                            )),
+                        subtitle: widget.user == null
+                            ? Text(
+                                "---",
+                              )
+                            : Text(widget.user.email,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18)),
+                      ),
+                      ListTile(
+                          leading: Icon(Icons.person),
+                          title: Text("موعد أخر تبرع",
+                              style: TextStyle(
+                                fontFamily: 'Tajawal',
+                              )),
+                          subtitle: widget.user == null
+                              ? Text("---")
+                              : Text(widget.user.dateOfDonation,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18))),
-                        ],
-                      ))
+                    ],
+                  ))
                 ],
               ),
             ),

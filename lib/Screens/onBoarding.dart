@@ -30,7 +30,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   @override
   Widget build(BuildContext context) {
     const bodyStyle =
-    TextStyle(fontSize: 19.0, fontFamily: "Tajawal", color: Colors.white);
+        TextStyle(fontSize: 19.0, fontFamily: "Tajawal", color: Colors.white);
     const pageDecoration = const PageDecoration(
       titleTextStyle: TextStyle(
           fontSize: 30.0,
@@ -52,7 +52,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           PageViewModel(
             title: "ساعدنا نكبر بنك الدم",
             body:
-            "ادخل علي صفحة بنك الدم و ضيف حسابك في محافظتك و لو معاك معلومات عن متبرعين"
+                "ادخل علي صفحة بنك الدم و ضيف حسابك في محافظتك و لو معاك معلومات عن متبرعين"
                 " ضيفهم علشان نقدر نغطي كل الفصايل في كل محافظات مصر ",
             image: _buildImage('intro1'),
             decoration: pageDecoration,
@@ -60,7 +60,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           PageViewModel(
             title: "اضافة طلب تبرع",
             body:
-            "لو محتاج نقل دم او حد تعرفه محتاج , تقدر تعمل طلب تبرع في الصفحة الرئيسية ",
+                "لو محتاج نقل دم او حد تعرفه محتاج , تقدر تعمل طلب تبرع في الصفحة الرئيسية ",
             image: _buildImage('boardingDrop'),
             decoration: pageDecoration,
           ),

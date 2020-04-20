@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../appBar_widget.dart';
+
 class DonationArticle extends StatefulWidget {
   @override
   _DonationArticleState createState() => _DonationArticleState();
@@ -14,12 +16,23 @@ class _DonationArticleState extends State<DonationArticle> {
       home: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
+              appBar: WaveAppBar(
+                title: "التبرع بالدم",
+                backGroundColor: Colors.white,
+                leftIcon: null,
+                onPressedLeft: null,
+                onPressedRight: null,
+                directionOfRightIcon: TextDirection.ltr,
+                rightIcon: null,
+              ),
               floatingActionButton: Padding(
                   padding: const EdgeInsets.only(right: 20, top: 20),
-                  child: GestureDetector(onTap: () {
-                    Navigator.pop(context);
-                  },
-                    child: Align(alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Align(
+                      alignment: Alignment.bottomRight,
                       child: Stack(
                         children: <Widget>[
                           Image.asset(
@@ -30,9 +43,12 @@ class _DonationArticleState extends State<DonationArticle> {
                           Positioned(
                             bottom: 18,
                             right: 24,
-
-                            child: Icon(Icons.arrow_back, color: Colors.white,
-                              size: 28,),),
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -40,13 +56,14 @@ class _DonationArticleState extends State<DonationArticle> {
               body: SafeArea(
                 child: Center(
                   child: ListView(
-                    padding:
-                    EdgeInsets.only(right: 15, bottom: 15, left: 15, top: 30),
+                    padding: EdgeInsets.only(
+                        right: 15, bottom: 15, left: 15, top: 20),
                     children: <Widget>[
                       Container(
                         decoration: BoxDecoration(
                             color: Colors.grey[300],
-                            borderRadius: BorderRadius.all(Radius.circular(35))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(35))),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -127,7 +144,8 @@ class _DonationArticleState extends State<DonationArticle> {
                             Padding(
                               padding: const EdgeInsets.only(
                                   right: 10, top: 5, left: 10),
-                              child: Text("- أن يكون عمر المتبرع من 18-65 سنة . ",
+                              child: Text(
+                                  "- أن يكون عمر المتبرع من 18-65 سنة . ",
                                   style: TextStyle(fontSize: 16)),
                             ),
                             Padding(
