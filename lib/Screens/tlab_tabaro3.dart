@@ -28,6 +28,7 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
 
   void getLocation() async {
     EasyLoading.show(status: 'loading...');
+
     Location location = Location();
     await location.getCurrentLocation();
     longitude = location.longitude;
@@ -497,13 +498,12 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                         height: 5,
                       ),
                       RaisedButton(
-                        elevation: 5,
                         child: Text(
-                          "طلب تبرع جديد",
+                          "ارسال طلب التبرع",
                           style: TextStyle(
                               fontFamily: 'Tajawal',
                               fontWeight: FontWeight.bold,
-                              color: Colors.red[900],
+                              color: Colors.white,
                               fontSize: 17),
                         ),
                         onPressed: _isLoading
@@ -511,6 +511,9 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                             : () {
                                 validation();
                               },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: Colors.red[900],
                       ),
                       SizedBox(
                         height: 10,

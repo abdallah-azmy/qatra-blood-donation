@@ -475,8 +475,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 )),
                                             leading:
                                                 Icon(Icons.accessibility_new),
-                                            title: Text("فصيلة الدم",
+                                            title: Text("فصيلة الدم :",
                                                 style: TextStyle(
+                                                  color: Colors.black,
                                                   fontFamily: 'Tajawal',
                                                 )),
                                             subtitle: Row(
@@ -487,6 +488,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     textDirection:
                                                         TextDirection.ltr,
                                                     style: TextStyle(
+                                                        color: Colors.red[900],
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 18)),
@@ -495,7 +497,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                           ListTile(
                                             leading: Icon(Icons.phone),
-                                            title: Text("رقم الهاتف",
+                                            title: Text("رقم الهاتف :",
                                                 style: TextStyle(
                                                   fontFamily: 'Tajawal',
                                                 )),
@@ -505,6 +507,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   )
                                                 : Text(user.phone,
                                                     style: TextStyle(
+                                                        color: Colors.red[900],
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 18)),
@@ -524,18 +527,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   ),
                                                 )),
                                             leading: Icon(Icons.my_location),
-                                            title: Text("العنوان",
+                                            title: Text("العنوان :",
                                                 style: TextStyle(
                                                   fontFamily: 'Tajawal',
                                                 )),
                                             subtitle: Text(newAddress,
                                                 style: TextStyle(
+                                                    color: Colors.red[900],
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 18)),
                                           ),
                                           ListTile(
                                             leading: Icon(Icons.email),
-                                            title: Text("البريد الالكترونى",
+                                            title: Text("البريد الالكتروني :",
                                                 style: TextStyle(
                                                   fontFamily: 'Tajawal',
                                                 )),
@@ -545,13 +549,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   )
                                                 : Text(user.email,
                                                     style: TextStyle(
+                                                        color: Colors.red[900],
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 18)),
                                           ),
                                           ListTile(
                                               leading: Icon(Icons.person),
-                                              title: Text("موعد أخر تبرع",
+                                              title: Text("موعد اخر تبرع :",
                                                   style: TextStyle(
                                                     fontFamily: 'Tajawal',
                                                   )),
@@ -570,6 +575,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   )),
                                               subtitle: Text(dateOfDonation,
                                                   style: TextStyle(
+                                                      color: Colors.red[900],
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 18))),

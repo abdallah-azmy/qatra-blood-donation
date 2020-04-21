@@ -18,7 +18,10 @@ creatAlertDialog(BuildContext context, text) {
             style: TextStyle(color: Colors.red[900], fontSize: 24),
           ),
           elevation: 10,
-          content: Text("$text"),
+          content: Text(
+            "$text",
+            textDirection: TextDirection.rtl,
+          ),
         );
       });
 }

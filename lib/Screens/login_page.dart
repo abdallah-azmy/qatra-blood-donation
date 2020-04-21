@@ -329,7 +329,44 @@ class _LoginPageState extends State<LoginPage> {
             showSpinner = false;
           });
 
-          creatAlertDialog(context, e);
+          var errorSigningIn;
+          if (Platform.isAndroid) {
+            switch (e.message) {
+              case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+                errorSigningIn =
+                    "لا يوجد مستخدم بهذه المعلومات , قد يكون هناك خطأ في البريد الالكتروني او كلمة المرور .";
+                break;
+              case 'The password is invalid or the user does not have a password.':
+                errorSigningIn = "كلمة مرور خاطئة .";
+                break;
+              case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
+                errorSigningIn =
+                    "خطأ في الاتصال بشبكة الانترنت , تحقق من اتصالك و حاول مرة اخري .";
+                break;
+              // ...
+              default:
+                print('Case ${e.message} is not yet implemented');
+            }
+          } else if (Platform.isIOS) {
+            switch (e.code) {
+              case 'Error 17011':
+                errorSigningIn =
+                    "لا يوجد مستخدم بهذه المعلومات , قد يكون هناك خطأ في البريد الالكتروني او كلمة المرور .";
+                break;
+              case 'Error 17009':
+                errorSigningIn = "كلمة مرور خاطئة .";
+                break;
+              case 'Error 17020':
+                errorSigningIn =
+                    "خطأ في الاتصال بشبكة الانترنت , تحقق من اتصالك و حاول مرة اخري .";
+                break;
+              // ...
+              default:
+                print('Case ${e.message} is not yet implemented');
+            }
+          }
+
+          creatAlertDialog(context, errorSigningIn);
           print(e);
         }
       }

@@ -166,7 +166,7 @@ class _UserInfoState extends State<UserInfo> {
                     children: <Widget>[
                       ListTile(
                         leading: Icon(Icons.accessibility_new),
-                        title: Text("فصيلة الدم",
+                        title: Text("فصيلة الدم :",
                             style: TextStyle(
                               fontFamily: 'Tajawal',
                             )),
@@ -174,13 +174,21 @@ class _UserInfoState extends State<UserInfo> {
                             ? Text(
                                 "---",
                               )
-                            : Text(widget.user.fasila,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18)),
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(widget.user.fasila,
+                                      textDirection: TextDirection.ltr,
+                                      style: TextStyle(
+                                          color: Colors.red[900],
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                ],
+                              ),
                       ),
                       ListTile(
                         leading: Icon(Icons.phone),
-                        title: Text("رقم الهاتف",
+                        title: Text("رقم الهاتف :",
                             style: TextStyle(
                               fontFamily: 'Tajawal',
                             )),
@@ -198,7 +206,7 @@ class _UserInfoState extends State<UserInfo> {
                       ),
                       ListTile(
                         leading: Icon(Icons.my_location),
-                        title: Text("العنوان",
+                        title: Text("العنوان :",
                             style: TextStyle(
                               fontFamily: 'Tajawal',
                             )),
@@ -208,11 +216,14 @@ class _UserInfoState extends State<UserInfo> {
                               )
                             : Text(widget.user.address,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18)),
+                                    fontFamily: 'Tajawal',
+                                    color: Colors.red[900],
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 19)),
                       ),
                       ListTile(
                         leading: Icon(Icons.email),
-                        title: Text("البريد الالكترونى",
+                        title: Text("البريد الالكتروني :",
                             style: TextStyle(
                               fontFamily: 'Tajawal',
                             )),
@@ -226,7 +237,7 @@ class _UserInfoState extends State<UserInfo> {
                       ),
                       ListTile(
                           leading: Icon(Icons.person),
-                          title: Text("موعد أخر تبرع",
+                          title: Text("موعد اخر تبرع :",
                               style: TextStyle(
                                 fontFamily: 'Tajawal',
                               )),
