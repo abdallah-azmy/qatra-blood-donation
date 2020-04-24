@@ -233,6 +233,7 @@ class _UserInfoState extends State<UserInfo> {
                               )
                             : Text(widget.user.email,
                                 style: TextStyle(
+                                    color: Colors.red[900],
                                     fontWeight: FontWeight.bold, fontSize: 18)),
                       ),
                       ListTile(
@@ -245,6 +246,7 @@ class _UserInfoState extends State<UserInfo> {
                               ? Text("---")
                               : Text(widget.user.dateOfDonation,
                                   style: TextStyle(
+                                      color: Colors.red[900],
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18))),
                     ],
