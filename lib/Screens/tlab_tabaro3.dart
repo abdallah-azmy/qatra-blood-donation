@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import '../appBar_widget.dart';
 import 'first_page.dart';
-import '../get_Location.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+//import '../get_Location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:location/location.dart';
 
 class TlabTabaro3 extends StatefulWidget {
   @override
@@ -26,29 +27,6 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
   var city;
   var government;
 
-  void getLocation() async {
-    EasyLoading.show(status: 'loading...');
-
-    Location location = Location();
-    await location.getCurrentLocation();
-    longitude = location.longitude;
-    latitude = location.latitude;
-
-    final coordinates = new Coordinates(latitude, longitude);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
-    print(" ${first.locality}");
-    print(" ${first.adminArea}");
-    city = first.locality;
-    government = first.adminArea;
-
-    EasyLoading.dismiss();
-
-    _madinaController.text = city;
-    _governmentController.text = government;
-  }
-
   String name;
   String akias;
   String hospital;
@@ -58,6 +36,8 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
 
   TextEditingController textFieldController = new TextEditingController();
   final TextEditingController _akias = TextEditingController();
+
+  bool locationLoading = false;
 
   var _fasilaDropDown = [
     'اي فصيلة',
@@ -269,24 +249,25 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                                 color: Colors.grey,
                               ),
                             ),
-                            MaterialButton(
-                              onPressed: () {
-                                getLocation();
-
-                                SpinKitDoubleBounce(
-                                  color: Colors.white,
-                                  size: 50.0,
-                                );
-                              },
-                              color: Colors.blue,
-                              textColor: Colors.white,
-                              child: Icon(
-                                Icons.location_on,
-                                size: 20,
-                              ),
-                              padding: EdgeInsets.all(14),
-                              shape: CircleBorder(),
-                            ),
+                            locationLoading
+                                ? Image.asset(
+                                    "assets/loading.gif",
+                                    height: 47.0,
+                                    width: 47.0,
+                                  )
+                                : MaterialButton(
+                                    onPressed: () {
+                                      _getLocation();
+                                    },
+                                    color: Colors.blue,
+                                    textColor: Colors.white,
+                                    child: Icon(
+                                      Icons.location_on,
+                                      size: 20,
+                                    ),
+                                    padding: EdgeInsets.all(14),
+                                    shape: CircleBorder(),
+                                  ),
                             SizedBox(
                               height: 2,
                             ),
@@ -530,6 +511,39 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
   }
 
   bool _isLoading = false;
+
+  void _getLocation() async {
+    setState(() {
+      locationLoading = true;
+    });
+
+    LocationData myLocation;
+    Location location = new Location();
+    myLocation = await location.getLocation();
+    var test = myLocation.latitude;
+    print("aaaaaaaaaaaaaaa$test");
+
+    final coordinates =
+        new Coordinates(myLocation.latitude, myLocation.longitude);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var first = addresses.first;
+    print(" ${first.locality}");
+    print(" ${first.adminArea}");
+    city = first.locality;
+    government = first.adminArea;
+
+    setState(() {
+      locationLoading = false;
+    });
+
+    _madinaController.text = city;
+    _governmentController.text = government;
+
+    setState(() {
+      locationLoading = false;
+    });
+  }
 
   validation() {
     _formTlabKey.currentState.validate() ? addPost() : print("not valid");

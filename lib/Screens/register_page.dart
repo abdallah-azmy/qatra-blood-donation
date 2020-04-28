@@ -4,11 +4,11 @@ import 'first_page.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../user_model.dart';
-import '../get_Location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'add_doner_to_bank.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
+import 'package:location/location.dart';
 
 final _fireStore = Firestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -25,6 +25,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = new TextEditingController();
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _addressController = new TextEditingController();
+
+  bool _locationLoading = false;
 
   String name;
   String email;
@@ -347,32 +349,40 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 borderRadius:
                                                     BorderRadius.circular(20.0),
                                               ),
-                                              icon: InkWell(
-                                                  onTap: () {
-                                                    getLocation();
+                                              icon: _locationLoading
+                                                  ? Image.asset(
+                                                      "assets/loading.gif",
+                                                      height: 47.0,
+                                                      width: 47.0,
+                                                    )
+                                                  : InkWell(
+                                                      onTap: () {
+                                                        getLocation();
 
 //
-                                                  },
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Icon(
-                                                        Icons.location_on,
-                                                        size: 40,
-                                                        color: Colors.blue,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 2,
-                                                      ),
-                                                      Text(
-                                                        "لتحديد المكان",
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors.blue,
-                                                          fontFamily: 'Tajawal',
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ))),
+                                                      },
+                                                      child: Column(
+                                                        children: <Widget>[
+                                                          Icon(
+                                                            Icons.location_on,
+                                                            size: 40,
+                                                            color: Colors.blue,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 2,
+                                                          ),
+                                                          Text(
+                                                            "لتحديد المكان",
+                                                            style: TextStyle(
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontFamily:
+                                                                  'Tajawal',
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ))),
                                         )),
                                     Container(
                                       padding: EdgeInsets.only(top: 13),
@@ -424,14 +434,18 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void getLocation() async {
-    EasyLoading.show(status: 'loading...');
+    setState(() {
+      _locationLoading = true;
+    });
 
-    Location location = Location();
-    await location.getCurrentLocation();
-    longitude = location.longitude;
-    latitude = location.latitude;
+    LocationData myLocation;
+    Location location = new Location();
+    myLocation = await location.getLocation();
+    var test = myLocation.latitude;
+    print("aaaaaaaaaaaaaaa$test");
 
-    final coordinates = new Coordinates(latitude, longitude);
+    final coordinates =
+        new Coordinates(myLocation.latitude, myLocation.longitude);
     var addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
@@ -440,7 +454,9 @@ class _RegisterPageState extends State<RegisterPage> {
     city = first.locality;
     government = first.adminArea;
 
-    EasyLoading.dismiss();
+    setState(() {
+      _locationLoading = false;
+    });
 
     _addressController.text = "$government--$city";
     setState(() {
@@ -493,10 +509,11 @@ class _RegisterPageState extends State<RegisterPage> {
             setState(() {
               showSpinner = false;
             });
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
                 context,
-                new MaterialPageRoute(
-                    builder: (BuildContext context) => FirstPage()));
+                MaterialPageRoute(
+                    builder: (BuildContext context) => FirstPage()),
+                (Route<dynamic> route) => route is FirstPage);
           } else {
             var error = "لم تتم العملية بنجاح .";
             creatAlertDialog(context, error);

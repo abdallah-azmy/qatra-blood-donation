@@ -181,7 +181,7 @@ class _AboutTheAppState extends State<AboutTheApp> {
                                 throw 'Could not launch $link';
                               }
                             },
-                            text: "Gmail : abdallah.azmy@gmail.com",
+                            text: "Gmail : abdallah.azmy2016@gmail.com",
 //                              options: LinkifyOptions(humanize: false),
                             style: TextStyle(color: Colors.black, fontSize: 17),
                             linkStyle:

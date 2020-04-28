@@ -112,348 +112,355 @@ class _FirstPageState extends State<FirstPage>
     FlutterStatusbarcolor.setStatusBarColor(Colors.red[900]);
     return FlutterEasyLoading(
         child: OrientationBuilder(builder: (context, orientation) {
-      return Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-            key: _key,
-            resizeToAvoidBottomPadding: false,
-            appBar: WaveAppBar(
-              title: "طلبات التبرع",
-              backGroundColor: Colors.grey[300],
-              leftIcon: null,
-              onPressedLeft: null,
-              onPressedRight: () {
-                _key.currentState.openDrawer();
-              },
-              directionOfRightIcon: TextDirection.ltr,
-              rightIcon: Icons.arrow_back_ios,
-            ),
-            floatingActionButton: Padding(
-                padding: const EdgeInsets.only(right: 20, top: 20),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => new TlabTabaro3()));
-                  },
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Stack(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/drop.png",
-                          width: 75,
-                          height: 80,
-                        ),
-                        Positioned(
-                          bottom: 15,
-                          right: 21,
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 34,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )),
-            drawer: Drawer(
-              child: ListView(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    color: Colors.white,
-                    child: DrawerHeader(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/fainallogo.png",
-                        )
-                      ],
-                    )),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Column(
-                      children: <Widget>[
-                        Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          color: null,
-                          child: Container(
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => new BloodBank()));
-                              },
-                              title: Text(
-                                "بنك الدم",
-                                style: TextStyle(
-                                    fontFamily: 'Tajawal',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              leading: Icon(Icons.local_hospital,
-                                  size: 30, color: Colors.red[900]),
-                              trailing: null,
-                            ),
-                          ),
-                        ),
-                        Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          color: null,
-                          child: Container(
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) =>
-                                            new ProfilePage()));
-                              },
-                              title: Text(
-                                "الصفحة الشخصية",
-                                style: TextStyle(
-                                    fontFamily: 'Tajawal',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              leading: Icon(Icons.account_circle,
-                                  size: 30, color: Colors.red[900]),
-                              trailing: null,
-                            ),
-                          ),
-                        ),
-                        Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          color: null,
-                          child: Container(
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => Chat()));
-                              },
-                              title: Text(
-                                "الشات العام",
-                                style: TextStyle(
-                                    fontFamily: 'Tajawal',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              leading: Icon(Icons.chat,
-                                  size: 30, color: Colors.red[900]),
-                              trailing: null,
-                            ),
-                          ),
-                        ),
-                        Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          color: null,
-                          child: Container(
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => new Articles()));
-                              },
-                              title: Text(
-                                "مقالات",
-                                style: TextStyle(
-                                    fontFamily: 'Tajawal',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              leading: Icon(Icons.description,
-                                  size: 30, color: Colors.red[900]),
-                              trailing: null,
-                            ),
-                          ),
-                        ),
-                        Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          color: null,
-                          child: Container(
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) =>
-                                            new AboutTheApp()));
-                              },
-                              title: Text(
-                                "عن التطبيق",
-                                style: TextStyle(
-                                    fontFamily: 'Tajawal',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              leading: Icon(Icons.apps,
-                                  size: 30, color: Colors.red[900]),
-                              trailing: null,
-                            ),
-                          ),
-                        ),
-                        Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          color: null,
-                          child: Container(
-                            child: ListTile(
-                              onTap: () {
-                                _auth.signOut();
-                                Navigator.pushReplacement(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            LoginPage()));
-                              },
-                              title: Text(
-                                "تسجيل الخروج",
-                                style: TextStyle(
-                                    fontFamily: 'Tajawal',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              leading: Icon(
-                                Icons.lock_outline,
-                                size: 30,
-                                color: Colors.red[900],
-                              ),
-                              trailing: null,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                      ],
-                    ),
-                  ),
-                ],
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+//        theme: ThemeData.dark(),
+        home: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Scaffold(
+              key: _key,
+              resizeToAvoidBottomPadding: false,
+              appBar: WaveAppBar(
+                title: "طلبات التبرع",
+                backGroundColor: Colors.grey[300],
+                leftIcon: null,
+                onPressedLeft: null,
+                onPressedRight: () {
+                  _key.currentState.openDrawer();
+                },
+                directionOfRightIcon: TextDirection.ltr,
+                rightIcon: Icons.arrow_back_ios,
               ),
-            ),
-            body: Container(
-              decoration: new BoxDecoration(
-                color: Colors.grey[300],
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    padding:
-                        const EdgeInsets.only(top: 10, right: 10, left: 10),
-                    child: DropdownButtonFormField<String>(
-                      isDense: true,
-                      decoration: InputDecoration(
-                          isDense: true,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0)),
-                          prefixIcon: Icon(
-                            Icons.local_hospital,
-                            color: Colors.red[900],
-                            size: 24,
-                          )),
-                      validator: (value) =>
-                          value == "حدد فصيلتك" ? 'برجاء اختيار الفصيلة' : null,
-                      items: _fasila.map((String dropDownStringItem) {
-                        return DropdownMenuItem<String>(
-                          value: dropDownStringItem,
-                          child: Center(
-                              child: Text(
-                            dropDownStringItem,
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.red[900],
-                              fontSize: 18,
-                              fontFamily: 'Tajawal',
-                            ),
-                          )),
-                        );
-                      }).toList(),
-                      onChanged: (String newValueSelected) {
-                        // Your code to execute, when a menu item is selected from drop down
-                        _onDropDownItemSelected(newValueSelected);
-                        setTheSearch();
-                      },
-                      value: _currentFasilaSelected,
-                    ),
-                  ),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: search,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.red[900],
-                          ),
-                        );
-                      }
-                      final posts = snapshot.data.documents;
-                      List<PostBubble> postBubbles = [];
-                      for (var post in posts) {
-                        final date = post.data["date"].toDate();
-                        final dateThatSignsThePost =
-                            post.data["dateThatSignsThePost"];
-                        final name = post.data["name"];
-                        final fasila = post.data["fasila"];
-                        final akias = post.data["akias"];
-                        final government = post.data["government"];
-                        final city = post.data["city"];
-                        final hospital = post.data["hospital"];
-                        final hospitalAddress = post.data["hospitalAddress"];
-                        final phone = post.data["phone"];
-                        final note = post.data["note"];
-                        final postSender = post.data["postSender"];
-                        final postColor = post.data["postColor"];
-
-                        final postBubble = PostBubble(
-                          name: name,
-                          fasila: fasila,
-                          akias: akias,
-                          government: government,
-                          city: city,
-                          hospital: hospital,
-                          hospitalAddress: hospitalAddress,
-                          phone: phone,
-                          note: note,
-                          date: date,
-                          postSender: postSender,
-                          postColor: postColor,
-                          dateThatSignsThePost: dateThatSignsThePost,
-                        );
-                        postBubbles.add(postBubble);
-                      }
-                      return Expanded(
-                        child: SizedBox(
-                          height: 170.0,
-                          child: ListView(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 20),
-                            children: postBubbles,
-                          ),
-                        ),
-                      );
+              floatingActionButton: Padding(
+                  padding: const EdgeInsets.only(right: 20, top: 20),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new TlabTabaro3()));
                     },
-                  ),
-                ],
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Stack(
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/drop.png",
+                            width: 75,
+                            height: 80,
+                          ),
+                          Positioned(
+                            bottom: 15,
+                            right: 21,
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 34,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+              drawer: Drawer(
+                child: ListView(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      color: Colors.white,
+                      child: DrawerHeader(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/fainallogo.png",
+                          )
+                        ],
+                      )),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        children: <Widget>[
+                          Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            color: null,
+                            child: Container(
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new BloodBank()));
+                                },
+                                title: Text(
+                                  "بنك الدم",
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                leading: Icon(Icons.local_hospital,
+                                    size: 30, color: Colors.red[900]),
+                                trailing: null,
+                              ),
+                            ),
+                          ),
+                          Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            color: null,
+                            child: Container(
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new ProfilePage()));
+                                },
+                                title: Text(
+                                  "الصفحة الشخصية",
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                leading: Icon(Icons.account_circle,
+                                    size: 30, color: Colors.red[900]),
+                                trailing: null,
+                              ),
+                            ),
+                          ),
+                          Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            color: null,
+                            child: Container(
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => Chat()));
+                                },
+                                title: Text(
+                                  "الشات العام",
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                leading: Icon(Icons.chat,
+                                    size: 30, color: Colors.red[900]),
+                                trailing: null,
+                              ),
+                            ),
+                          ),
+                          Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            color: null,
+                            child: Container(
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new Articles()));
+                                },
+                                title: Text(
+                                  "مقالات",
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                leading: Icon(Icons.description,
+                                    size: 30, color: Colors.red[900]),
+                                trailing: null,
+                              ),
+                            ),
+                          ),
+                          Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            color: null,
+                            child: Container(
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new AboutTheApp()));
+                                },
+                                title: Text(
+                                  "عن التطبيق",
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                leading: Icon(Icons.apps,
+                                    size: 30, color: Colors.red[900]),
+                                trailing: null,
+                              ),
+                            ),
+                          ),
+                          Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            color: null,
+                            child: Container(
+                              child: ListTile(
+                                onTap: () {
+                                  _auth.signOut();
+                                  Navigator.pushReplacement(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              LoginPage()));
+                                },
+                                title: Text(
+                                  "تسجيل الخروج",
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                leading: Icon(
+                                  Icons.lock_outline,
+                                  size: 30,
+                                  color: Colors.red[900],
+                                ),
+                                trailing: null,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )),
+              body: Container(
+                decoration: new BoxDecoration(
+                  color: Colors.grey[300],
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding:
+                          const EdgeInsets.only(top: 10, right: 10, left: 10),
+                      child: DropdownButtonFormField<String>(
+                        isDense: true,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                            prefixIcon: Icon(
+                              Icons.local_hospital,
+                              color: Colors.red[900],
+                              size: 24,
+                            )),
+                        validator: (value) => value == "حدد فصيلتك"
+                            ? 'برجاء اختيار الفصيلة'
+                            : null,
+                        items: _fasila.map((String dropDownStringItem) {
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Center(
+                                child: Text(
+                              dropDownStringItem,
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
+                                color: Colors.red[900],
+                                fontSize: 18,
+                                fontFamily: 'Tajawal',
+                              ),
+                            )),
+                          );
+                        }).toList(),
+                        onChanged: (String newValueSelected) {
+                          // Your code to execute, when a menu item is selected from drop down
+                          _onDropDownItemSelected(newValueSelected);
+                          setTheSearch();
+                        },
+                        value: _currentFasilaSelected,
+                      ),
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                      stream: search,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.red[900],
+                            ),
+                          );
+                        }
+                        final posts = snapshot.data.documents;
+                        List<PostBubble> postBubbles = [];
+                        for (var post in posts) {
+                          final date = post.data["date"].toDate();
+                          final dateThatSignsThePost =
+                              post.data["dateThatSignsThePost"];
+                          final name = post.data["name"];
+                          final fasila = post.data["fasila"];
+                          final akias = post.data["akias"];
+                          final government = post.data["government"];
+                          final city = post.data["city"];
+                          final hospital = post.data["hospital"];
+                          final hospitalAddress = post.data["hospitalAddress"];
+                          final phone = post.data["phone"];
+                          final note = post.data["note"];
+                          final postSender = post.data["postSender"];
+                          final postColor = post.data["postColor"];
+
+                          final postBubble = PostBubble(
+                            name: name,
+                            fasila: fasila,
+                            akias: akias,
+                            government: government,
+                            city: city,
+                            hospital: hospital,
+                            hospitalAddress: hospitalAddress,
+                            phone: phone,
+                            note: note,
+                            date: date,
+                            postSender: postSender,
+                            postColor: postColor,
+                            dateThatSignsThePost: dateThatSignsThePost,
+                          );
+                          postBubbles.add(postBubble);
+                        }
+                        return Expanded(
+                          child: SizedBox(
+                            height: 170.0,
+                            child: ListView(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 20),
+                              children: postBubbles,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              )),
+        ),
       );
     }));
   }
@@ -787,12 +794,14 @@ class PostBubble extends StatelessWidget {
                                         ),
                                         Row(
                                           children: <Widget>[
-                                            Text("_ شارك طلب التبرع :",
-                                                style: TextStyle(
-                                                    fontFamily: 'Tajawal',
-                                                    color: Colors.red[500],
-                                                    fontSize: 16,
-                                                    letterSpacing: .3)),
+                                            Flexible(
+                                              child: Text("_ شارك طلب التبرع :",
+                                                  style: TextStyle(
+                                                      fontFamily: 'Tajawal',
+                                                      color: Colors.red[500],
+                                                      fontSize: 16,
+                                                      letterSpacing: .3)),
+                                            ),
                                             SizedBox(
                                               width: 5,
                                             ),
@@ -803,8 +812,9 @@ class PostBubble extends StatelessWidget {
                                                           " الفصيلة : + $fasilaTwiter\n"
                                                           "$government -- $city\n"
                                                           "$name\n"
-                                                          " رقم المرافق :   $phone\n",
-                                                      url: '\nتطبيق * قطرة * للتبرع بالدم');
+                                                          " رقم المرافق :   $phone\n"
+                                                          "\nتطبيق * قطرة * للتبرع بالدم",
+                                                      url: '\nhttps://play.google.com/store/apps/details?id=com.abdallahazmy.icandoit');
                                                 },
                                                 child: Tab(
                                                   icon: ClipRRect(
@@ -828,7 +838,8 @@ class PostBubble extends StatelessWidget {
                                                         "$government -- $city\n"
                                                         "$name\n"
                                                         " رقم المرافق :  $phone\n"
-                                                        '\nتطبيق * قطرة * للتبرع بالدم');
+                                                        '\nتطبيق * قطرة * للتبرع بالدم'
+                                                        '\nhttps://play.google.com/store/apps/details?id=com.abdallahazmy.icandoit');
                                               },
                                               child: Tab(
                                                   icon: ClipRRect(
