@@ -42,6 +42,7 @@ dependencies:
   wave: ^0.0.8
   flutter_statusbarcolor: ^0.2.3
   location: ^3.0.2
+  geolocator: ^5.2.1
 
 
 

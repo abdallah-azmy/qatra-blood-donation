@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'first_page.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,6 +58,48 @@ class _RegisterPageState extends State<RegisterPage> {
   double latitude;
   var city;
   var government;
+
+
+  var _myLocation ;
+
+
+  Future haa() async {
+
+    Location location = new Location();
+    LocationData myLocation = await location.getLocation();
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    setState(() {
+      _myLocation = myLocation ;
+    });
+
+  }
+//  Future<Map<String, double>> _getLocation() async {
+////var currentLocation = <String, double>{};
+//    LocationData myLocation
+//    Map<String,double> currentLocation;
+//    try {
+//      currentLocation = await location.getLocation();
+//    } catch (e) {
+//      currentLocation = null;
+//    }
+//    setState(() {
+//      userLocation = currentLocation;
+//    });
+//    return currentLocation;
+//
+//
+//
+//  }
+
+  @override
+  void initState() {
+
+
+    haa();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -434,33 +477,37 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void getLocation() async {
+    print("1111111111111111111111222222222222222");
+    haa();
+    print("333333333333333333333333333333");
+    var test =  _myLocation.latitude;
+    print("aaaaaaaaaaaaaaa$test");
+
     setState(() {
       _locationLoading = true;
     });
 
-    LocationData myLocation;
-    Location location = new Location();
-    myLocation = await location.getLocation();
-    var test = myLocation.latitude;
-    print("aaaaaaaaaaaaaaa$test");
 
-    final coordinates =
-        new Coordinates(myLocation.latitude, myLocation.longitude);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
-    print(" ${first.locality}");
-    print(" ${first.adminArea}");
-    city = first.locality;
-    government = first.adminArea;
+
+
+    setState(() {
+      latitude = _myLocation.latitude ;
+      longitude = _myLocation.longitude ;
+    });
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+    List<Placemark> p = await geolocator.placemarkFromCoordinates(
+        latitude, longitude);
+    Placemark place = p[0];
+    print("${place.locality}, ${place.administrativeArea}");
+
+    _addressController.text = "${place.administrativeArea}--${place.locality}";
+
+    setState(() {
+      address = _addressController.text;
+    });
 
     setState(() {
       _locationLoading = false;
-    });
-
-    _addressController.text = "$government--$city";
-    setState(() {
-      address = _addressController.text;
     });
   }
 

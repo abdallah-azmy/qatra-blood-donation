@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../appBar_widget.dart';
 import 'first_page.dart';
-//import '../get_Location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +8,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class TlabTabaro3 extends StatefulWidget {
   @override
@@ -512,7 +513,8 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
 
   bool _isLoading = false;
 
-  void _getLocation() async {
+  Future _getLocation() async {
+
     setState(() {
       locationLoading = true;
     });
@@ -523,22 +525,16 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
     var test = myLocation.latitude;
     print("aaaaaaaaaaaaaaa$test");
 
-    final coordinates =
-        new Coordinates(myLocation.latitude, myLocation.longitude);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
-    print(" ${first.locality}");
-    print(" ${first.adminArea}");
-    city = first.locality;
-    government = first.adminArea;
 
-    setState(() {
-      locationLoading = false;
-    });
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+    List<Placemark> p = await geolocator.placemarkFromCoordinates(
+        myLocation.latitude, myLocation.longitude);
+    Placemark place = p[0];
+    print("${place.locality}, ${place.administrativeArea}, ${place.country}");
 
-    _madinaController.text = city;
-    _governmentController.text = government;
+
+    _madinaController.text = place.locality;
+    _governmentController.text = place.administrativeArea;
 
     setState(() {
       locationLoading = false;
