@@ -226,13 +226,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  geocoder:
-    dependency: "direct main"
-    description:
-      name: geocoder
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
   geolocator:
     dependency: "direct main"
     description:
@@ -268,6 +261,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  image_picker_saver:
+    dependency: "direct main"
+    description:
+      name: image_picker_saver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   intl:
     dependency: "direct main"
     description:
@@ -387,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  share_extend:
+    dependency: "direct main"
+    description:
+      name: share_extend
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.5"
   shared_preferences:
     dependency: "direct main"
     description:

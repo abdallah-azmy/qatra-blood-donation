@@ -35,14 +35,18 @@ dependencies:
   expand_widget: ^0.2.0+2
   firebase_auth: ^0.15.5+2
   cloud_firestore: ^0.13.4+2
-  geocoder: ^0.2.1
   flutter_linkify: ^3.1.0
   social_share_plugin: ^0.3.1+1
   flutter_share_me: ^0.9.1
   wave: ^0.0.8
   flutter_statusbarcolor: ^0.2.3
   location: ^3.0.2
-  geolocator: ^5.2.1
+  geolocator: ^5.3.1
+  share_extend: "^1.1.5"
+  image_picker_saver: ^0.3.0
+
+
+
 
 
 
@@ -85,6 +89,7 @@ flutter:
     - assets/72.jpg
     - assets/73.jpg
     - assets/loading.gif
+    - assets/ssch.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

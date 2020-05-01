@@ -18,6 +18,11 @@ import 'package:social_share_plugin/social_share_plugin.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:icandoit/appBar_widget.dart';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:flutter/rendering.dart';
+import 'package:share_extend/share_extend.dart';
+import 'package:image_picker_saver/image_picker_saver.dart';
 
 final _fireStore = Firestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -354,110 +359,120 @@ class _FirstPageState extends State<FirstPage>
                   ],
                 ),
               ),
-              body: Container(
-                decoration: new BoxDecoration(
-                  color: Colors.grey[300],
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding:
-                          const EdgeInsets.only(top: 10, right: 10, left: 10),
-                      child: DropdownButtonFormField<String>(
-                        isDense: true,
-                        decoration: InputDecoration(
-                            isDense: true,
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
-                            prefixIcon: Icon(
-                              Icons.local_hospital,
-                              color: Colors.red[900],
-                              size: 24,
-                            )),
-                        validator: (value) => value == "حدد فصيلتك"
-                            ? 'برجاء اختيار الفصيلة'
-                            : null,
-                        items: _fasila.map((String dropDownStringItem) {
-                          return DropdownMenuItem<String>(
-                            value: dropDownStringItem,
-                            child: Center(
-                                child: Text(
-                              dropDownStringItem,
-                              textDirection: TextDirection.ltr,
-                              style: TextStyle(
+              body: GestureDetector(
+                onPanUpdate: (details) {
+                  if (details.delta.dx > 0)
+                    print("Dragging in +X direction");
+                  else
+                    _key.currentState.openDrawer();
+                  print("Dragging in -X direction");
+                },
+                child: Container(
+                  decoration: new BoxDecoration(
+                    color: Colors.grey[300],
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        padding:
+                            const EdgeInsets.only(top: 10, right: 10, left: 10),
+                        child: DropdownButtonFormField<String>(
+                          isDense: true,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              prefixIcon: Icon(
+                                Icons.local_hospital,
                                 color: Colors.red[900],
-                                fontSize: 18,
-                                fontFamily: 'Tajawal',
-                              ),
-                            )),
-                          );
-                        }).toList(),
-                        onChanged: (String newValueSelected) {
-                          // Your code to execute, when a menu item is selected from drop down
-                          _onDropDownItemSelected(newValueSelected);
-                          setTheSearch();
-                        },
-                        value: _currentFasilaSelected,
+                                size: 24,
+                              )),
+                          validator: (value) => value == "حدد فصيلتك"
+                              ? 'برجاء اختيار الفصيلة'
+                              : null,
+                          items: _fasila.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Center(
+                                  child: Text(
+                                dropDownStringItem,
+                                textDirection: TextDirection.ltr,
+                                style: TextStyle(
+                                  color: Colors.red[900],
+                                  fontSize: 18,
+                                  fontFamily: 'Tajawal',
+                                ),
+                              )),
+                            );
+                          }).toList(),
+                          onChanged: (String newValueSelected) {
+                            // Your code to execute, when a menu item is selected from drop down
+                            _onDropDownItemSelected(newValueSelected);
+                            setTheSearch();
+                          },
+                          value: _currentFasilaSelected,
+                        ),
                       ),
-                    ),
-                    StreamBuilder<QuerySnapshot>(
-                      stream: search,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.red[900],
-                            ),
-                          );
-                        }
-                        final posts = snapshot.data.documents;
-                        List<PostBubble> postBubbles = [];
-                        for (var post in posts) {
-                          final date = post.data["date"].toDate();
-                          final dateThatSignsThePost =
-                              post.data["dateThatSignsThePost"];
-                          final name = post.data["name"];
-                          final fasila = post.data["fasila"];
-                          final akias = post.data["akias"];
-                          final government = post.data["government"];
-                          final city = post.data["city"];
-                          final hospital = post.data["hospital"];
-                          final hospitalAddress = post.data["hospitalAddress"];
-                          final phone = post.data["phone"];
-                          final note = post.data["note"];
-                          final postSender = post.data["postSender"];
-                          final postColor = post.data["postColor"];
+                      StreamBuilder<QuerySnapshot>(
+                        stream: search,
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.red[900],
+                              ),
+                            );
+                          }
+                          final posts = snapshot.data.documents;
+                          List<PostBubble> postBubbles = [];
+                          for (var post in posts) {
+                            final date = post.data["date"].toDate();
+                            final dateThatSignsThePost =
+                                post.data["dateThatSignsThePost"];
+                            final name = post.data["name"];
+                            final fasila = post.data["fasila"];
+                            final akias = post.data["akias"];
+                            final government = post.data["government"];
+                            final city = post.data["city"];
+                            final hospital = post.data["hospital"];
+                            final hospitalAddress =
+                                post.data["hospitalAddress"];
+                            final phone = post.data["phone"];
+                            final note = post.data["note"];
+                            final postSender = post.data["postSender"];
+                            final postColor = post.data["postColor"];
 
-                          final postBubble = PostBubble(
-                            name: name,
-                            fasila: fasila,
-                            akias: akias,
-                            government: government,
-                            city: city,
-                            hospital: hospital,
-                            hospitalAddress: hospitalAddress,
-                            phone: phone,
-                            note: note,
-                            date: date,
-                            postSender: postSender,
-                            postColor: postColor,
-                            dateThatSignsThePost: dateThatSignsThePost,
-                          );
-                          postBubbles.add(postBubble);
-                        }
-                        return Expanded(
-                          child: SizedBox(
-                            height: 170.0,
-                            child: ListView(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 20),
-                              children: postBubbles,
+                            final postBubble = PostBubble(
+                              name: name,
+                              fasila: fasila,
+                              akias: akias,
+                              government: government,
+                              city: city,
+                              hospital: hospital,
+                              hospitalAddress: hospitalAddress,
+                              phone: phone,
+                              note: note,
+                              date: date,
+                              postSender: postSender,
+                              postColor: postColor,
+                              dateThatSignsThePost: dateThatSignsThePost,
+                            );
+                            postBubbles.add(postBubble);
+                          }
+                          return Expanded(
+                            child: SizedBox(
+                              height: 170.0,
+                              child: ListView(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 20),
+                                children: postBubbles,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               )),
         ),
@@ -466,7 +481,7 @@ class _FirstPageState extends State<FirstPage>
   }
 }
 
-class PostBubble extends StatelessWidget {
+class PostBubble extends StatefulWidget {
   PostBubble({
     this.name,
     this.fasila,
@@ -497,14 +512,19 @@ class PostBubble extends StatelessWidget {
   var postColor;
   var dateThatSignsThePost;
 
+  @override
+  _PostBubbleState createState() => _PostBubbleState();
+}
+
+class _PostBubbleState extends State<PostBubble> {
   changeDateFormat() {
-    String formattedDate = intl.DateFormat.yMd().add_jm().format(date);
+    String formattedDate = intl.DateFormat.yMd().add_jm().format(widget.date);
     return formattedDate;
   }
 
   changeColor() {
-    if (postColor == true) {
-      return postSender == _loggedInUser.email
+    if (widget.postColor == true) {
+      return widget.postSender == _loggedInUser.email
           ? Colors.yellow[600]
           : Colors.white;
     } else {
@@ -515,383 +535,673 @@ class PostBubble extends StatelessWidget {
   updatePostStateEnd() async {
     await _fireStore
         .collection('post')
-        .document(dateThatSignsThePost)
+        .document(widget.dateThatSignsThePost)
         .updateData({'postColor': false});
   }
 
   updatePostStateContinue() async {
     await _fireStore
         .collection('post')
-        .document(dateThatSignsThePost)
+        .document(widget.dateThatSignsThePost)
         .updateData({'postColor': true});
   }
 
   var fasilaTwiter;
 
-  @override
-  Widget build(BuildContext context) {
-    if (fasila == "A+") {
-      fasilaTwiter = "$fasilaموجب";
-    } else if (fasila == "AB+") {
-      fasilaTwiter = "$fasilaموجب";
-    } else if (fasila == "O+") {
-      fasilaTwiter = "$fasilaموجب";
-    } else if (fasila == "B+") {
-      fasilaTwiter = "$fasilaموجب";
-    } else {
-      fasilaTwiter = fasila;
-    }
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25), color: changeColor()),
-      width: double.infinity,
-//      height: 159,
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 13),
-      child: Stack(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                postColor == true
-                                    ? fasila
-                                    : "طلب التبرع هذا قد تم",
-                                textDirection: TextDirection.ltr,
-                                style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                  color: Colors.red[900],
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.red[700],
-                                size: 20,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Flexible(
-                                child: Text("$government -- $city",
-                                    style: TextStyle(
-                                        fontFamily: 'Tajawal',
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red[500],
-                                        fontSize: 16,
-                                        letterSpacing: .3)),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.account_circle,
-                                color: Colors.red[700],
-                                size: 20,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Flexible(
-                                child: Text("اسم الحالة : $name",
-                                    style: TextStyle(
-                                        fontFamily: 'Tajawal',
-                                        color: Colors.red[500],
-                                        fontSize: 16,
-                                        letterSpacing: .3)),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 7,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.only(top: 1),
-                                child: Text(
-                                  changeDateFormat(),
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ),
-                            ],
-                          ),
-                          ExpandChild(
-                            child: Column(
+  GlobalKey _globalKey = new GlobalKey();
+
+  Future capturePNG() async {
+    try {
+      print('inside');
+      RenderRepaintBoundary boundary =
+          _globalKey.currentContext.findRenderObject();
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      var filePath = await ImagePickerSaver.saveFile(
+          fileData: byteData.buffer.asUint8List());
+      File imgFile = File("$filePath");
+
+      forgotPassword(BuildContext contex) {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30.0))),
+//                  elevation: 10,
+                  actions: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        RaisedButton(
+                          child: Center(
+                            child: Row(
                               children: <Widget>[
-                                Container(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        postColor == true
-                                            ? Row(
-                                                children: <Widget>[
-                                                  Icon(
-                                                    Icons.phone,
-                                                    color:
-                                                        Colors.lightBlueAccent,
-                                                    size: 20,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Flexible(
-                                                    child: SelectableText(
-                                                        "$phone", onTap: () {
-                                                      call();
-                                                    },
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors
-                                                                .lightBlueAccent,
-                                                            fontSize: 16,
-                                                            letterSpacing: .3)),
-                                                  ),
-                                                ],
-                                              )
-                                            : Row(
-                                                children: <Widget>[
-                                                  Icon(
-                                                    Icons.phone,
-                                                    color:
-                                                        Colors.lightBlueAccent,
-                                                    size: 20,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Flexible(
-                                                    child: Text("-----------",
-                                                        style: TextStyle(
-                                                            color: Colors
-                                                                .lightBlueAccent,
-                                                            fontSize: 16,
-                                                            letterSpacing: .3)),
-                                                  ),
-                                                ],
-                                              ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.accessibility_new,
-                                              color: Colors.red[700],
-                                              size: 20,
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Flexible(
-                                              child: Text(
-                                                  "عدد الأكياس : $akias",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Tajawal',
-                                                      color: Colors.red[500],
-                                                      fontSize: 16,
-                                                      letterSpacing: .3)),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.local_hospital,
-                                              color: Colors.red[700],
-                                              size: 20,
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Flexible(
-                                              child: Text(
-                                                  "اسم المستشفي : $hospital",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Tajawal',
-                                                      color: Colors.red[500],
-                                                      fontSize: 16,
-                                                      letterSpacing: .3)),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.home,
-                                              color: Colors.red[700],
-                                              size: 20,
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Flexible(
-                                              child: Text(
-                                                  "عنوان المستشفي : $hospitalAddress",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Tajawal',
-                                                      color: Colors.red[500],
-                                                      fontSize: 16,
-                                                      letterSpacing: .3)),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.content_paste,
-                                              color: Colors.red[700],
-                                              size: 20,
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Flexible(
-                                              child: Text("ملاحظة : $note",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Tajawal',
-                                                      color: Colors.red[500],
-                                                      fontSize: 16,
-                                                      letterSpacing: .3)),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: <Widget>[
-                                            Flexible(
-                                              child: Text("_ شارك طلب التبرع :",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Tajawal',
-                                                      color: Colors.red[500],
-                                                      fontSize: 16,
-                                                      letterSpacing: .3)),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            InkWell(
-                                                onTap: () async {
-                                                  await SocialSharePlugin.shareToTwitterLink(
-                                                      text: "مطلوب متبرع بالدم .. \n"
-                                                          " الفصيلة : + $fasilaTwiter\n"
-                                                          "$government -- $city\n"
-                                                          "$name\n"
-                                                          " رقم المرافق :   $phone\n"
-                                                          "\nتطبيق * قطرة * للتبرع بالدم",
-                                                      url: '\nhttps://play.google.com/store/apps/details?id=com.abdallahazmy.icandoit');
-                                                },
-                                                child: Tab(
-                                                  icon: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                      child: Image.asset(
-                                                        "assets/72.jpg",
-                                                        height: 40,
-                                                        width: 40,
-                                                      )),
-                                                )),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                FlutterShareMe().shareToWhatsApp(
-                                                    msg: "مطلوب متبرع بالدم .. \n"
-                                                        " الفصيلة :  $fasila\n"
-                                                        "$government -- $city\n"
-                                                        "$name\n"
-                                                        " رقم المرافق :  $phone\n"
-                                                        '\nتطبيق * قطرة * للتبرع بالدم'
-                                                        '\nhttps://play.google.com/store/apps/details?id=com.abdallahazmy.icandoit');
-                                              },
-                                              child: Tab(
-                                                  icon: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                      child: Image.asset(
-                                                        "assets/73.jpg",
-                                                        height: 40,
-                                                        width: 40,
-                                                      ))),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    )),
+                                Icon(
+                                  Icons.share,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  'ساعد',
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      color: Colors.white,
+                                      fontSize: 20),
+                                ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                          onPressed: () async {
+                            ShareExtend.share(filePath, "image");
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          color: Colors.red[900],
+                        ),
+                      ],
                     ),
-                    postSender == _loggedInUser.email
-                        ? Positioned(
-                            left: -28,
-                            top: -8,
-                            child: MaterialButton(
-                                height: 27,
-                                onPressed: () {
-                                  editTlabState(context);
-                                },
-                                color: Colors.red[700],
-                                shape: CircleBorder(),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                  size: 20,
-                                )),
-                          )
-                        : Container(),
                   ],
-                ),
-              )
-            ],
-          ),
-        ],
+                  content: Image.file(imgFile));
+            });
+      }
+
+      forgotPassword(context);
+
+//      var filee = new File(filePath);
+
+//       await Image.file(filee);
+
+    } catch (e) {
+      print("False");
+      print(e);
+      return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.fasila == "A+") {
+      fasilaTwiter = "${widget.fasila}موجب";
+    } else if (widget.fasila == "AB+") {
+      fasilaTwiter = "${widget.fasila}موجب";
+    } else if (widget.fasila == "O+") {
+      fasilaTwiter = "${widget.fasila}موجب";
+    } else if (widget.fasila == "B+") {
+      fasilaTwiter = "${widget.fasila}موجب";
+    } else {
+      fasilaTwiter = widget.fasila;
+    }
+
+    return RepaintBoundary(
+      key: _globalKey,
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25), color: changeColor()),
+        width: double.infinity,
+//      height: 159,
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 13),
+        child: Stack(
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  widget.postColor == true
+                                      ? widget.fasila
+                                      : "طلب التبرع هذا قد تم",
+                                  textDirection: TextDirection.ltr,
+                                  style: TextStyle(
+                                    fontFamily: 'Tajawal',
+                                    color: Colors.red[900],
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.location_on,
+                                  color: Colors.red[700],
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                      "${widget.government} -- ${widget.city}",
+                                      style: TextStyle(
+                                          fontFamily: 'Tajawal',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.red[500],
+                                          fontSize: 16,
+                                          letterSpacing: .3)),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.account_circle,
+                                  color: Colors.red[700],
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Flexible(
+                                  child: RichText(
+                                    text: TextSpan(children: <TextSpan>[
+                                      TextSpan(
+                                        text: 'اسم الحالة :',
+                                        style: TextStyle(
+                                            fontFamily: 'Tajawal',
+                                            color: Colors.grey[800],
+                                            fontSize: 16,
+                                            letterSpacing: .3),
+                                      ),
+                                      TextSpan(
+                                        text: ' ${widget.name}',
+                                        style: TextStyle(
+                                            fontFamily: 'Tajawal',
+                                            color: Colors.red[500],
+                                            fontSize: 16,
+                                            letterSpacing: .3),
+                                      ),
+                                    ]),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.only(top: 1),
+                                  child: Text(
+                                    changeDateFormat(),
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ExpandChild(
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          widget.postColor == true
+                                              ? Row(
+                                                  children: <Widget>[
+                                                    Icon(
+                                                      Icons.phone,
+                                                      color: Colors
+                                                          .lightBlueAccent,
+                                                      size: 20,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Flexible(
+                                                      child: SelectableText(
+                                                          "${widget.phone}",
+                                                          onTap: () {
+                                                        call();
+                                                      },
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Colors
+                                                                  .lightBlueAccent,
+                                                              fontSize: 16,
+                                                              letterSpacing:
+                                                                  .3)),
+                                                    ),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  children: <Widget>[
+                                                    Icon(
+                                                      Icons.phone,
+                                                      color: Colors
+                                                          .lightBlueAccent,
+                                                      size: 20,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Flexible(
+                                                      child: Text("-----------",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .lightBlueAccent,
+                                                              fontSize: 16,
+                                                              letterSpacing:
+                                                                  .3)),
+                                                    ),
+                                                  ],
+                                                ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Container(
+                                            height: 1,
+                                            color: Colors.grey[400],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.accessibility_new,
+                                                color: Colors.red[700],
+                                                size: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Flexible(
+                                                child: RichText(
+                                                  text: TextSpan(children: <
+                                                      TextSpan>[
+                                                    TextSpan(
+                                                      text: 'عدد الأكياس :',
+                                                      style: TextStyle(
+                                                          fontFamily: 'Tajawal',
+                                                          color:
+                                                              Colors.grey[800],
+                                                          fontSize: 14,
+                                                          letterSpacing: .3),
+                                                    ),
+                                                    TextSpan(
+                                                      text: ' ${widget.akias}',
+                                                      style: TextStyle(
+                                                          fontFamily: 'Tajawal',
+                                                          color:
+                                                              Colors.red[500],
+                                                          fontSize: 16,
+                                                          letterSpacing: .3),
+                                                    ),
+                                                  ]),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Container(
+                                            height: 1,
+                                            color: Colors.grey[400],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.local_hospital,
+                                                color: Colors.red[700],
+                                                size: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Flexible(
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Flexible(
+                                                      child: RichText(
+                                                        text:
+                                                            TextSpan(children: <
+                                                                TextSpan>[
+                                                          TextSpan(
+                                                            text:
+                                                                'اسم المستشفي :',
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'Tajawal',
+                                                                color: Colors
+                                                                    .grey[800],
+                                                                fontSize: 14,
+                                                                letterSpacing:
+                                                                    .3),
+                                                          ),
+                                                        ]),
+                                                      ),
+                                                    ),
+                                                    Flexible(
+                                                      child: RichText(
+                                                        text: TextSpan(
+                                                          text:
+                                                              ' ${widget.hospital}',
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Tajawal',
+                                                              color: Colors
+                                                                  .red[500],
+                                                              fontSize: 16,
+                                                              letterSpacing:
+                                                                  .3),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Container(
+                                            height: 1,
+                                            color: Colors.grey[400],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.home,
+                                                color: Colors.red[700],
+                                                size: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Flexible(
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    RichText(
+                                                      text: TextSpan(children: <
+                                                          TextSpan>[
+                                                        TextSpan(
+                                                          text:
+                                                              'عنوان المستشفي :',
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Tajawal',
+                                                              color: Colors
+                                                                  .grey[800],
+                                                              fontSize: 14,
+                                                              letterSpacing:
+                                                                  .3),
+                                                        ),
+                                                      ]),
+
+//
+                                                    ),
+                                                    Flexible(
+                                                      child: RichText(
+                                                        text: TextSpan(
+                                                          text:
+                                                              ' ${widget.hospitalAddress}',
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Tajawal',
+                                                              color: Colors
+                                                                  .red[500],
+                                                              fontSize: 16,
+                                                              letterSpacing:
+                                                                  .3),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Container(
+                                            height: 1,
+                                            color: Colors.grey[400],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.content_paste,
+                                                color: Colors.red[700],
+                                                size: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Flexible(
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    RichText(
+                                                      text: TextSpan(children: <
+                                                          TextSpan>[
+                                                        TextSpan(
+                                                          text: 'ملاحظة :',
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Tajawal',
+                                                              color: Colors
+                                                                  .grey[800],
+                                                              fontSize: 14,
+                                                              letterSpacing:
+                                                                  .3),
+                                                        ),
+                                                      ]),
+                                                    ),
+                                                    Flexible(
+                                                        child: RichText(
+                                                      text: TextSpan(
+                                                        text: ' ${widget.note}',
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'Tajawal',
+                                                            color:
+                                                                Colors.red[500],
+                                                            fontSize: 16,
+                                                            letterSpacing: .3),
+                                                      ),
+                                                    ))
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Container(
+                                            height: 1,
+                                            color: Colors.grey[400],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Column(
+                                            children: <Widget>[
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                              Text("_ شارك طلب التبرع _",
+                                                  style: TextStyle(
+                                                      fontFamily: 'Tajawal',
+                                                      color: Colors.grey[800],
+                                                      fontSize: 16,
+                                                      letterSpacing: .3)),
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () async {
+                                                        await SocialSharePlugin.shareToTwitterLink(
+                                                            text: "مطلوب متبرع بالدم .. \n"
+                                                                "الفصيلة : + $fasilaTwiter\n"
+                                                                "${widget.government} -- ${widget.city}\n"
+                                                                "الاسم :   ${widget.name}\n"
+                                                                "رقم المرافق :   ${widget.phone}\n"
+                                                                "\nتطبيق * قطرة * للتبرع بالدم",
+                                                            url: '\nhttps://play.google.com/store/apps/details?id=com.abdallahazmy.icandoit');
+                                                      },
+                                                      child: Tab(
+                                                        icon: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                            child: Image.asset(
+                                                              "assets/72.jpg",
+                                                              height: 40,
+                                                              width: 40,
+                                                            )),
+                                                      )),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      FlutterShareMe().shareToWhatsApp(
+                                                          msg: "مطلوب متبرع بالدم .. \n"
+                                                              "الفصيلة :  ${widget.fasila}\n"
+                                                              "${widget.government} -- ${widget.city}\n"
+                                                              "الاسم :   ${widget.name}\n"
+                                                              "رقم المرافق :  ${widget.phone}\n"
+                                                              '\nتطبيق * قطرة * للتبرع بالدم'
+                                                              '\nhttps://play.google.com/store/apps/details?id=com.abdallahazmy.icandoit');
+                                                    },
+                                                    child: Tab(
+                                                        icon: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                            child: Image.asset(
+                                                              "assets/73.jpg",
+                                                              height: 40,
+                                                              width: 40,
+                                                            ))),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      print("kkkkkkk");
+
+                                                      capturePNG();
+                                                    },
+                                                    child: Tab(
+                                                        icon: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                            child: Container(
+                                                              color: Colors
+                                                                  .cyan[300],
+                                                              child:
+                                                                  Image.asset(
+                                                                "assets/ssch.png",
+                                                                color: Colors
+                                                                    .black,
+                                                                height: 39,
+                                                                width: 39,
+                                                              ),
+                                                            ))),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 2,
+                                              ),
+                                              Opacity(
+                                                opacity: .9,
+                                                child: Image.asset(
+                                                  "assets/fainallogo.png",
+                                                  height: 45,
+                                                  width: 45,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      widget.postSender == _loggedInUser.email
+                          ? Positioned(
+                              left: -28,
+                              top: -8,
+                              child: MaterialButton(
+                                  height: 27,
+                                  onPressed: () {
+                                    editTlabState(context);
+                                  },
+                                  color: Colors.red[700],
+                                  shape: CircleBorder(),
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 20,
+                                  )),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   call() {
-    String phoneNumber = "tel:" + phone;
+    String phoneNumber = "tel:" + widget.phone;
     launch(phoneNumber);
   }
 
@@ -989,71 +1299,5 @@ class PostBubble extends StatelessWidget {
             ),
           );
         });
-  }
-}
-
-List<PopMenuItem> getPopMenus() {
-  List<PopMenuItem> popMenus = new List();
-  popMenus.add(PopMenuItem(title: "", id: 1));
-  popMenus.add(PopMenuItem(title: "", id: 2));
-  return popMenus;
-}
-
-PopMenuItem activePopMenu = getPopMenus()[0];
-
-List<PopupMenuEntry<Object>> getChildPopUpWidgets(BuildContext context) {
-  var childrenPopMenu = List<PopupMenuEntry<Object>>();
-  for (PopMenuItem popUpMenu in getPopMenus()) {
-    childrenPopMenu.add(PopupMenuItem(
-      value: popUpMenu.id,
-      child: Padding(
-        padding: EdgeInsets.all(6.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: Icon(Icons.brightness_1,
-                  size: 12,
-                  color: popUpMenu.id == activePopMenu.id
-                      ? Colors.white
-                      : Colors.transparent),
-            ),
-            Container(
-              width: 90,
-              child: Text(
-                popUpMenu.title,
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ));
-  }
-  return childrenPopMenu;
-}
-
-class PopMenuItem {
-  String title;
-  int id;
-
-  PopMenuItem({this.title, this.id});
-
-  PopMenuItem.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    id = json['id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.title;
-    data['id'] = this.id;
-    return data;
   }
 }

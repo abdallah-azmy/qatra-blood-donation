@@ -5,11 +5,10 @@ import 'first_page.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../user_model.dart';
-import 'package:geocoder/geocoder.dart';
 import 'add_doner_to_bank.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as lo;
 
 final _fireStore = Firestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -54,26 +53,24 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  double longitude;
-  double latitude;
-  var city;
-  var government;
+//  double longitude;
+//  double latitude;
+//  var city;
+//  var government;
 
+  var _myLocation;
 
-  var _myLocation ;
-
-
-  Future haa() async {
-
-    Location location = new Location();
-    LocationData myLocation = await location.getLocation();
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-    setState(() {
-      _myLocation = myLocation ;
-    });
-
-  }
+//  Future haa() async {
+//
+//    Location location = new Location();
+//    LocationData myLocation = await location.getLocation();
+//    bool _serviceEnabled;
+//    PermissionStatus _permissionGranted;
+//    setState(() {
+//      _myLocation = myLocation ;
+//    });
+//
+//  }
 //  Future<Map<String, double>> _getLocation() async {
 ////var currentLocation = <String, double>{};
 //    LocationData myLocation
@@ -94,9 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void initState() {
-
-
-    haa();
+//    haa();
 
     super.initState();
   }
@@ -184,6 +179,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                             return "لا يجب ان توجد مسافات في البريد الالكتروني";
                                           }
                                           if (!text.contains("@")) {
+                                            return "البريد الالكتروني غير صحيح";
+                                          }
+                                          if (!text.contains(".")) {
                                             return "البريد الالكتروني غير صحيح";
                                           }
 
@@ -476,29 +474,42 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void getLocation() async {
-    print("1111111111111111111111222222222222222");
-    haa();
-    print("333333333333333333333333333333");
-    var test =  _myLocation.latitude;
-    print("aaaaaaaaaaaaaaa$test");
+  getLocationPermission() async {
+    final lo.Location location = lo.Location();
+    bool _serviceEnabled;
+    lo.PermissionStatus _permissionGranted;
 
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == lo.PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != lo.PermissionStatus.granted) {
+        return;
+      }
+    }
+  }
+
+  void getLocation() async {
+    getLocationPermission();
     setState(() {
       _locationLoading = true;
     });
 
-
-
-
-    setState(() {
-      latitude = _myLocation.latitude ;
-      longitude = _myLocation.longitude ;
-    });
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.lowest);
+
     List<Placemark> p = await geolocator.placemarkFromCoordinates(
-        latitude, longitude);
+        position.latitude, position.longitude);
     Placemark place = p[0];
-    print("${place.locality}, ${place.administrativeArea}");
+    print("${place.locality}, ${place.administrativeArea}, ${place.country}");
 
     _addressController.text = "${place.administrativeArea}--${place.locality}";
 

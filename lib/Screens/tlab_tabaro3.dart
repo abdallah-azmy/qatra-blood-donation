@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import '../appBar_widget.dart';
 import 'first_page.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:location/location.dart' as lo;
 
 class TlabTabaro3 extends StatefulWidget {
   @override
@@ -513,25 +511,43 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
 
   bool _isLoading = false;
 
+  getLocationPermission() async {
+    final lo.Location location = lo.Location();
+    bool _serviceEnabled;
+    lo.PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == lo.PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != lo.PermissionStatus.granted) {
+        return;
+      }
+    }
+  }
+
   Future _getLocation() async {
+    getLocationPermission();
 
     setState(() {
       locationLoading = true;
     });
 
-    LocationData myLocation;
-    Location location = new Location();
-    myLocation = await location.getLocation();
-    var test = myLocation.latitude;
-    print("aaaaaaaaaaaaaaa$test");
-
-
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.lowest);
+
     List<Placemark> p = await geolocator.placemarkFromCoordinates(
-        myLocation.latitude, myLocation.longitude);
+        position.latitude, position.longitude);
     Placemark place = p[0];
     print("${place.locality}, ${place.administrativeArea}, ${place.country}");
-
 
     _madinaController.text = place.locality;
     _governmentController.text = place.administrativeArea;
