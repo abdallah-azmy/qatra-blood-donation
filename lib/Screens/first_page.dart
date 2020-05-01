@@ -361,7 +361,7 @@ class _FirstPageState extends State<FirstPage>
               ),
               body: GestureDetector(
                 onPanUpdate: (details) {
-                  if (details.delta.dx > 0)
+                  if (details.delta.dx > 20)
                     print("Dragging in +X direction");
                   else
                     _key.currentState.openDrawer();
