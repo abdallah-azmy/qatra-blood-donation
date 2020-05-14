@@ -48,8 +48,8 @@ android {
         applicationId "com.abdallahazmy.icandoit"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 2
-        versionName '2.0'
+        versionCode 3
+        versionName '3.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -79,5 +79,6 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.firebase:firebase-messaging:20.1.7'
 }
 apply plugin: 'com.google.gms.google-services'

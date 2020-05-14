@@ -134,7 +134,7 @@ class _FirstPageState extends State<FirstPage>
                   _key.currentState.openDrawer();
                 },
                 directionOfRightIcon: TextDirection.ltr,
-                rightIcon: Icons.arrow_back_ios,
+                rightIcon: Icons.dehaze,
               ),
               floatingActionButton: Padding(
                   padding: const EdgeInsets.only(right: 20, top: 20),
@@ -461,10 +461,10 @@ class _FirstPageState extends State<FirstPage>
                           }
                           return Expanded(
                             child: SizedBox(
-                              height: 170.0,
+//                              height: 170.0,
                               child: ListView(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 20),
+                                    horizontal: 4, vertical: 15),
                                 children: postBubbles,
                               ),
                             ),
@@ -642,7 +642,7 @@ class _PostBubbleState extends State<PostBubble> {
             borderRadius: BorderRadius.circular(25), color: changeColor()),
         width: double.infinity,
 //      height: 159,
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 13),
         child: Stack(
           children: <Widget>[
@@ -899,11 +899,12 @@ class _PostBubbleState extends State<PostBubble> {
                                                         ]),
                                                       ),
                                                     ),
+                                                    SizedBox(width: 2,),
                                                     Flexible(
                                                       child: RichText(
                                                         text: TextSpan(
                                                           text:
-                                                              ' ${widget.hospital}',
+                                                              '${widget.hospital}',
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   'Tajawal',
@@ -962,11 +963,12 @@ class _PostBubbleState extends State<PostBubble> {
 
 //
                                                     ),
+                                                    SizedBox(width: 2,),
                                                     Flexible(
                                                       child: RichText(
                                                         text: TextSpan(
                                                           text:
-                                                              ' ${widget.hospitalAddress}',
+                                                              '${widget.hospitalAddress}',
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   'Tajawal',
@@ -1022,10 +1024,11 @@ class _PostBubbleState extends State<PostBubble> {
                                                         ),
                                                       ]),
                                                     ),
+                                                    SizedBox(width: 2,),
                                                     Flexible(
                                                         child: RichText(
                                                       text: TextSpan(
-                                                        text: ' ${widget.note}',
+                                                        text: '${widget.note}',
                                                         style: TextStyle(
                                                             fontFamily:
                                                                 'Tajawal',

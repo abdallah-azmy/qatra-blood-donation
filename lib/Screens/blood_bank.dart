@@ -20,20 +20,20 @@ class _BloodBankState extends State<BloodBank> {
   var sohag = "سوهاج";
   var asiot = "اسيوط";
   var mnofia = "المنوفية";
+  var kafrelshikh = "كفر الشيخ";
   var faiom = "الفيوم";
   var qina = "قنا";
   var bniswif = "بني سويف";
-  var kafrelshikh = "كفر الشيخ";
   var aswan = "اسوان";
   var dmiat = "دمياط";
   var ismaeelia = "الاسماعيلية";
   var alaksur = "الاقصر";
   var borsaid = "بور سعيد";
-  var suis = "اسيوط";
+  var suis = "السويس";
   var matrooh = "مطروح";
   var shamalsina = "شمال سيناء";
-  var bahrahmar = "البحر الاحمر";
   var wadigdid = "الوادي الجديد";
+  var bahrahmar = "البحر الاحمر";
   var ganobsina = "جنوب سيناء";
 
   Widget governrateCard(String city) {
@@ -129,20 +129,20 @@ class _BloodBankState extends State<BloodBank> {
                     governrateCard(sohag),
                     governrateCard(asiot),
                     governrateCard(mnofia),
+                    governrateCard(kafrelshikh),
                     governrateCard(faiom),
                     governrateCard(qina),
                     governrateCard(bniswif),
-                    governrateCard(kafrelshikh),
                     governrateCard(aswan),
                     governrateCard(dmiat),
                     governrateCard(ismaeelia),
                     governrateCard(alaksur),
                     governrateCard(borsaid),
-                    governrateCard(asiot),
+                    governrateCard(suis),
                     governrateCard(matrooh),
                     governrateCard(shamalsina),
-                    governrateCard(bahrahmar),
                     governrateCard(wadigdid),
+                    governrateCard(bahrahmar),
                     governrateCard(ganobsina),
                   ],
                 ),

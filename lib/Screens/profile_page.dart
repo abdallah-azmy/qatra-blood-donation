@@ -356,7 +356,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   ),
                                                                   CupertinoActionSheetAction(
                                                                     child: Text(
-                                                                      "A-",
+                                                                      "B-",
                                                                       style: TextStyle(
                                                                           color:
                                                                               Colors.blue),
@@ -366,7 +366,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       setState(
                                                                           () {
                                                                         _newFasila =
-                                                                            "A-";
+                                                                            "B-";
                                                                       });
 
                                                                       upFasila();
