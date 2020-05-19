@@ -517,6 +517,9 @@ class PostBubble extends StatefulWidget {
 }
 
 class _PostBubbleState extends State<PostBubble> {
+
+
+
   changeDateFormat() {
     String formattedDate = intl.DateFormat.yMd().add_jm().format(widget.date);
     return formattedDate;
@@ -639,6 +642,11 @@ class _PostBubbleState extends State<PostBubble> {
       key: _globalKey,
       child: Container(
         decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: const Color(0x29000000), offset: Offset(2, 5), blurRadius: 6)
+            ],
+
             borderRadius: BorderRadius.circular(25), color: changeColor()),
         width: double.infinity,
 //      height: 159,
@@ -646,6 +654,15 @@ class _PostBubbleState extends State<PostBubble> {
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 13),
         child: Stack(
           children: <Widget>[
+
+
+
+
+
+
+
+
+
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -899,7 +916,9 @@ class _PostBubbleState extends State<PostBubble> {
                                                         ]),
                                                       ),
                                                     ),
-                                                    SizedBox(width: 2,),
+                                                    SizedBox(
+                                                      width: 2,
+                                                    ),
                                                     Flexible(
                                                       child: RichText(
                                                         text: TextSpan(
@@ -963,7 +982,9 @@ class _PostBubbleState extends State<PostBubble> {
 
 //
                                                     ),
-                                                    SizedBox(width: 2,),
+                                                    SizedBox(
+                                                      width: 2,
+                                                    ),
                                                     Flexible(
                                                       child: RichText(
                                                         text: TextSpan(
@@ -1024,7 +1045,9 @@ class _PostBubbleState extends State<PostBubble> {
                                                         ),
                                                       ]),
                                                     ),
-                                                    SizedBox(width: 2,),
+                                                    SizedBox(
+                                                      width: 2,
+                                                    ),
                                                     Flexible(
                                                         child: RichText(
                                                       text: TextSpan(

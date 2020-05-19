@@ -334,7 +334,7 @@ class _LoginPageState extends State<LoginPage> {
             switch (e.message) {
               case 'There is no user record corresponding to this identifier. The user may have been deleted.':
                 errorSigningIn =
-                    "لا يوجد مستخدم بهذه المعلومات , قد يكون هناك خطأ في البريد الالكتروني او كلمة المرور .";
+                    "لا يوجد مستخدم بهذه المعلومات , قد يكون هناك خطأ في البريد الالكتروني .";
                 break;
               case 'The password is invalid or the user does not have a password.':
                 errorSigningIn = "كلمة مرور خاطئة .";

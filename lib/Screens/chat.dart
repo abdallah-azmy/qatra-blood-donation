@@ -64,6 +64,9 @@ class _ChatState extends State<Chat> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+
+
+
                   Expanded(
                     child: Container(
                       height: 55,
