@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import '../appBar_widget.dart';
+import 'blazma_governrate_bank.dart';
 import 'governrate_bank.dart';
 
-class BloodBank extends StatefulWidget {
+class BlazmaBank extends StatefulWidget {
   @override
-  _BloodBankState createState() => _BloodBankState();
+  _BlazmaBankState createState() => _BlazmaBankState();
 }
 
-class _BloodBankState extends State<BloodBank> {
+class _BlazmaBankState extends State<BlazmaBank> {
   TextEditingController _search=new TextEditingController();
 
   var _cities = [
@@ -88,9 +89,9 @@ class _BloodBankState extends State<BloodBank> {
             Navigator.push(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) => new GovernrateBank(
-                          city: city,
-                        )));
+                    builder: (context) => new BlazmaGovernrateBank(
+                      city: city,
+                    )));
           },
           title: Center(
             child: Text(
@@ -114,7 +115,7 @@ class _BloodBankState extends State<BloodBank> {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           appBar: WaveAppBar(
-            title: "بنك الدم",
+            title: "بنك البلازما",
             backGroundColor: Colors.white,
             leftIcon: null,
             onPressedLeft: null,
@@ -175,13 +176,13 @@ class _BloodBankState extends State<BloodBank> {
                               BorderRadius.circular(20.0),
                             ),
                             suffixIcon:  InkWell(
-                                onTap: (){
-                                  setState(() {
-                                    _search.text="";
-                                  });
-                                  _setSearchFilter("");
-                                },
-                                child: Icon(Icons.cancel,size: 25,color: Colors.black87,),),
+                              onTap: (){
+                                setState(() {
+                                  _search.text="";
+                                });
+                                _setSearchFilter("");
+                              },
+                              child: Icon(Icons.cancel,size: 25,color: Colors.black87,),),
                             prefixIcon: Icon(Icons.search)),
 
                       ),

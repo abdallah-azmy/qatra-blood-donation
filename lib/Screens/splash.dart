@@ -6,7 +6,7 @@ import 'login_page.dart';
 import 'first_page.dart';
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -76,8 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterEasyLoading(
-      child: Scaffold(
+    return  Scaffold(
         body: Container(
           color: Colors.white,
           child: Stack(
@@ -139,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ],
                         ),
                         onPressed: () async {
-                          EasyLoading.show(status: 'loading...');
+
 
 //                          checkInternetConnection();
                         },
@@ -151,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ],
           ),
         ),
-      ),
-    );
+      )
+    ;
   }
 }

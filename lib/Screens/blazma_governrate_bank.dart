@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../appBar_widget.dart';
 import '../user_model.dart';
+import 'addDonorToBlazmaBank.dart';
 import 'user_profile_page.dart';
 import 'add_doner_to_bank.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,16 +13,16 @@ import 'dart:io';
 
 final _fireStore = Firestore.instance;
 
-class GovernrateBank extends StatefulWidget {
+class BlazmaGovernrateBank extends StatefulWidget {
   final String city;
 
-  const GovernrateBank({Key key, this.city}) : super(key: key);
+  const BlazmaGovernrateBank({Key key, this.city}) : super(key: key);
 
   @override
-  _GovernrateBankState createState() => _GovernrateBankState();
+  _BlazmaGovernrateBankState createState() => _BlazmaGovernrateBankState();
 }
 
-class _GovernrateBankState extends State<GovernrateBank> {
+class _BlazmaGovernrateBankState extends State<BlazmaGovernrateBank> {
   @override
   void initState() {
     super.initState();
@@ -62,7 +63,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
 
   inetialSearch() {
     Stream _search = _fireStore
-        .collection("bank")
+        .collection("blazmaBank")
         .document(widget.city)
         .collection('doners')
         .orderBy('date', descending: true)
@@ -71,7 +72,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
     if (__currentFasilaSelected != ' - عرض كل الفصائل -  ') {
       setState(() {
         _search = _fireStore
-            .collection("bank")
+            .collection("blazmaBank")
             .document(widget.city)
             .collection('doners')
             .orderBy('date', descending: true)
@@ -86,7 +87,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
 
   _readCheckIfAccAddedToBank() async {
     final prefs = await SharedPreferences.getInstance();
-    final key = 'my_int_key';
+    final key = 'my_int_key_blazma';
     setState(() {
       addedToBank = prefs.getInt(key) ?? 0;
     });
@@ -96,7 +97,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
 
   _saveCheckIfAccAddedToBank() async {
     final prefs = await SharedPreferences.getInstance();
-    final key = 'my_int_key';
+    final key = 'my_int_key_blazma';
     addedToBank = 1;
     prefs.setInt(key, addedToBank);
     print('saved $addedToBank');
@@ -114,7 +115,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
           await _fireStore
               .collection('users')
               .document(firebaseUser.uid)
-              .updateData({'governrateBank': widget.city});
+              .updateData({'blazmaBank': widget.city});
         }
 
         ;
@@ -122,7 +123,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
         uploadUserToGovernrateBank();
 
         await _fireStore
-            .collection('bank')
+            .collection('blazmaBank')
             .document(widget.city)
             .collection('doners')
             .document(firebaseUser.uid)
@@ -142,7 +143,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
 
   Future<User> retrieveUserDetails(FirebaseUser user) async {
     DocumentSnapshot _documentSnapshot =
-        await _fireStore.collection('users').document(user.uid).get();
+    await _fireStore.collection('users').document(user.uid).get();
     print(user.uid);
     if (_documentSnapshot.data != null) {
       print('there is data ');
@@ -174,7 +175,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
         builder: (context) {
           return AlertDialog(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             title: Center(
               child: Text(
                 "سيتم اضافتك كمتبرع في محافظة $city",
@@ -293,28 +294,28 @@ class _GovernrateBankState extends State<GovernrateBank> {
                   ),
                   addedToBank == 0
                       ? FlatButton(
-                          child: Text(
-                            'اضف حسابك الي بنك الدم',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Tajawal',
-                            ),
-                          ),
-                          onPressed: () {
-                            creatAlertDialog(context, widget.city);
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          color: Colors.red,
-                        )
+                    child: Text(
+                      'اضف حسابك الي بنك البلازما',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Tajawal',
+                      ),
+                    ),
+                    onPressed: () {
+                      creatAlertDialog(context, widget.city);
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    color: Colors.red,
+                  )
                       : SizedBox(
-                          height: 0,
-                        ),
+                    height: 0,
+                  ),
                   FlatButton(
                     child: Text(
-                      'أضف متبرع الي بنك الدم',
+                      'أضف متبرع الي بنك البلازما',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -327,7 +328,7 @@ class _GovernrateBankState extends State<GovernrateBank> {
                           context,
                           new MaterialPageRoute(
                               builder: (context) =>
-                                  AddDonerToBank(widget.city, _scafold)));
+                                  AddDonerToBlazmaBank(widget.city, _scafold)));
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
@@ -347,20 +348,20 @@ class _GovernrateBankState extends State<GovernrateBank> {
                             size: 24,
                           )),
                       validator: (value) =>
-                          value == "حدد فصيلتك" ? 'برجاء اختيار الفصيلة' : null,
+                      value == "حدد فصيلتك" ? 'برجاء اختيار الفصيلة' : null,
                       items: __fasila.map((String dropDownStringItem) {
                         return DropdownMenuItem<String>(
                           value: dropDownStringItem,
                           child: Center(
                               child: Text(
-                            dropDownStringItem,
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.red[900],
-                              fontSize: 18,
-                              fontFamily: 'Tajawal',
-                            ),
-                          )),
+                                dropDownStringItem,
+                                textDirection: TextDirection.ltr,
+                                style: TextStyle(
+                                  color: Colors.red[900],
+                                  fontSize: 18,
+                                  fontFamily: 'Tajawal',
+                                ),
+                              )),
                         );
                       }).toList(),
                       onChanged: (String newValueSelected) {
@@ -420,8 +421,8 @@ class _GovernrateBankState extends State<GovernrateBank> {
                         padding: const EdgeInsets.only(bottom: 80),
                         child: Center(
                           child: Text("لا يوجد متبرعين حتي الان",style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: "Tajawal"
+                            fontSize: 20,
+                            fontFamily: "Tajawal"
                           ),),
                         ),
                       ): ListView(
@@ -441,12 +442,12 @@ class _GovernrateBankState extends State<GovernrateBank> {
 class Doner extends StatefulWidget {
   Doner(
       {this.fasila,
-      this.address,
-      this.displayName,
-      this.phone,
-      this.email,
-      this.imageUrl,
-      this.dateOfDonation});
+        this.address,
+        this.displayName,
+        this.phone,
+        this.email,
+        this.imageUrl,
+        this.dateOfDonation});
 
   final String fasila;
   final String address;
@@ -515,8 +516,8 @@ class _DonerState extends State<Doner> {
                   context,
                   new MaterialPageRoute(
                       builder: (context) => new UserProfile(
-                            user: _user,
-                          )));
+                        user: _user,
+                      )));
             },
             title: Center(
               child: Column(

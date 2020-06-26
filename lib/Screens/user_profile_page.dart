@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../appBar_widget.dart';
 import '../user_model.dart';
@@ -13,6 +14,24 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+
+  imageConditions() {
+   if (widget.user.imageUrl != null) {
+      return CachedNetworkImage(
+        imageUrl: "${widget.user.imageUrl}",
+        placeholder: (context, url) => new CircularProgressIndicator(),
+        errorWidget: (context, url, error) => new Icon(Icons.error),
+      );
+
+    }
+
+      return Image.asset(
+        "assets/abcd.jpg",
+        fit: BoxFit.cover,
+      );
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -68,15 +87,11 @@ class _UserProfileState extends State<UserProfile> {
                     Column(
                       children: <Widget>[
                         Container(
-                            height: 100,
-                            margin: EdgeInsets.only(top: 30),
+                            height: 125,
+                            width: 125,
+                            margin: EdgeInsets.only(top: 12),
                             child: ClipOval(
-                                child: Image.asset(
-                              "assets/abcd.jpg",
-                              fit: BoxFit.cover,
-                              width: 95.0,
-                              height: 100.0,
-                            ))),
+                                child: imageConditions())),
                         Padding(
                           padding: EdgeInsets.all(4),
                         ),
@@ -181,6 +196,7 @@ class _UserInfoState extends State<UserInfo> {
                                       textDirection: TextDirection.ltr,
                                       style: TextStyle(
                                           color: Colors.red[900],
+                                          fontFamily: 'Tajawal',
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18)),
                                 ],

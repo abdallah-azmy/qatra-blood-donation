@@ -6,6 +6,7 @@ class User {
   String fasila;
   String address;
   String dateOfDonation;
+  String imageUrl;
   var date;
 
   User(
@@ -15,6 +16,7 @@ class User {
       this.phone,
       this.fasila,
       this.address,
+      this.imageUrl,
       this.dateOfDonation,
       this.date});
 
@@ -25,6 +27,7 @@ class User {
         phone: map['phone'],
         fasila: map['fasila'],
         address: map['address'],
+        imageUrl: map['imageUrl'],
         dateOfDonation: map['dateOfDonation'],
         date: map['date'],
       );
@@ -36,6 +39,7 @@ class User {
         'phone': user.phone,
         'fasila': user.fasila,
         'address': user.address,
+        'imageUrl': user.imageUrl,
         'dateOfDonation': user.dateOfDonation,
         'date': user.date,
       };

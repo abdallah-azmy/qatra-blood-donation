@@ -136,6 +136,40 @@ class _AboutTheAppState extends State<AboutTheApp> {
                               color: Colors.grey,
                             ),
                           ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 20, right: 23, bottom: 3),
+                                child: Text(
+                                  "عايز تعمل خير ؟",
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontSize: 21,
+                                      color: Colors.red[900]),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                right: 10, top: 5, left: 10),
+                            child: Text(
+                                "تقدر تشارك وتنشر طلبات التبرع عندك علي مواقع السوشيال ميديا "
+                                    "وتتفاعل مع صفحة التطبيق وتساعد المحتاج انه يوصل للمتبرع والعكس .. ممكن تنقذ حياة انسان "
+                                    "بضغطة واحدة ومن غير ما تاخد بالك ! "
+                                ,
+                                style: TextStyle(fontSize: 16)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15, right: 25, left: 25),
+                            child: Container(
+                              height: 1,
+                              color: Colors.grey,
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Center(

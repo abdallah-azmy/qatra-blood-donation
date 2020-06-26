@@ -150,9 +150,12 @@ class MessagesStream extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.red[900],
+            return Container(
+              height: 150,
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.red[900],
+                ),
               ),
             );
           }
@@ -232,11 +235,13 @@ class _MessageBubbleState extends State<MessageBubble> {
                     SizedBox(
                       width: 5,
                     ),
-                    Text(
-                      senderName,
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 24,
+                    Flexible(
+                      child: Text(
+                        senderName,
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 24,
+                        ),
                       ),
                     ),
                   ],

@@ -12,7 +12,7 @@ creatAlertDialog(BuildContext context, text) {
       builder: (context) {
         return AlertDialog(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
             "Warning",
             style: TextStyle(color: Colors.red[900], fontSize: 24),
@@ -28,17 +28,17 @@ creatAlertDialog(BuildContext context, text) {
       });
 }
 
-class AddDonerToBank extends StatefulWidget {
+class AddDonerToBlazmaBank extends StatefulWidget {
   var city;
   GlobalKey<ScaffoldState> _scafold;
 
-  AddDonerToBank(this.city, this._scafold);
+  AddDonerToBlazmaBank(this.city, this._scafold);
 
   @override
-  _AddDonerToBankState createState() => _AddDonerToBankState();
+  _AddDonerToBlazmaBankState createState() => _AddDonerToBlazmaBankState();
 }
 
-class _AddDonerToBankState extends State<AddDonerToBank> {
+class _AddDonerToBlazmaBankState extends State<AddDonerToBlazmaBank> {
   GlobalKey<ScaffoldState> scafoldKey = new GlobalKey<ScaffoldState>();
 
   final _fireStore = Firestore.instance;
@@ -114,7 +114,7 @@ class _AddDonerToBankState extends State<AddDonerToBank> {
         print("Connected to Mobile Network");
 
         await _fireStore
-            .collection('bank')
+            .collection('blazmaBank')
             .document(widget.city)
             .collection('doners')
             .document(now.toString())
@@ -152,7 +152,7 @@ class _AddDonerToBankState extends State<AddDonerToBank> {
         child: Scaffold(
           key: scafoldKey,
           appBar: WaveAppBar(
-            title: "أضف متبرع الي بنك الدم",
+            title: "أضف متبرع الي بنك البلازما",
             backGroundColor: Colors.white,
             leftIcon: null,
             onPressedLeft: null,
@@ -340,26 +340,26 @@ class _AddDonerToBankState extends State<AddDonerToBank> {
                   ),
                   isLoading
                       ? Image.asset(
-                          "assets/loading.gif",
-                          height: 47.0,
-                          width: 47.0,
-                        )
+                    "assets/loading.gif",
+                    height: 47.0,
+                    width: 47.0,
+                  )
                       : RaisedButton(
-                          child: Text(
-                            'حفظ',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Tajawal',
-                                fontSize: 20),
-                          ),
-                          onPressed: () {
-                            validation();
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          color: Colors.green,
-                        ),
+                    child: Text(
+                      'حفظ',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Tajawal',
+                          fontSize: 20),
+                    ),
+                    onPressed: () {
+                      validation();
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    color: Colors.green,
+                  ),
                 ],
               ),
             ),

@@ -3,19 +3,20 @@ import '../appBar_widget.dart';
 import 'first_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart' as lo;
 
-class TlabTabaro3 extends StatefulWidget {
+GlobalKey<ScaffoldState> _scafold = new GlobalKey<ScaffoldState>();
+
+class TalabTabaro3 extends StatefulWidget {
   @override
   _TalabTabaro3State createState() => _TalabTabaro3State();
 }
 
-class _TalabTabaro3State extends State<TlabTabaro3> {
-  final _fireStore = Firestore.instance;
+class _TalabTabaro3State extends State<TalabTabaro3> {
   final _auth = FirebaseAuth.instance;
 
   var _madinaController = TextEditingController();
@@ -37,6 +38,7 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
   final TextEditingController _akias = TextEditingController();
 
   bool locationLoading = false;
+  bool _isLoading = false;
 
   var _fasilaDropDown = [
     'اي فصيلة',
@@ -81,12 +83,12 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterEasyLoading(
-      child: MaterialApp(
+    return  MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
+            key: _scafold,
             appBar: WaveAppBar(
               title: "طلب تبرع",
               backGroundColor: Colors.white,
@@ -283,6 +285,8 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                                 validator: (text) {
                                   if (text.isEmpty) {
                                     return "ادخل اسم المحافظة";
+                                  }if (text.trim() == "") {
+                                    return "ادخل اسم المحافظة";
                                   }
                                 },
                                 textAlign: TextAlign.center,
@@ -312,6 +316,8 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                               child: new TextFormField(
                                 validator: (text) {
                                   if (text.isEmpty) {
+                                    return "ادخل اسم المدينة";
+                                  }if (text.trim() == "") {
                                     return "ادخل اسم المدينة";
                                   }
                                 },
@@ -477,7 +483,13 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                       SizedBox(
                         height: 5,
                       ),
-                      RaisedButton(
+                      _isLoading
+                          ?  Image.asset(
+                        "assets/loading.gif",
+                        height: 47.0,
+                        width: 47.0,
+                      )
+                          : RaisedButton(
                         child: Text(
                           "ارسال طلب التبرع",
                           style: TextStyle(
@@ -486,9 +498,7 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
                               color: Colors.white,
                               fontSize: 17),
                         ),
-                        onPressed: _isLoading
-                            ? null
-                            : () {
+                        onPressed:  () {
                                 validation();
                               },
                         shape: RoundedRectangleBorder(
@@ -505,11 +515,11 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
             ),
           ),
         ),
-      ),
-    );
+      )
+    ;
   }
 
-  bool _isLoading = false;
+
 
   getLocationPermission() async {
     final lo.Location location = lo.Location();
@@ -558,7 +568,8 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
   }
 
   validation() {
-    _formTlabKey.currentState.validate() ? addPost() : print("not valid");
+    addPost();
+//    _formTlabKey.currentState.validate() ? addPost() : print("not valid");
   }
 
   addPost() async {
@@ -569,38 +580,44 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
     var now = new DateTime.now();
     bool postColor = true;
 
-    Map<String, dynamic> postMap() => {
-          'name': name,
-          'fasila': fasila,
-          'akias': akias,
-          'government': government,
-          'city': city,
-          'hospital': hospital,
-          'hospitalAddress': hospitalAddress,
-          'phone': phone,
-          'note': note,
-          'date': now,
-          'dateThatSignsThePost': now.toString(),
-          'postSender': loggedInUser.email,
-          'postColor': postColor
-        };
+    print("11111111111111111111111111");
+//    Map<String, dynamic> postMap() => {
+//          'name': name,
+//          'fasila': fasila,
+//          'akias': akias,
+//          'government': government,
+//          'city': city,
+//          'hospital': hospital,
+//          'hospitalAddress': hospitalAddress,
+//          'phone': phone,
+//          'note': note,
+//          'date': now,
+//          'dateThatSignsThePost': now.toString(),
+//          'postSender': loggedInUser.email,
+//          'postColor': postColor
+//        };
 
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print("Connected to Mobile Network");
 
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => FirstPage()));
+//        await _fireStore
+//            .collection("post")
+//            .document(now.toString())
+//            .setData(postMap());
+
 
         setState(() {
           _isLoading = false;
         });
 
-        await _fireStore
-            .collection("post")
-            .document(now.toString())
-            .setData(postMap());
+        showNotification("تم اضافة طلب التبرع بنجاح", _scafold );
+        Navigator.pop(context);
+
+
+
+
       }
     } on SocketException catch (_) {
       String invalid = "Unable to connect. Please Check Internet Connection";
@@ -609,9 +626,23 @@ class _TalabTabaro3State extends State<TlabTabaro3> {
       });
 
       print(invalid);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        EasyLoading.showError('لا يوجد اتصال بالانترنت');
-      });
+      showNotification("لا يوجد اتصال بالانترنت !", _scafold);
     }
   }
+}
+
+showNotification(msg, _scafold) {
+  _scafold.currentState.showSnackBar(
+    SnackBar(
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          "$msg",textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: "Tajawal", fontSize: 18),
+        ),
+      ),
+      backgroundColor: Colors.black87.withOpacity(.8),
+      duration: Duration(seconds: 4),
+    ),
+  );
 }

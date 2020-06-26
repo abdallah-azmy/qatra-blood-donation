@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
 //    configureNotifications();
     subscripeAdmin();
-//    getDeviceToken();
+    getDeviceToken();
     super.initState();
   }
 

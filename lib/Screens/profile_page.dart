@@ -1,11 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '../appBar_widget.dart';
 import '../user_model.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
+import 'package:path/path.dart' as path;
 import 'package:intl/intl.dart' as intl;
 
 class ProfilePage extends StatefulWidget {
@@ -18,14 +22,22 @@ class _ProfilePageState extends State<ProfilePage> {
   final _auth = FirebaseAuth.instance;
   final _fireStore = Firestore.instance;
   FirebaseUser loggedInUser;
+
   var dateOfDonation = "---";
+  var newPhone = "---";
+  var _newPhone;
+  var _newName;
+  var newName = "---";
   var _newAddress;
   var newAddress = "---";
   var newFasila = "---";
   var _newFasila;
   final _addressFormKey = GlobalKey<FormState>();
+  final _phoneFormKey = GlobalKey<FormState>();
+  final _nameFormKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   var myFormat = intl.DateFormat('d-MM-yyyy');
+  GlobalKey<ScaffoldState> _scafold = new GlobalKey<ScaffoldState>();
 
   makeUserObject() async {
     FirebaseUser _currentUser = await getCurrentUser();
@@ -49,11 +61,84 @@ class _ProfilePageState extends State<ProfilePage> {
         dateOfDonation = _documentSnapshot.data["dateOfDonation"];
         newAddress = _documentSnapshot.data["address"];
         newFasila = _documentSnapshot.data["fasila"];
+        newPhone = _documentSnapshot.data["phone"];
+        newName = _documentSnapshot.data["displayName"];
+        imageUrl = _documentSnapshot.data["imageUrl"];
       });
 
       return User.fromMap(_documentSnapshot.data);
     } else {
       return null;
+    }
+  }
+
+  File _image;
+  var imageUrl;
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+    print("bbbbbbbbbbbbbbbbbbbbbbbbbbb");
+    uploadPic(context);
+  }
+
+  var loading = false;
+
+  Future uploadPic(BuildContext context) async {
+    setState(() {
+      loading = true;
+    });
+
+    String fileName = path.basename(_image.path);
+
+    StorageReference fireBaseStorageRefrence =
+        FirebaseStorage.instance.ref().child(fileName);
+
+    StorageUploadTask uploadTask = fireBaseStorageRefrence.putFile(_image);
+
+    var dowurl = await (await uploadTask.onComplete).ref.getDownloadURL();
+
+    setState(() {
+      imageUrl = dowurl.toString();
+    });
+
+    await _fireStore.collection('users').document(loggedInUser.uid).updateData({
+      "imageUrl": imageUrl,
+//      'displayName': name,
+    });
+    print("dataaa uploaaaaaaaaded  image");
+
+//    setState(() {
+//      print("profile pic uploaded");
+//      Scaffold.of(context).showSnackBar(SnackBar(
+//        content: Text("Done !"),
+//      ));
+//    });
+    showNotification("تمت العملية بنجاح !", _scafold);
+
+    setState(() {
+      loading = false;
+    });
+  }
+
+  imageConditions() {
+    if (_image != null) {
+      return Image.file(
+        _image,
+        fit: BoxFit.cover,
+      );
+    } else if (imageUrl != null) {
+      return CachedNetworkImage(
+        imageUrl: "$imageUrl",
+        placeholder: (context, url) => new CircularProgressIndicator(),
+        errorWidget: (context, url, error) => new Icon(Icons.error),
+      );
+    } else {
+      return Image.asset(
+        "assets/abcd.jpg",
+        fit: BoxFit.cover,
+      );
     }
   }
 
@@ -69,6 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+          key: _scafold,
           appBar: WaveAppBar(
             title: "الصفحة الشخصية",
             backGroundColor: Colors.red[800],
@@ -113,44 +199,100 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: <Widget>[
                     Container(
                       width: double.infinity,
-                      height: 238,
+                      height: 275,
                       color: Colors.red[800],
                     ),
                     Column(
                       children: <Widget>[
-                        Container(
-                          height: 100,
-                          margin: EdgeInsets.only(top: 30),
-                          child: ClipOval(
-                              child: Image.asset(
-                            "assets/abcd.jpg",
-                            fit: BoxFit.cover,
-                            width: 95.0,
-                            height: 100.0,
-                          )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            InkWell(
+                              onTap: () {
+                                print("aaaaaaaaaaaaaaa");
+                                getImage();
+                              },
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 90),
+                                  child: loading == false
+                                      ? Icon(
+                                          Icons.add_a_photo,
+                                          color: Colors.black87,
+                                          size: 25,
+                                        )
+                                      : Image.asset(
+                                          "assets/loading.gif",
+                                          height: 25.0,
+                                          width: 25.0,
+                                        ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 125,
+                              width: 125,
+                              margin: EdgeInsets.only(top: 12),
+                              child: ClipOval(child: imageConditions()),
+                            ),
+                            Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 90),
+                                child: Icon(
+                                  null,
+                                  color: Colors.black87,
+                                  size: 25,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: EdgeInsets.all(4),
                         ),
-                        user == null
-                            ? Text(
-                                "---",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20),
-                                textAlign: TextAlign.center,
-                              )
-                            : Text(
-                                user.displayName,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 27),
-                                textAlign: TextAlign.center,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              height: 40,
+                              width: 40,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: new BorderRadius.circular(10.0),
+                                color: Colors.black87.withOpacity(.4),
                               ),
-                        Padding(
-                          padding: EdgeInsets.all(2),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  newName,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                print("aa");
+                                editName(context);
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                child: Icon(
+                                  Icons.settings,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                         Container(
                           padding: EdgeInsets.all(10),
@@ -496,21 +638,30 @@ class _ProfilePageState extends State<ProfilePage> {
                                             ),
                                           ),
                                           ListTile(
+                                            trailing: InkWell(
+                                              onTap: () {
+                                                editPhone(context);
+                                              },
+                                              child: Container(
+                                                height: 50,
+                                                width: 50,
+                                                color: Colors.white,
+                                                child: Icon(
+                                                  Icons.settings,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
                                             leading: Icon(Icons.phone),
                                             title: Text("رقم الهاتف :",
                                                 style: TextStyle(
                                                   fontFamily: 'Tajawal',
                                                 )),
-                                            subtitle: user == null
-                                                ? Text(
-                                                    "---",
-                                                  )
-                                                : Text(user.phone,
-                                                    style: TextStyle(
-                                                        color: Colors.red[900],
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18)),
+                                            subtitle: Text(newPhone,
+                                                style: TextStyle(
+                                                    color: Colors.red[900],
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18)),
                                           ),
                                           ListTile(
                                             trailing: InkWell(
@@ -538,23 +689,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     fontSize: 18)),
                                           ),
                                           ListTile(
-                                            leading: Icon(Icons.email),
-                                            title: Text("البريد الالكتروني :",
-                                                style: TextStyle(
-                                                  fontFamily: 'Tajawal',
-                                                )),
-                                            subtitle: user == null
-                                                ? Text(
-                                                    "---",
-                                                  )
-                                                : Text(user.email,
-                                                    style: TextStyle(
-                                                        color: Colors.red[900],
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18)),
-                                          ),
-                                          ListTile(
                                               leading: Icon(Icons.person),
                                               title: Text("موعد اخر تبرع :",
                                                   style: TextStyle(
@@ -579,6 +713,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 18))),
+                                          ListTile(
+                                            leading: Icon(Icons.email),
+                                            title: Text("البريد الالكتروني :",
+                                                style: TextStyle(
+                                                  fontFamily: 'Tajawal',
+                                                )),
+                                            subtitle: user == null
+                                                ? Text(
+                                                    "---",
+                                                  )
+                                                : Text(user.email,
+                                                    style: TextStyle(
+                                                        color: Colors.red[900],
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18)),
+                                          ),
                                         ],
                                       ))
                                     ],
@@ -590,7 +741,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               )
                             ],
                           ),
-                        )
+                        ),
                       ],
                     )
                   ],
@@ -599,6 +750,101 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           )),
     );
+  }
+
+  editName(BuildContext contex) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              actions: <Widget>[
+                RaisedButton(
+                  child: Text(
+                    'حفظ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Tajawal',
+                    ),
+                  ),
+                  onPressed: () {
+                    print("bbbbbbbbbbbbbbbbbbbbbbbb");
+                    upName() async {
+                      print("in the fn");
+                      try {
+                        final result =
+                            await InternetAddress.lookup('google.com');
+                        if (result.isNotEmpty &&
+                            result[0].rawAddress.isNotEmpty) {
+                          print("Connected to Mobile Network");
+                          uploadName();
+                        }
+                      } on SocketException catch (_) {
+                        showNotification("لا يوجد اتصال بالانترنت !", _scafold);
+                      }
+                      print("aaaaaaaaaaaaaaaaa");
+
+                      retrieveUserDetails(loggedInUser);
+                      Navigator.pop(context);
+                    }
+
+                    _nameFormKey.currentState.validate()
+                        ? upName()
+                        : print("not valid");
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  color: Colors.green,
+                ),
+              ],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30.0))),
+              title: Center(
+                child: Text(
+                  "تعديل الاسم",
+                  style: TextStyle(
+                    fontFamily: 'Tajawal',
+                    color: Colors.red[900],
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              elevation: 10,
+              content: Form(
+                key: _nameFormKey,
+                child: TextFormField(
+                  validator: (text) {
+                    if (text.trim() == "") {
+                      return "لا يجب ان يكون الاسم كله مسافات";
+                    }
+                  },
+                  textAlign: TextAlign.center,
+                  onChanged: (text) {
+                    setState(() {
+                      _newName = text;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "الاسم",
+                    labelStyle: TextStyle(
+                      fontFamily: 'Tajawal',
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
+                ),
+              ));
+        });
+  }
+
+  uploadName() async {
+    FirebaseUser firebaseUser = await _auth.currentUser();
+
+    await _fireStore
+        .collection('users')
+        .document(firebaseUser.uid)
+        .updateData({'displayName': _newName});
   }
 
   upFasila() async {
@@ -611,9 +857,7 @@ class _ProfilePageState extends State<ProfilePage> {
         uploadFasila();
       }
     } on SocketException catch (_) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        EasyLoading.showError('لا يوجد اتصال بالانترنت');
-      });
+      showNotification("لا يوجد اتصال بالانترنت !", _scafold);
     }
     retrieveUserDetails(loggedInUser);
   }
@@ -624,6 +868,129 @@ class _ProfilePageState extends State<ProfilePage> {
         .collection('users')
         .document(firebaseUser.uid)
         .updateData({'fasila': _newFasila});
+  }
+
+  editPhone(BuildContext contex) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              actions: <Widget>[
+                RaisedButton(
+                  child: Text(
+                    'حفظ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Tajawal',
+                    ),
+                  ),
+                  onPressed: () {
+                    print("bbbbbbbbbbbbbbbbbbbbbbbb");
+                    upPhone() async {
+                      print("in the fn");
+                      try {
+                        final result =
+                            await InternetAddress.lookup('google.com');
+                        if (result.isNotEmpty &&
+                            result[0].rawAddress.isNotEmpty) {
+                          print("Connected to Mobile Network");
+                          uploadPhone();
+                        }
+                      } on SocketException catch (_) {
+                        showNotification("لا يوجد اتصال بالانترنت !", _scafold);
+                      }
+                      print("aaaaaaaaaaaaaaaaa");
+
+                      retrieveUserDetails(loggedInUser);
+                      Navigator.pop(context);
+                    }
+
+                    _phoneFormKey.currentState.validate()
+                        ? upPhone()
+                        : print("not valid");
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  color: Colors.green,
+                ),
+              ],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30.0))),
+              title: Center(
+                child: Text(
+                  "تعديل رقم الموبايل",
+                  style: TextStyle(
+                    fontFamily: 'Tajawal',
+                    color: Colors.red[900],
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              elevation: 10,
+              content: Form(
+                key: _phoneFormKey,
+                child: TextFormField(
+                  textDirection: TextDirection.rtl,
+                  validator: (text) {
+                    if (text.isEmpty) {
+                      return "برجاء كتابة الرقم";
+                    } else if (text.length != 11) {
+                      return "الرقم خاطيء";
+                    }
+                  },
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                  onChanged: (text) {
+                    setState(() {
+                      _newPhone = text;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "رقم الموبايل",
+                    labelStyle: TextStyle(
+                      fontFamily: 'Tajawal',
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
+                ),
+              ));
+        });
+  }
+
+  uploadPhone() async {
+    FirebaseUser firebaseUser = await _auth.currentUser();
+
+    var _governerate;
+
+    DocumentSnapshot _documentSnapshot =
+        await _fireStore.collection('users').document(user.uid).get();
+
+    if (_documentSnapshot.data != null) {
+      print('there is data ');
+
+      setState(() {
+        _governerate = _documentSnapshot.data["governrateBank"];
+      });
+
+      print("$_governerate");
+
+      if (_governerate != null) {
+        await _fireStore
+            .collection('bank')
+            .document(_governerate)
+            .collection('doners')
+            .document(firebaseUser.uid)
+            .updateData({'phone': _newPhone});
+      }
+    }
+
+    await _fireStore
+        .collection('users')
+        .document(firebaseUser.uid)
+        .updateData({'phone': _newPhone});
   }
 
   editAddress(BuildContext contex) {
@@ -654,9 +1021,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           uploadAddressFB();
                         }
                       } on SocketException catch (_) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          EasyLoading.showError('لا يوجد اتصال بالانترنت');
-                        });
+                        showNotification("لا يوجد اتصال بالانترنت !", _scafold);
                       }
                       print("aaaaaaaaaaaaaaaaa");
 
@@ -689,6 +1054,7 @@ class _ProfilePageState extends State<ProfilePage> {
               content: Form(
                 key: _addressFormKey,
                 child: TextFormField(
+                  textDirection: TextDirection.rtl,
                   validator: (text) {
                     if (text.isEmpty) {
                       return "برجاء كتابة العنوان";
@@ -745,13 +1111,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             await InternetAddress.lookup('google.com');
                         if (result.isNotEmpty &&
                             result[0].rawAddress.isNotEmpty) {
-                          print("Connected to Mobile Network");
+
                           uploadDateOfDonation();
+
                         }
                       } on SocketException catch (_) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          EasyLoading.showError('لا يوجد اتصال بالانترنت');
-                        });
+                        showNotification("لا يوجد اتصال بالانترنت !", _scafold);
                       }
                     }
 
@@ -807,7 +1172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       setState(() {
                         selectedDate = picked;
                       });
-                    uploadDateOfDonation();
+//                    uploadDateOfDonation();
                   }
 
                   _selectDate(context);
@@ -818,9 +1183,64 @@ class _ProfilePageState extends State<ProfilePage> {
 
   uploadDateOfDonation() async {
     FirebaseUser firebaseUser = await _auth.currentUser();
+
+    var _governerate;
+    var blazmaBank;
+
+    DocumentSnapshot _documentSnapshot =
+        await _fireStore.collection('users').document(user.uid).get();
+
+    if (_documentSnapshot.data != null) {
+      print('there is data ');
+
+      setState(() {
+        _governerate = _documentSnapshot.data["governrateBank"];
+        blazmaBank = _documentSnapshot.data["blazmaBank"];
+      });
+
+      print("$_governerate");
+
+      if (_governerate != null) {
+        await _fireStore
+            .collection('bank')
+            .document(_governerate)
+            .collection('doners')
+            .document(firebaseUser.uid)
+            .updateData({'dateOfDonation': myFormat.format(selectedDate)});
+      }
+      if (_governerate != null) {
+        await _fireStore
+            .collection('blazmaBank')
+            .document(blazmaBank)
+            .collection('doners')
+            .document(firebaseUser.uid)
+            .updateData({'dateOfDonation': myFormat.format(selectedDate)});
+      }
+    }
+
     await _fireStore
         .collection('users')
         .document(firebaseUser.uid)
         .updateData({'dateOfDonation': myFormat.format(selectedDate)});
+
+    print("888888888888888888");
+    retrieveUserDetails(firebaseUser);
   }
+}
+
+showNotification(msg, _scafold) {
+  _scafold.currentState.showSnackBar(
+    SnackBar(
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          "$msg",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: "Tajawal", fontSize: 18),
+        ),
+      ),
+      backgroundColor: Colors.black87.withOpacity(.8),
+      duration: Duration(seconds: 4),
+    ),
+  );
 }

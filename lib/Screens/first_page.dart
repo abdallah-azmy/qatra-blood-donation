@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import 'blazma_bank.dart';
 import 'blood_bank.dart';
 import 'about_theApp.dart';
 import 'articles.dart';
@@ -12,7 +16,6 @@ import 'package:intl/intl.dart' as intl;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
 import 'package:social_share_plugin/social_share_plugin.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
@@ -22,7 +25,8 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
 import 'package:share_extend/share_extend.dart';
-import 'package:image_picker_saver/image_picker_saver.dart';
+
+final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
 final _fireStore = Firestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -110,64 +114,63 @@ class _FirstPageState extends State<FirstPage>
     return null;
   }
 
-  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarColor(Colors.red[900]);
-    return FlutterEasyLoading(
-        child: OrientationBuilder(builder: (context, orientation) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
 //        theme: ThemeData.dark(),
-        home: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Scaffold(
-              key: _key,
-              resizeToAvoidBottomPadding: false,
-              appBar: WaveAppBar(
-                title: "طلبات التبرع",
-                backGroundColor: Colors.grey[300],
-                leftIcon: null,
-                onPressedLeft: null,
-                onPressedRight: () {
-                  _key.currentState.openDrawer();
-                },
-                directionOfRightIcon: TextDirection.ltr,
-                rightIcon: Icons.dehaze,
-              ),
-              floatingActionButton: Padding(
-                  padding: const EdgeInsets.only(right: 20, top: 20),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => new TlabTabaro3()));
-                    },
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Stack(
-                        children: <Widget>[
-                          Image.asset(
-                            "assets/drop.png",
-                            width: 75,
-                            height: 80,
+      home: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+            key: _key,
+            resizeToAvoidBottomPadding: false,
+            appBar: WaveAppBar(
+              title: "طلبات التبرع",
+              backGroundColor: Colors.grey[300],
+              leftIcon: null,
+              onPressedLeft: null,
+              onPressedRight: () {
+                _key.currentState.openDrawer();
+              },
+              directionOfRightIcon: TextDirection.ltr,
+              rightIcon: Icons.dehaze,
+            ),
+            floatingActionButton: Padding(
+                padding: const EdgeInsets.only(right: 20, top: 20),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new TalabTabaro3()));
+                  },
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Stack(
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/drop.png",
+                          width: 75,
+                          height: 80,
+                        ),
+                        Positioned(
+                          bottom: 15,
+                          right: 21,
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 34,
                           ),
-                          Positioned(
-                            bottom: 15,
-                            right: 21,
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 34,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  )),
-              drawer: Drawer(
+                  ),
+                )),
+            drawer: Opacity(
+              opacity: .9,
+              child: Drawer(
                 child: ListView(
                   children: [
                     Container(
@@ -188,7 +191,7 @@ class _FirstPageState extends State<FirstPage>
                       child: Column(
                         children: <Widget>[
                           Card(
-                            elevation: 5,
+                            elevation: 10,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             color: null,
@@ -215,7 +218,34 @@ class _FirstPageState extends State<FirstPage>
                             ),
                           ),
                           Card(
-                            elevation: 5,
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            color: null,
+                            child: Container(
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new BlazmaBank()));
+                                },
+                                title: Text(
+                                  "بنك البلازما",
+                                  style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                leading: Icon(Icons.add_circle_outline,
+                                    size: 30, color: Colors.red[900]),
+                                trailing: null,
+                              ),
+                            ),
+                          ),
+                          Card(
+                            elevation: 10,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             color: null,
@@ -242,7 +272,7 @@ class _FirstPageState extends State<FirstPage>
                             ),
                           ),
                           Card(
-                            elevation: 5,
+                            elevation: 10,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             color: null,
@@ -268,7 +298,7 @@ class _FirstPageState extends State<FirstPage>
                             ),
                           ),
                           Card(
-                            elevation: 5,
+                            elevation: 10,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             color: null,
@@ -295,7 +325,7 @@ class _FirstPageState extends State<FirstPage>
                             ),
                           ),
                           Card(
-                            elevation: 5,
+                            elevation: 10,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             color: null,
@@ -322,7 +352,7 @@ class _FirstPageState extends State<FirstPage>
                             ),
                           ),
                           Card(
-                            elevation: 5,
+                            elevation: 10,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             color: null,
@@ -359,125 +389,127 @@ class _FirstPageState extends State<FirstPage>
                   ],
                 ),
               ),
-              body: GestureDetector(
-                onPanUpdate: (details) {
-                  if (details.delta.dx > 20)
-                    print("Dragging in +X direction");
-                  else
-                    _key.currentState.openDrawer();
-                  print("Dragging in -X direction");
-                },
-                child: Container(
-                  decoration: new BoxDecoration(
-                    color: Colors.grey[300],
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        padding:
-                            const EdgeInsets.only(top: 10, right: 10, left: 10),
-                        child: DropdownButtonFormField<String>(
-                          isDense: true,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              prefixIcon: Icon(
-                                Icons.local_hospital,
+            ),
+            body: GestureDetector(
+              onPanUpdate: (details) {
+                if (details.delta.dx > 20)
+                  print("Dragging in +X direction");
+                else
+                  _key.currentState.openDrawer();
+                print("Dragging in -X direction");
+              },
+              child: Container(
+                decoration: new BoxDecoration(
+                  color: Colors.grey[300],
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding:
+                          const EdgeInsets.only(top: 10, right: 10, left: 10),
+                      child: DropdownButtonFormField<String>(
+                        isDense: true,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                            prefixIcon: Icon(
+                              Icons.local_hospital,
+                              color: Colors.red[900],
+                              size: 24,
+                            )),
+                        validator: (value) => value == "حدد فصيلتك"
+                            ? 'برجاء اختيار الفصيلة'
+                            : null,
+                        items: _fasila.map((String dropDownStringItem) {
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Center(
+                                child: Text(
+                              dropDownStringItem,
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
                                 color: Colors.red[900],
-                                size: 24,
-                              )),
-                          validator: (value) => value == "حدد فصيلتك"
-                              ? 'برجاء اختيار الفصيلة'
-                              : null,
-                          items: _fasila.map((String dropDownStringItem) {
-                            return DropdownMenuItem<String>(
-                              value: dropDownStringItem,
-                              child: Center(
-                                  child: Text(
-                                dropDownStringItem,
-                                textDirection: TextDirection.ltr,
-                                style: TextStyle(
-                                  color: Colors.red[900],
-                                  fontSize: 18,
-                                  fontFamily: 'Tajawal',
-                                ),
-                              )),
-                            );
-                          }).toList(),
-                          onChanged: (String newValueSelected) {
-                            // Your code to execute, when a menu item is selected from drop down
-                            _onDropDownItemSelected(newValueSelected);
-                            setTheSearch();
-                          },
-                          value: _currentFasilaSelected,
-                        ),
+                                fontSize: 18,
+                                fontFamily: 'Tajawal',
+                              ),
+                            )),
+                          );
+                        }).toList(),
+                        onChanged: (String newValueSelected) {
+                          // Your code to execute, when a menu item is selected from drop down
+                          _onDropDownItemSelected(newValueSelected);
+                          setTheSearch();
+                        },
+                        value: _currentFasilaSelected,
                       ),
-                      StreamBuilder<QuerySnapshot>(
-                        stream: search,
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Center(
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                      stream: search,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Container(
+                            height: 150,
+                            child: Center(
                               child: CircularProgressIndicator(
                                 backgroundColor: Colors.red[900],
                               ),
-                            );
-                          }
-                          final posts = snapshot.data.documents;
-                          List<PostBubble> postBubbles = [];
-                          for (var post in posts) {
-                            final date = post.data["date"].toDate();
-                            final dateThatSignsThePost =
-                                post.data["dateThatSignsThePost"];
-                            final name = post.data["name"];
-                            final fasila = post.data["fasila"];
-                            final akias = post.data["akias"];
-                            final government = post.data["government"];
-                            final city = post.data["city"];
-                            final hospital = post.data["hospital"];
-                            final hospitalAddress =
-                                post.data["hospitalAddress"];
-                            final phone = post.data["phone"];
-                            final note = post.data["note"];
-                            final postSender = post.data["postSender"];
-                            final postColor = post.data["postColor"];
-
-                            final postBubble = PostBubble(
-                              name: name,
-                              fasila: fasila,
-                              akias: akias,
-                              government: government,
-                              city: city,
-                              hospital: hospital,
-                              hospitalAddress: hospitalAddress,
-                              phone: phone,
-                              note: note,
-                              date: date,
-                              postSender: postSender,
-                              postColor: postColor,
-                              dateThatSignsThePost: dateThatSignsThePost,
-                            );
-                            postBubbles.add(postBubble);
-                          }
-                          return Expanded(
-                            child: SizedBox(
-//                              height: 170.0,
-                              child: ListView(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 4, vertical: 15),
-                                children: postBubbles,
-                              ),
                             ),
                           );
-                        },
-                      ),
-                    ],
-                  ),
+                        }
+                        final posts = snapshot.data.documents;
+                        List<PostBubble> postBubbles = [];
+                        for (var post in posts) {
+                          final date = post.data["date"].toDate();
+                          final dateThatSignsThePost =
+                              post.data["dateThatSignsThePost"];
+                          final name = post.data["name"];
+                          final fasila = post.data["fasila"];
+                          final akias = post.data["akias"];
+                          final government = post.data["government"];
+                          final city = post.data["city"];
+                          final hospital = post.data["hospital"];
+                          final hospitalAddress = post.data["hospitalAddress"];
+                          final phone = post.data["phone"];
+                          final note = post.data["note"];
+                          final postSender = post.data["postSender"];
+                          final postColor = post.data["postColor"];
+
+                          final postBubble = PostBubble(
+                            name: name,
+                            fasila: fasila,
+                            akias: akias,
+                            government: government,
+                            city: city,
+                            hospital: hospital,
+                            hospitalAddress: hospitalAddress,
+                            phone: phone,
+                            note: note,
+                            date: date,
+                            postSender: postSender,
+                            postColor: postColor,
+                            dateThatSignsThePost: dateThatSignsThePost,
+                          );
+                          postBubbles.add(postBubble);
+                        }
+                        return Expanded(
+                          child: SizedBox(
+//                              height: 170.0,
+                            child: ListView(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 15),
+                              children: postBubbles,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              )),
-        ),
-      );
-    }));
+              ),
+            )),
+      ),
+    );
   }
 }
 
@@ -517,9 +549,6 @@ class PostBubble extends StatefulWidget {
 }
 
 class _PostBubbleState extends State<PostBubble> {
-
-
-
   changeDateFormat() {
     String formattedDate = intl.DateFormat.yMd().add_jm().format(widget.date);
     return formattedDate;
@@ -549,23 +578,44 @@ class _PostBubbleState extends State<PostBubble> {
         .updateData({'postColor': true});
   }
 
+  deletePost() async {
+    await _fireStore
+        .collection('post')
+        .document(widget.dateThatSignsThePost)
+        .delete();
+  }
+
   var fasilaTwiter;
 
   GlobalKey _globalKey = new GlobalKey();
 
   Future capturePNG() async {
     try {
-      print('inside');
+      if (await Permission.contacts.request().isGranted) {}
+
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.storage,
+      ].request();
+
       RenderRepaintBoundary boundary =
           _globalKey.currentContext.findRenderObject();
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      final directory = (await getExternalStorageDirectory()).path;
       ByteData byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
-      var filePath = await ImagePickerSaver.saveFile(
-          fileData: byteData.buffer.asUint8List());
-      File imgFile = File("$filePath");
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
+      final String dirPath = '${directory}/Pictures';
+      await Directory(dirPath).create(recursive: true);
+      final String filePath = '$dirPath/${timestamp()}.jpg';
+      File imgFile = new File('$filePath');
 
-      forgotPassword(BuildContext contex) {
+
+      setState(() {
+        imgFile.writeAsBytes(pngBytes);
+      });
+
+      shareImage(BuildContext contex) {
         return showDialog(
             context: context,
             builder: (context) {
@@ -611,11 +661,8 @@ class _PostBubbleState extends State<PostBubble> {
             });
       }
 
-      forgotPassword(context);
+      shareImage(context);
 
-//      var filee = new File(filePath);
-
-//       await Image.file(filee);
 
     } catch (e) {
       print("False");
@@ -641,28 +688,18 @@ class _PostBubbleState extends State<PostBubble> {
     return RepaintBoundary(
       key: _globalKey,
       child: Container(
-        decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: const Color(0x29000000), offset: Offset(2, 5), blurRadius: 6)
-            ],
-
-            borderRadius: BorderRadius.circular(25), color: changeColor()),
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+              color: const Color(0x29000000),
+              offset: Offset(2, 5),
+              blurRadius: 6)
+        ], borderRadius: BorderRadius.circular(25), color: changeColor()),
         width: double.infinity,
 //      height: 159,
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 13),
         child: Stack(
           children: <Widget>[
-
-
-
-
-
-
-
-
-
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -1215,6 +1252,24 @@ class _PostBubbleState extends State<PostBubble> {
                                   )),
                             )
                           : Container(),
+                      widget.postSender == _loggedInUser.email
+                          ? Positioned(
+                              left: -28,
+                              top: 30,
+                              child: MaterialButton(
+                                  height: 27,
+                                  onPressed: () {
+                                    deleteTlab(context);
+                                  },
+                                  color: Colors.red[700],
+                                  shape: CircleBorder(),
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 20,
+                                  )),
+                            )
+                          : Container(),
                     ],
                   ),
                 )
@@ -1274,9 +1329,7 @@ class _PostBubbleState extends State<PostBubble> {
                           "Unable to connect. Please Check Internet Connection";
 
                       print(invalid);
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        EasyLoading.showError('لا يوجد اتصال بالانترنت');
-                      });
+                      showNotification("تم اضافة حسابك بنجاح", _key);
                     }
 
                     Navigator.pop(context);
@@ -1311,7 +1364,7 @@ class _PostBubbleState extends State<PostBubble> {
 
                       print(invalid);
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        EasyLoading.showError('لا يوجد اتصال بالانترنت');
+                        showNotification("لا يوجد اتصال بالانترنت !", _key);
                       });
                     }
 
@@ -1326,4 +1379,94 @@ class _PostBubbleState extends State<PostBubble> {
           );
         });
   }
+
+  deleteTlab(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30.0))),
+            title: Center(
+              child: Text(
+                "مسح طلب التبرع",
+                style: TextStyle(
+                  fontFamily: 'Tajawal',
+                  color: Colors.red[900],
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            elevation: 10,
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  child: Text(
+                    'تراجع',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Tajawal',
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  color: Colors.green,
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                RaisedButton(
+                  child: Text(
+                    'مسح',
+                    style: TextStyle(
+                      fontFamily: 'Tajawal',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () async {
+                    try {
+                      final result = await InternetAddress.lookup('google.com');
+                      if (result.isNotEmpty &&
+                          result[0].rawAddress.isNotEmpty) {
+                        print("Connected to Mobile Network");
+                        deletePost();
+                      }
+                    } on SocketException catch (_) {
+                      showNotification("حدث خطأ اثناء اتمام العملية", _key);
+                    }
+
+                    Navigator.pop(context);
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  color: Colors.yellow[900],
+                ),
+              ],
+            ),
+          );
+        });
+  }
+}
+
+showNotification(msg, _scafold) {
+  _scafold.currentState.showSnackBar(
+    SnackBar(
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          "$msg",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: "Tajawal", fontSize: 18),
+        ),
+      ),
+      backgroundColor: Colors.black87.withOpacity(.8),
+      duration: Duration(seconds: 4),
+    ),
+  );
 }

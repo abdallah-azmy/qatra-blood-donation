@@ -6,9 +6,11 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../user_model.dart';
 import 'add_doner_to_bank.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'dart:io';
 import 'package:location/location.dart' as lo;
+
+GlobalKey<ScaffoldState> _scafold = new GlobalKey<ScaffoldState>();
 
 final _fireStore = Firestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -98,12 +100,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterEasyLoading(
-      child: MaterialApp(
+    return  MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
+            key: _scafold,
               backgroundColor: Colors.white,
               body: ModalProgressHUD(
                 inAsyncCall: showSpinner,
@@ -470,8 +472,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 )),
               )),
         ),
-      ),
-    );
+      )
+    ;
   }
 
   getLocationPermission() async {
@@ -548,7 +550,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
           firebaseUser = await _auth.currentUser();
 
-          var now = new DateTime.now();
+//          var now = new DateTime.now();
           _user = User(
               uid: firebaseUser.uid,
               email: firebaseUser.email,
@@ -556,7 +558,7 @@ class _RegisterPageState extends State<RegisterPage> {
               phone: phoneNumber,
               fasila: _currentFasilaSelected,
               address: address,
-              date: now.toString(),
+              date: null,
               dateOfDonation: "----");
           await _fireStore
               .collection('users')
@@ -573,14 +575,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     builder: (BuildContext context) => FirstPage()),
                 (Route<dynamic> route) => route is FirstPage);
           } else {
-            var error = "لم تتم العملية بنجاح .";
+            var error = "حدث خطأ اثناء العملية !";
+            print("sssssssssssssssssssssssssssssssssss");
             creatAlertDialog(context, error);
           }
         } catch (e) {
+          print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
           setState(() {
             showSpinner = false;
           });
-
+          print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
           var errorSigningIn;
           if (Platform.isAndroid) {
             switch (e.message) {
@@ -598,6 +602,8 @@ class _RegisterPageState extends State<RegisterPage> {
               // ...
               default:
                 print('Case ${e.message} is not yet implemented');
+                errorSigningIn =
+                '${e.message}';
             }
           } else if (Platform.isIOS) {
             switch (e.code) {
@@ -615,10 +621,13 @@ class _RegisterPageState extends State<RegisterPage> {
               // ...
               default:
                 print('Case ${e.message} is not yet implemented');
+                errorSigningIn =
+                '${e.message}';
             }
           }
 
-          creatAlertDialog(context, errorSigningIn);
+          showNotification(errorSigningIn, _scafold);
+
           print(e);
         }
         setState(() {
@@ -631,7 +640,8 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         showSpinner = false;
       });
-      creatAlertDialog(context, invalid);
+      showNotification(invalid, _scafold);
+
     }
   }
 
@@ -640,4 +650,19 @@ class _RegisterPageState extends State<RegisterPage> {
       _currentFasilaSelected = newValueSelected;
     });
   }
+}
+showNotification(msg, _scafold) {
+  _scafold.currentState.showSnackBar(
+    SnackBar(
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          "$msg",textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: "Tajawal", fontSize: 18),
+        ),
+      ),
+      backgroundColor: Colors.black87.withOpacity(.8),
+      duration: Duration(seconds: 4),
+    ),
+  );
 }
