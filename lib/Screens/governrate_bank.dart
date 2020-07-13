@@ -143,9 +143,9 @@ class _GovernrateBankState extends State<GovernrateBank> {
   Future<User> retrieveUserDetails(FirebaseUser user) async {
     DocumentSnapshot _documentSnapshot =
         await _fireStore.collection('users').document(user.uid).get();
-    print(user.uid);
+
     if (_documentSnapshot.data != null) {
-      print('there is data ');
+
       return User.fromMap(_documentSnapshot.data);
     } else {
       return null;
@@ -493,7 +493,7 @@ class _DonerState extends State<Doner> {
   @override
   Widget build(BuildContext context) {
     updateInternData();
-    print("builllllllllllllllld");
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(

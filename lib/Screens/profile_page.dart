@@ -131,7 +131,11 @@ class _ProfilePageState extends State<ProfilePage> {
     } else if (imageUrl != null) {
       return CachedNetworkImage(
         imageUrl: "$imageUrl",
-        placeholder: (context, url) => new CircularProgressIndicator(),
+        placeholder: (context, url) => new Container(
+          child: CircularProgressIndicator(),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/abcd.jpg"), fit: BoxFit.cover))),
         errorWidget: (context, url, error) => new Icon(Icons.error),
       );
     } else {
@@ -1111,9 +1115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             await InternetAddress.lookup('google.com');
                         if (result.isNotEmpty &&
                             result[0].rawAddress.isNotEmpty) {
-
                           uploadDateOfDonation();
-
                         }
                       } on SocketException catch (_) {
                         showNotification("لا يوجد اتصال بالانترنت !", _scafold);

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import '../appBar_widget.dart';
-import 'first_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -36,6 +34,8 @@ class _TalabTabaro3State extends State<TalabTabaro3> {
 
   TextEditingController textFieldController = new TextEditingController();
   final TextEditingController _akias = TextEditingController();
+
+  final _fireStore = Firestore.instance;
 
   bool locationLoading = false;
   bool _isLoading = false;
@@ -563,13 +563,14 @@ class _TalabTabaro3State extends State<TalabTabaro3> {
     _governmentController.text = place.administrativeArea;
 
     setState(() {
+      city = _madinaController.text ;
+      government = _governmentController.text ;
       locationLoading = false;
     });
   }
 
   validation() {
-    addPost();
-//    _formTlabKey.currentState.validate() ? addPost() : print("not valid");
+    _formTlabKey.currentState.validate() ? addPost() : print("not valid");
   }
 
   addPost() async {
@@ -580,32 +581,33 @@ class _TalabTabaro3State extends State<TalabTabaro3> {
     var now = new DateTime.now();
     bool postColor = true;
 
-    print("11111111111111111111111111");
-//    Map<String, dynamic> postMap() => {
-//          'name': name,
-//          'fasila': fasila,
-//          'akias': akias,
-//          'government': government,
-//          'city': city,
-//          'hospital': hospital,
-//          'hospitalAddress': hospitalAddress,
-//          'phone': phone,
-//          'note': note,
-//          'date': now,
-//          'dateThatSignsThePost': now.toString(),
-//          'postSender': loggedInUser.email,
-//          'postColor': postColor
-//        };
+
 
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print("Connected to Mobile Network");
 
-//        await _fireStore
-//            .collection("post")
-//            .document(now.toString())
-//            .setData(postMap());
+        Map<String, dynamic> postMap() => {
+          'name': name,
+          'fasila': fasila,
+          'akias': akias,
+          'government': government,
+          'city': city,
+          'hospital': hospital,
+          'hospitalAddress': hospitalAddress,
+          'phone': phone,
+          'note': note,
+          'date': now,
+          'dateThatSignsThePost': now.toString(),
+          'postSender': loggedInUser.email,
+          'postColor': postColor
+        };
+
+        await _fireStore
+            .collection("post")
+            .document(now.toString())
+            .setData(postMap());
 
 
         setState(() {

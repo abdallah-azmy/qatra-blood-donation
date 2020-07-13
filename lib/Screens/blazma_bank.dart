@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../appBar_widget.dart';
 import 'blazma_governrate_bank.dart';
-import 'governrate_bank.dart';
 
 class BlazmaBank extends StatefulWidget {
   @override

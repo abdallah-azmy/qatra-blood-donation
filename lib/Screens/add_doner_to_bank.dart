@@ -86,10 +86,10 @@ class _AddDonerToBankState extends State<AddDonerToBank> {
   }
 
   validation() {
-    _formKey.currentState.validate() ? updataDataOfUser() : print("not valid");
+    _formKey.currentState.validate() ? addDonorToGovernrateBank() : print("not valid");
   }
 
-  updataDataOfUser() async {
+  addDonorToGovernrateBank() async {
     setState(() {
       isLoading = true;
     });

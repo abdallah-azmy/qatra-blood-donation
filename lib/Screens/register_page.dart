@@ -186,7 +186,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                           if (!text.contains(".")) {
                                             return "البريد الالكتروني غير صحيح";
                                           }
-
                                           if (text.length < 2) {
                                             return "البريد الالكتروني قصير جدا";
                                           }
@@ -550,7 +549,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
           firebaseUser = await _auth.currentUser();
 
-//          var now = new DateTime.now();
+          var now = new DateTime.now();
           _user = User(
               uid: firebaseUser.uid,
               email: firebaseUser.email,
@@ -558,7 +557,7 @@ class _RegisterPageState extends State<RegisterPage> {
               phone: phoneNumber,
               fasila: _currentFasilaSelected,
               address: address,
-              date: null,
+              date: now,
               dateOfDonation: "----");
           await _fireStore
               .collection('users')
@@ -576,15 +575,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 (Route<dynamic> route) => route is FirstPage);
           } else {
             var error = "حدث خطأ اثناء العملية !";
-            print("sssssssssssssssssssssssssssssssssss");
             creatAlertDialog(context, error);
           }
         } catch (e) {
-          print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
           setState(() {
             showSpinner = false;
           });
-          print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
           var errorSigningIn;
           if (Platform.isAndroid) {
             switch (e.message) {

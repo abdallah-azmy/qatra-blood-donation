@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
-      title: 'قطرة',
+      title: '????',
       theme: new ThemeData(primarySwatch: Colors.blue),
     );
   }
@@ -37,10 +37,10 @@ class _MyAppState extends State<MyApp> {
   void configureNotifications() {
 
     _firebaseMessaging.configure(
-      onMessage: (message)async{
-        //if the user opening the app
-        print("massssssageee --- : $message");
-      }
+        onMessage: (message)async{
+          //if the user opening the app
+          print("massssssageee --- : $message");
+        }
     );
   }
 

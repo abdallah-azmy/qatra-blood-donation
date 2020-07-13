@@ -6,7 +6,6 @@ import '../user_model.dart';
 import 'register_page.dart';
 import 'first_page.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'add_doner_to_bank.dart';
 import 'dart:io';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
           GoogleAuthProvider.getCredential(
               idToken: (await account.authentication).idToken,
               accessToken: (await account.authentication).accessToken));
-      print("${res.user} aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
 
       if (res.additionalUserInfo.isNewUser) {
         setState(() {
@@ -52,6 +51,7 @@ class _LoginPageState extends State<LoginPage> {
             print("Connected to Mobile Network");
             FirebaseUser firebaseUser = await _auth.currentUser();
 
+            var now = new DateTime.now();
             var _user = User(
                 uid: firebaseUser.uid,
                 email: firebaseUser.email,
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                 phone: "---",
                 fasila: "---",
                 address: "---",
-                date: null,
+                date: now,
                 dateOfDonation: "---");
             await _fireStore
                 .collection('users')
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         } on SocketException catch (_) {
           String invalid = "حدث خطأ أثناء اتمام العملية !";
-          print(invalid);
+
           setState(() {
             showSpinner = false;
           });

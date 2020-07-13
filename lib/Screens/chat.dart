@@ -288,31 +288,33 @@ class _MessageBubbleState extends State<MessageBubble> {
                 user = _user;
               });
 
-              print(user.displayName);
-              print(user.email);
-              print(user.phone);
-
               creatAlertDialog(context, user.displayName);
             },
-            child: Material(
-              borderRadius: widget.isMe
-                  ? BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      topLeft: Radius.circular(30))
-                  : BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      topRight: Radius.circular(30)),
-              elevation: 5,
-              color: widget.isMe ? Colors.blue : Colors.white,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: Text(
-                  widget.text,
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: widget.isMe ? Colors.white : Colors.black87),
+            child: Container(
+
+              child: Material(
+                borderRadius: widget.isMe
+                    ? BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                        topLeft: Radius.circular(30))
+                    : BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                        topRight: Radius.circular(30)),
+                elevation: 5,
+                color: widget.isMe ? Colors.blue : Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: Padding(
+                    padding: widget.isMe ? const EdgeInsets.only(left: 10) : const EdgeInsets.only(right: 10),
+                    child: Text(
+                      widget.text,
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: widget.isMe ? Colors.white : Colors.black87),
+                    ),
+                  ),
                 ),
               ),
             ),

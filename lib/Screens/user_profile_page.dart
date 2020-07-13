@@ -19,7 +19,11 @@ class _UserProfileState extends State<UserProfile> {
    if (widget.user.imageUrl != null) {
       return CachedNetworkImage(
         imageUrl: "${widget.user.imageUrl}",
-        placeholder: (context, url) => new CircularProgressIndicator(),
+        placeholder: (context, url) => new Container(
+            child: CircularProgressIndicator(),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/abcd.jpg"), fit: BoxFit.cover))),
         errorWidget: (context, url, error) => new Icon(Icons.error),
       );
 

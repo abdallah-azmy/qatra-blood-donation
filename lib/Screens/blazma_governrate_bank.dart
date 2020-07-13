@@ -7,7 +7,6 @@ import '../appBar_widget.dart';
 import '../user_model.dart';
 import 'addDonorToBlazmaBank.dart';
 import 'user_profile_page.dart';
-import 'add_doner_to_bank.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
@@ -494,7 +493,6 @@ class _DonerState extends State<Doner> {
   @override
   Widget build(BuildContext context) {
     updateInternData();
-    print("builllllllllllllllld");
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(

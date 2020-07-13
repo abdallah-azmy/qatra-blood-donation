@@ -63,7 +63,7 @@ class _DonationArticleState extends State<DonationArticle> {
                         decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius:
-                                BorderRadius.all(Radius.circular(35))),
+                            BorderRadius.all(Radius.circular(35))),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[

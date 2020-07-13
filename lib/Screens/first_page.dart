@@ -231,12 +231,25 @@ class _FirstPageState extends State<FirstPage>
                                           builder: (context) =>
                                               new BlazmaBank()));
                                 },
-                                title: Text(
-                                  "بنك البلازما",
-                                  style: TextStyle(
-                                      fontFamily: 'Tajawal',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
+                                title: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "بنك البلازما",
+                                      style: TextStyle(
+                                          fontFamily: 'Tajawal',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    SizedBox(width: 7,),
+                                    Text(
+                                      "( المتعافين )",
+                                      style: TextStyle(
+                                          fontFamily: 'Tajawal',
+//                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87.withOpacity(.5),
+                                          fontSize: 14),
+                                    ),
+                                  ],
                                 ),
                                 leading: Icon(Icons.add_circle_outline,
                                     size: 30, color: Colors.red[900]),
@@ -550,7 +563,7 @@ class PostBubble extends StatefulWidget {
 
 class _PostBubbleState extends State<PostBubble> {
   changeDateFormat() {
-    String formattedDate = intl.DateFormat.yMd().add_jm().format(widget.date);
+    String formattedDate = intl.DateFormat.yMMMMd('en_US').add_jm().format(widget.date);
     return formattedDate;
   }
 
@@ -730,27 +743,30 @@ class _PostBubbleState extends State<PostBubble> {
                             SizedBox(
                               height: 8,
                             ),
-                            Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.location_on,
-                                  color: Colors.red[700],
-                                  size: 20,
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Flexible(
-                                  child: Text(
-                                      "${widget.government} -- ${widget.city}",
-                                      style: TextStyle(
-                                          fontFamily: 'Tajawal',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.red[500],
-                                          fontSize: 16,
-                                          letterSpacing: .3)),
-                                ),
-                              ],
+                            Container(
+                              padding: EdgeInsets.only(left: 15),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.red[700],
+                                    size: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                        "${widget.government} -- ${widget.city}",
+                                        style: TextStyle(
+                                            fontFamily: 'Tajawal',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red[500],
+                                            fontSize: 16,
+                                            letterSpacing: .3)),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 3,
