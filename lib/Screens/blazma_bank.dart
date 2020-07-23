@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icandoit/wavyyy.dart';
 import '../appBar_widget.dart';
 import 'blazma_governrate_bank.dart';
 
@@ -113,17 +114,7 @@ class _BlazmaBankState extends State<BlazmaBank> {
       home: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          appBar: WaveAppBar(
-            title: "بنك البلازما",
-            backGroundColor: Colors.white,
-            leftIcon: null,
-            onPressedLeft: null,
-            directionOfRightIcon: TextDirection.rtl,
-            onPressedRight: () {
-//              showSearch(context: context, delegate: DataSearch());
-            },
-//            rightIcon: Icons.search,
-          ),
+
           floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
               child: GestureDetector(
@@ -154,8 +145,20 @@ class _BlazmaBankState extends State<BlazmaBank> {
               )),
           body: Stack(
             children: <Widget>[
+              Container(
+                  height: 120,
+                  child: Wavyyyy(
+                    title: "بنك البلازما",
+                    backGroundColor: Colors.white,
+                    leftIcon: null,
+                    onPressedLeft: null,
+                    directionOfRightIcon: TextDirection.rtl,
+                    onPressedRight: () {
+                    },
+
+                  )),
               Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.only(top: 110),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -190,7 +193,7 @@ class _BlazmaBankState extends State<BlazmaBank> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 70),
+                padding: const EdgeInsets.only(top: 140),
                 child: ListView(
                   children: List.generate(_cities.length, (index){
                     return governrateCard(_cities[index]);

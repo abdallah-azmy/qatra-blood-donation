@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:icandoit/wavyyy.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../appBar_widget.dart';
@@ -159,15 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
           key: _scafold,
-          appBar: WaveAppBar(
-            title: "الصفحة الشخصية",
-            backGroundColor: Colors.red[800],
-            leftIcon: null,
-            onPressedLeft: null,
-            onPressedRight: null,
-            directionOfRightIcon: TextDirection.ltr,
-            rightIcon: null,
-          ),
+
           floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
               child: GestureDetector(
@@ -199,508 +192,431 @@ class _ProfilePageState extends State<ProfilePage> {
           body: SafeArea(
             child: ListView(
               children: <Widget>[
+
                 Stack(
                   children: <Widget>[
+
                     Container(
                       width: double.infinity,
-                      height: 275,
+                      height: 350,
                       color: Colors.red[800],
                     ),
-                    Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            InkWell(
-                              onTap: () {
-                                print("aaaaaaaaaaaaaaa");
-                                getImage();
-                              },
-                              child: Container(
+                    Container(
+                        height: 120,
+                        child: Wavyyyy(
+                          title: "الصفحة الشخصية",
+                          backGroundColor: Colors.red[800],
+                          leftIcon: null,
+                          onPressedLeft: null,
+                          onPressedRight: null,
+                          directionOfRightIcon: TextDirection.ltr,
+                          rightIcon: null,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 90),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {
+                                  print("aaaaaaaaaaaaaaa");
+                                  getImage();
+                                },
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 90),
+                                    child: loading == false
+                                        ? Icon(
+                                            Icons.add_a_photo,
+                                            color: Colors.black87,
+                                            size: 25,
+                                          )
+                                        : Image.asset(
+                                            "assets/loading.gif",
+                                            height: 25.0,
+                                            width: 25.0,
+                                          ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 125,
+                                width: 125,
+                                margin: EdgeInsets.only(top: 12),
+                                child: ClipOval(child: imageConditions()),
+                              ),
+                              Container(
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 90),
-                                  child: loading == false
-                                      ? Icon(
-                                          Icons.add_a_photo,
-                                          color: Colors.black87,
-                                          size: 25,
-                                        )
-                                      : Image.asset(
-                                          "assets/loading.gif",
-                                          height: 25.0,
-                                          width: 25.0,
-                                        ),
+                                  child: Icon(
+                                    null,
+                                    color: Colors.black87,
+                                    size: 25,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              height: 125,
-                              width: 125,
-                              margin: EdgeInsets.only(top: 12),
-                              child: ClipOval(child: imageConditions()),
-                            ),
-                            Container(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 90),
-                                child: Icon(
-                                  null,
-                                  color: Colors.black87,
-                                  size: 25,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(4),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              height: 40,
-                              width: 40,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: new BorderRadius.circular(10.0),
-                                color: Colors.black87.withOpacity(.4),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  newName,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 2,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                print("aa");
-                                editName(context);
-                              },
-                              child: Container(
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(4),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
                                 height: 40,
                                 width: 40,
-                                child: Icon(
-                                  Icons.settings,
-                                  color: Colors.blue,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: new BorderRadius.circular(10.0),
+                                  color: Colors.black87.withOpacity(.4),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    newName,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            children: <Widget>[
-                              Card(
+                              SizedBox(
+                                width: 2,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  print("aa");
+                                  editName(context);
+                                },
                                 child: Container(
-                                  alignment: Alignment.topLeft,
-                                  padding: EdgeInsets.all(15),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.only(left: 5),
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          "معلوماتى",
-                                          style: TextStyle(
-                                            fontFamily: 'Tajawal',
-                                            color: Colors.black87,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                  height: 40,
+                                  width: 40,
+                                  child: Icon(
+                                    Icons.settings,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: <Widget>[
+                                Card(
+                                  child: Container(
+                                    alignment: Alignment.topLeft,
+                                    padding: EdgeInsets.all(15),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.only(left: 5),
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            "معلوماتى",
+                                            style: TextStyle(
+                                              fontFamily: 'Tajawal',
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                            textAlign: TextAlign.left,
                                           ),
-                                          textAlign: TextAlign.left,
                                         ),
-                                      ),
-                                      Divider(
-                                        color: Colors.black38,
-                                      ),
-                                      Container(
-                                          child: Column(
-                                        children: <Widget>[
-                                          ListTile(
-                                            trailing: InkWell(
-                                                onTap: () {
-                                                  showCupertinoModalPopup(
-                                                      context: context,
-                                                      builder: (context) =>
-                                                          CupertinoActionSheet(
-                                                            title: Text(
-                                                              "اختر فصيلة دمك",
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'Tajawal',
-                                                                fontSize: 22,
-                                                                color: Colors
-                                                                    .red[900],
-                                                              ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: <
-                                                                    Widget>[
-                                                                  CupertinoActionSheetAction(
-                                                                    child: Text(
-                                                                      "AB+",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        _newFasila =
-                                                                            "AB+";
-                                                                      });
-
-                                                                      upFasila();
-
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(
-                                                                              "Cancel");
-                                                                    },
-                                                                    isDefaultAction:
-                                                                        true,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 54,
-                                                                  ),
-                                                                  CupertinoActionSheetAction(
-                                                                    child: Text(
-                                                                      "AB-",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        _newFasila =
-                                                                            "AB-";
-                                                                      });
-
-                                                                      upFasila();
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(
-                                                                              "Cancel");
-                                                                    },
-                                                                    isDefaultAction:
-                                                                        true,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: <
-                                                                    Widget>[
-                                                                  CupertinoActionSheetAction(
-                                                                    child: Text(
-                                                                      "A+",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        _newFasila =
-                                                                            "A+";
-                                                                      });
-
-                                                                      upFasila();
-
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(
-                                                                              "Cancel");
-                                                                    },
-                                                                    isDefaultAction:
-                                                                        true,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 65,
-                                                                  ),
-                                                                  CupertinoActionSheetAction(
-                                                                    child: Text(
-                                                                      "A-",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        _newFasila =
-                                                                            "A-";
-                                                                      });
-
-                                                                      upFasila();
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(
-                                                                              "Cancel");
-                                                                    },
-                                                                    isDefaultAction:
-                                                                        true,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: <
-                                                                    Widget>[
-                                                                  CupertinoActionSheetAction(
-                                                                    child: Text(
-                                                                      "B+",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        _newFasila =
-                                                                            "B+";
-                                                                      });
-
-                                                                      upFasila();
-
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(
-                                                                              "Cancel");
-                                                                    },
-                                                                    isDefaultAction:
-                                                                        true,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 65,
-                                                                  ),
-                                                                  CupertinoActionSheetAction(
-                                                                    child: Text(
-                                                                      "B-",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        _newFasila =
-                                                                            "B-";
-                                                                      });
-
-                                                                      upFasila();
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(
-                                                                              "Cancel");
-                                                                    },
-                                                                    isDefaultAction:
-                                                                        true,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: <
-                                                                    Widget>[
-                                                                  CupertinoActionSheetAction(
-                                                                    child: Text(
-                                                                      "O+",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        _newFasila =
-                                                                            "O+";
-                                                                      });
-
-                                                                      upFasila();
-
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(
-                                                                              "Cancel");
-                                                                    },
-                                                                    isDefaultAction:
-                                                                        true,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 65,
-                                                                  ),
-                                                                  CupertinoActionSheetAction(
-                                                                    child: Text(
-                                                                      "O-",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        _newFasila =
-                                                                            "O-";
-                                                                      });
-
-                                                                      upFasila();
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(
-                                                                              "Cancel");
-                                                                    },
-                                                                    isDefaultAction:
-                                                                        true,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                            cancelButton:
-                                                                CupertinoActionSheetAction(
-                                                              child: Text(
-                                                                "رجوع",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontFamily:
-                                                                      'Tajawal',
-                                                                  fontSize: 19,
-                                                                  color: Colors
-                                                                      .blue,
-                                                                ),
-                                                              ),
-                                                              onPressed: () =>
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop(
-                                                                          "Cancel"),
-                                                              isDestructiveAction:
-                                                                  true,
-                                                            ),
-                                                          ));
-                                                },
-                                                child: Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  color: Colors.white,
-                                                  child: Icon(
-                                                    Icons.settings,
-                                                    color: Colors.blue,
-                                                  ),
-                                                )),
-                                            leading:
-                                                Icon(Icons.accessibility_new),
-                                            title: Text("فصيلة الدم :",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontFamily: 'Tajawal',
-                                                )),
-                                            subtitle: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(newFasila,
-                                                    textDirection:
-                                                        TextDirection.ltr,
-                                                    style: TextStyle(
-                                                        color: Colors.red[900],
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18)),
-                                              ],
-                                            ),
-                                          ),
-                                          ListTile(
-                                            trailing: InkWell(
-                                              onTap: () {
-                                                editPhone(context);
-                                              },
-                                              child: Container(
-                                                height: 50,
-                                                width: 50,
-                                                color: Colors.white,
-                                                child: Icon(
-                                                  Icons.settings,
-                                                  color: Colors.blue,
-                                                ),
-                                              ),
-                                            ),
-                                            leading: Icon(Icons.phone),
-                                            title: Text("رقم الهاتف :",
-                                                style: TextStyle(
-                                                  fontFamily: 'Tajawal',
-                                                )),
-                                            subtitle: Text(newPhone,
-                                                style: TextStyle(
-                                                    color: Colors.red[900],
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18)),
-                                          ),
-                                          ListTile(
-                                            trailing: InkWell(
-                                                onTap: () {
-                                                  editAddress(context);
-                                                },
-                                                child: Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  color: Colors.white,
-                                                  child: Icon(
-                                                    Icons.settings,
-                                                    color: Colors.blue,
-                                                  ),
-                                                )),
-                                            leading: Icon(Icons.my_location),
-                                            title: Text("العنوان :",
-                                                style: TextStyle(
-                                                  fontFamily: 'Tajawal',
-                                                )),
-                                            subtitle: Text(newAddress,
-                                                style: TextStyle(
-                                                    color: Colors.red[900],
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18)),
-                                          ),
-                                          ListTile(
-                                              leading: Icon(Icons.person),
-                                              title: Text("موعد اخر تبرع :",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Tajawal',
-                                                  )),
+                                        Divider(
+                                          color: Colors.black38,
+                                        ),
+                                        Container(
+                                            child: Column(
+                                          children: <Widget>[
+                                            ListTile(
                                               trailing: InkWell(
                                                   onTap: () {
-                                                    editDateOfDonation(context);
+                                                    showCupertinoModalPopup(
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            CupertinoActionSheet(
+                                                              title: Text(
+                                                                "اختر فصيلة دمك",
+                                                                style: TextStyle(
+                                                                  fontFamily:
+                                                                      'Tajawal',
+                                                                  fontSize: 22,
+                                                                  color: Colors
+                                                                      .red[900],
+                                                                ),
+                                                              ),
+                                                              actions: <Widget>[
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    CupertinoActionSheetAction(
+                                                                      child: Text(
+                                                                        "AB+",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          _newFasila =
+                                                                              "AB+";
+                                                                        });
+
+                                                                        upFasila();
+
+                                                                        Navigator.of(
+                                                                                context)
+                                                                            .pop(
+                                                                                "Cancel");
+                                                                      },
+                                                                      isDefaultAction:
+                                                                          true,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 54,
+                                                                    ),
+                                                                    CupertinoActionSheetAction(
+                                                                      child: Text(
+                                                                        "AB-",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          _newFasila =
+                                                                              "AB-";
+                                                                        });
+
+                                                                        upFasila();
+                                                                        Navigator.of(
+                                                                                context)
+                                                                            .pop(
+                                                                                "Cancel");
+                                                                      },
+                                                                      isDefaultAction:
+                                                                          true,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    CupertinoActionSheetAction(
+                                                                      child: Text(
+                                                                        "A+",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          _newFasila =
+                                                                              "A+";
+                                                                        });
+
+                                                                        upFasila();
+
+                                                                        Navigator.of(
+                                                                                context)
+                                                                            .pop(
+                                                                                "Cancel");
+                                                                      },
+                                                                      isDefaultAction:
+                                                                          true,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 65,
+                                                                    ),
+                                                                    CupertinoActionSheetAction(
+                                                                      child: Text(
+                                                                        "A-",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          _newFasila =
+                                                                              "A-";
+                                                                        });
+
+                                                                        upFasila();
+                                                                        Navigator.of(
+                                                                                context)
+                                                                            .pop(
+                                                                                "Cancel");
+                                                                      },
+                                                                      isDefaultAction:
+                                                                          true,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    CupertinoActionSheetAction(
+                                                                      child: Text(
+                                                                        "B+",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          _newFasila =
+                                                                              "B+";
+                                                                        });
+
+                                                                        upFasila();
+
+                                                                        Navigator.of(
+                                                                                context)
+                                                                            .pop(
+                                                                                "Cancel");
+                                                                      },
+                                                                      isDefaultAction:
+                                                                          true,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 65,
+                                                                    ),
+                                                                    CupertinoActionSheetAction(
+                                                                      child: Text(
+                                                                        "B-",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          _newFasila =
+                                                                              "B-";
+                                                                        });
+
+                                                                        upFasila();
+                                                                        Navigator.of(
+                                                                                context)
+                                                                            .pop(
+                                                                                "Cancel");
+                                                                      },
+                                                                      isDefaultAction:
+                                                                          true,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    CupertinoActionSheetAction(
+                                                                      child: Text(
+                                                                        "O+",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          _newFasila =
+                                                                              "O+";
+                                                                        });
+
+                                                                        upFasila();
+
+                                                                        Navigator.of(
+                                                                                context)
+                                                                            .pop(
+                                                                                "Cancel");
+                                                                      },
+                                                                      isDefaultAction:
+                                                                          true,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 65,
+                                                                    ),
+                                                                    CupertinoActionSheetAction(
+                                                                      child: Text(
+                                                                        "O-",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          _newFasila =
+                                                                              "O-";
+                                                                        });
+
+                                                                        upFasila();
+                                                                        Navigator.of(
+                                                                                context)
+                                                                            .pop(
+                                                                                "Cancel");
+                                                                      },
+                                                                      isDefaultAction:
+                                                                          true,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                              cancelButton:
+                                                                  CupertinoActionSheetAction(
+                                                                child: Text(
+                                                                  "رجوع",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontFamily:
+                                                                        'Tajawal',
+                                                                    fontSize: 19,
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                ),
+                                                                onPressed: () =>
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop(
+                                                                            "Cancel"),
+                                                                isDestructiveAction:
+                                                                    true,
+                                                              ),
+                                                            ));
                                                   },
                                                   child: Container(
                                                     height: 50,
@@ -711,42 +627,135 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       color: Colors.blue,
                                                     ),
                                                   )),
-                                              subtitle: Text(dateOfDonation,
+                                              leading:
+                                                  Icon(Icons.accessibility_new),
+                                              title: Text("فصيلة الدم :",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontFamily: 'Tajawal',
+                                                  )),
+                                              subtitle: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Text(newFasila,
+                                                      textDirection:
+                                                          TextDirection.ltr,
+                                                      style: TextStyle(
+                                                          color: Colors.red[900],
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18)),
+                                                ],
+                                              ),
+                                            ),
+                                            ListTile(
+                                              trailing: InkWell(
+                                                onTap: () {
+                                                  editPhone(context);
+                                                },
+                                                child: Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  color: Colors.white,
+                                                  child: Icon(
+                                                    Icons.settings,
+                                                    color: Colors.blue,
+                                                  ),
+                                                ),
+                                              ),
+                                              leading: Icon(Icons.phone),
+                                              title: Text("رقم الهاتف :",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Tajawal',
+                                                  )),
+                                              subtitle: Text(newPhone,
                                                   style: TextStyle(
                                                       color: Colors.red[900],
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18))),
-                                          ListTile(
-                                            leading: Icon(Icons.email),
-                                            title: Text("البريد الالكتروني :",
-                                                style: TextStyle(
-                                                  fontFamily: 'Tajawal',
-                                                )),
-                                            subtitle: user == null
-                                                ? Text(
-                                                    "---",
-                                                  )
-                                                : Text(user.email,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 18)),
+                                            ),
+                                            ListTile(
+                                              trailing: InkWell(
+                                                  onTap: () {
+                                                    editAddress(context);
+                                                  },
+                                                  child: Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    color: Colors.white,
+                                                    child: Icon(
+                                                      Icons.settings,
+                                                      color: Colors.blue,
+                                                    ),
+                                                  )),
+                                              leading: Icon(Icons.my_location),
+                                              title: Text("العنوان :",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Tajawal',
+                                                  )),
+                                              subtitle: Text(newAddress,
+                                                  style: TextStyle(
+                                                      color: Colors.red[900],
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 18)),
+                                            ),
+                                            ListTile(
+                                                leading: Icon(Icons.person),
+                                                title: Text("موعد اخر تبرع :",
+                                                    style: TextStyle(
+                                                      fontFamily: 'Tajawal',
+                                                    )),
+                                                trailing: InkWell(
+                                                    onTap: () {
+                                                      editDateOfDonation(context);
+                                                    },
+                                                    child: Container(
+                                                      height: 50,
+                                                      width: 50,
+                                                      color: Colors.white,
+                                                      child: Icon(
+                                                        Icons.settings,
+                                                        color: Colors.blue,
+                                                      ),
+                                                    )),
+                                                subtitle: Text(dateOfDonation,
                                                     style: TextStyle(
                                                         color: Colors.red[900],
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: 18)),
-                                          ),
-                                        ],
-                                      ))
-                                    ],
+                                                        fontSize: 18))),
+                                            ListTile(
+                                              leading: Icon(Icons.email),
+                                              title: Text("البريد الالكتروني :",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Tajawal',
+                                                  )),
+                                              subtitle: user == null
+                                                  ? Text(
+                                                      "---",
+                                                    )
+                                                  : Text(user.email,
+                                                      style: TextStyle(
+                                                          color: Colors.red[900],
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18)),
+                                            ),
+                                          ],
+                                        ))
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 25,
-                              )
-                            ],
+                                SizedBox(
+                                  height: 25,
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                   ],
                 ),

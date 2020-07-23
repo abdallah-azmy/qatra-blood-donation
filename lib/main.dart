@@ -9,6 +9,7 @@ void main() {
   );
 }
 
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -29,7 +30,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
-      title: '????',
+      title: 'قطرة',
       theme: new ThemeData(primarySwatch: Colors.blue),
     );
   }

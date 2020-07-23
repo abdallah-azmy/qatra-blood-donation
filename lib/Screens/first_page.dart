@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:icandoit/wavyyy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -126,17 +127,7 @@ class _FirstPageState extends State<FirstPage>
         child: Scaffold(
             key: _key,
             resizeToAvoidBottomPadding: false,
-            appBar: WaveAppBar(
-              title: "طلبات التبرع",
-              backGroundColor: Colors.grey[300],
-              leftIcon: null,
-              onPressedLeft: null,
-              onPressedRight: () {
-                _key.currentState.openDrawer();
-              },
-              directionOfRightIcon: TextDirection.ltr,
-              rightIcon: Icons.dehaze,
-            ),
+//            appBar: Wavyyyy(),
             floatingActionButton: Padding(
                 padding: const EdgeInsets.only(right: 20, top: 20),
                 child: GestureDetector(
@@ -240,7 +231,9 @@ class _FirstPageState extends State<FirstPage>
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18),
                                     ),
-                                    SizedBox(width: 7,),
+                                    SizedBox(
+                                      width: 7,
+                                    ),
                                     Text(
                                       "( المتعافين )",
                                       style: TextStyle(
@@ -418,8 +411,21 @@ class _FirstPageState extends State<FirstPage>
                 child: Column(
                   children: <Widget>[
                     Container(
+                        height: 120,
+                        child: Wavyyyy(
+                          title: "طلبات التبرع",
+                          backGroundColor: Colors.grey[300],
+                          leftIcon: null,
+                          onPressedLeft: null,
+                          onPressedRight: () {
+                            _key.currentState.openDrawer();
+                          },
+                          directionOfRightIcon: TextDirection.ltr,
+                          rightIcon: Icons.dehaze,
+                        )),
+                    Container(
                       padding:
-                          const EdgeInsets.only(top: 10, right: 10, left: 10),
+                          const EdgeInsets.only(top: 0, right: 10, left: 10),
                       child: DropdownButtonFormField<String>(
                         isDense: true,
                         decoration: InputDecoration(
@@ -563,7 +569,8 @@ class PostBubble extends StatefulWidget {
 
 class _PostBubbleState extends State<PostBubble> {
   changeDateFormat() {
-    String formattedDate = intl.DateFormat.yMMMMd('en_US').add_jm().format(widget.date);
+    String formattedDate =
+        intl.DateFormat.yMMMMd('en_US').add_jm().format(widget.date);
     return formattedDate;
   }
 
@@ -623,7 +630,6 @@ class _PostBubbleState extends State<PostBubble> {
       final String filePath = '$dirPath/${timestamp()}.jpg';
       File imgFile = new File('$filePath');
 
-
       setState(() {
         imgFile.writeAsBytes(pngBytes);
       });
@@ -675,8 +681,6 @@ class _PostBubbleState extends State<PostBubble> {
       }
 
       shareImage(context);
-
-
     } catch (e) {
       print("False");
       print(e);

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:icandoit/wavyyy.dart';
 import '../appBar_widget.dart';
 import '../user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,15 +42,7 @@ class _UserProfileState extends State<UserProfile> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          appBar: WaveAppBar(
-            title: "الصفحة الشخصية",
-            backGroundColor: Colors.red[800],
-            leftIcon: null,
-            onPressedLeft: null,
-            onPressedRight: null,
-            directionOfRightIcon: TextDirection.ltr,
-            rightIcon: null,
-          ),
+
           floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
               child: GestureDetector(
@@ -85,47 +78,61 @@ class _UserProfileState extends State<UserProfile> {
                   children: <Widget>[
                     Container(
                       width: double.infinity,
-                      height: 238,
+                      height: 350,
                       color: Colors.red[800],
                     ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                            height: 125,
-                            width: 125,
-                            margin: EdgeInsets.only(top: 12),
-                            child: ClipOval(
-                                child: imageConditions())),
-                        Padding(
-                          padding: EdgeInsets.all(4),
-                        ),
-                        widget.user == null
-                            ? Text(
-                                "---",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20),
-                                textAlign: TextAlign.center,
-                              )
-                            : Center(
-                                child: Text(
-                                  widget.user.displayName,
+                    Container(
+                        height: 120,
+                        child: Wavyyyy(
+                          title: "الصفحة الشخصية",
+                          backGroundColor: Colors.red[800],
+                          leftIcon: null,
+                          onPressedLeft: null,
+                          onPressedRight: null,
+                          directionOfRightIcon: TextDirection.ltr,
+                          rightIcon: null,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 90),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                              height: 125,
+                              width: 125,
+                              margin: EdgeInsets.only(top: 12),
+                              child: ClipOval(
+                                  child: imageConditions())),
+                          Padding(
+                            padding: EdgeInsets.all(4),
+                          ),
+                          widget.user == null
+                              ? Text(
+                                  "---",
                                   style: TextStyle(
-                                      fontFamily: 'Tajawal',
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 27),
+                                      fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                )
+                              : Center(
+                                  child: Text(
+                                    widget.user.displayName,
+                                    style: TextStyle(
+                                        fontFamily: 'Tajawal',
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 27),
 //                          textAlign: TextAlign.center,
+                                  ),
                                 ),
-                              ),
-                        Padding(
-                          padding: EdgeInsets.all(2),
-                        ),
-                        UserInfo(
-                          user: widget.user,
-                        )
-                      ],
+                          Padding(
+                            padding: EdgeInsets.all(2),
+                          ),
+                          UserInfo(
+                            user: widget.user,
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),

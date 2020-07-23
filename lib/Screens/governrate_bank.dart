@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:icandoit/wavyyy.dart';
 import '../appBar_widget.dart';
 import '../user_model.dart';
 import 'user_profile_page.dart';
@@ -245,15 +246,6 @@ class _GovernrateBankState extends State<GovernrateBank> {
         child: Scaffold(
           key: _scafold,
           backgroundColor: Colors.white,
-          appBar: WaveAppBar(
-            title: widget.city,
-            backGroundColor: Colors.white,
-            leftIcon: null,
-            onPressedLeft: null,
-            onPressedRight: null,
-            directionOfRightIcon: TextDirection.ltr,
-            rightIcon: null,
-          ),
           floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
               child: GestureDetector(
@@ -285,56 +277,91 @@ class _GovernrateBankState extends State<GovernrateBank> {
           body: Column(
 //              mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              Container(
+                  height: 120,
+                  child: Wavyyyy(
+                    title: widget.city,
+                    backGroundColor: Colors.white,
+                    leftIcon: null,
+                    onPressedLeft: null,
+                    onPressedRight: null,
+                    directionOfRightIcon: TextDirection.ltr,
+                    rightIcon: null,
+                  )),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
-                    height: 5,
-                  ),
-                  addedToBank == 0
-                      ? FlatButton(
-                          child: Text(
-                            'اضف حسابك الي بنك الدم',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Tajawal',
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      addedToBank == 0
+                          ? Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: FlatButton(
+                                child: Container(
+                                  width: 135,
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 6),
+                                      child: Text(
+                                        'اضف حسابك\nالي بنك الدم',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Tajawal',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  creatAlertDialog(context, widget.city);
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                color: Colors.red,
+                              ),
+                          )
+                          : SizedBox(
+                              width: 0,
+                            ),
+                      FlatButton(
+                        child: Container(
+                          width: 135,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              child: Text(
+                                'أضف متبرع\nالي بنك الدم',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Tajawal',
+                                    fontSize: 16),
+                              ),
                             ),
                           ),
-                          onPressed: () {
-                            creatAlertDialog(context, widget.city);
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          color: Colors.red,
-                        )
-                      : SizedBox(
-                          height: 0,
                         ),
-                  FlatButton(
-                    child: Text(
-                      'أضف متبرع الي بنك الدم',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Tajawal',
-                          fontSize: 16),
-                    ),
-                    onPressed: () {
+                        onPressed: () {
 
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) =>
-                                  AddDonerToBank(widget.city, _scafold)));
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    color: Colors.green,
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddDonerToBank(widget.city, _scafold)));
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: Colors.green,
+                      ),
+                    ],
                   ),
                   Container(
-                    padding: const EdgeInsets.only(top: 7, right: 10, left: 10),
+                    padding: const EdgeInsets.only(top: 9, right: 10, left: 10),
                     child: DropdownButtonFormField<String>(
                       isDense: true,
                       decoration: InputDecoration(
@@ -495,7 +522,7 @@ class _DonerState extends State<Doner> {
     updateInternData();
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 8,right: 8,bottom: 8),
       child: Card(
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:icandoit/wavyyy.dart';
 import '../appBar_widget.dart';
 import '../user_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -151,15 +152,6 @@ class _AddDonerToBlazmaBankState extends State<AddDonerToBlazmaBank> {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           key: scafoldKey,
-          appBar: WaveAppBar(
-            title: "أضف متبرع الي بنك البلازما",
-            backGroundColor: Colors.white,
-            leftIcon: null,
-            onPressedLeft: null,
-            directionOfRightIcon: TextDirection.rtl,
-            onPressedRight: null,
-            rightIcon: null,
-          ),
           floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 20, top: 20),
               child: GestureDetector(
@@ -191,174 +183,191 @@ class _AddDonerToBlazmaBankState extends State<AddDonerToBlazmaBank> {
           body: Center(
             child: Form(
               key: _formKey,
-              child: ListView(
-                padding: EdgeInsets.all(15),
+              child: Column(
                 children: <Widget>[
                   Container(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: DropdownButtonFormField<String>(
-                      validator: (value) => value == "حدد الفصيلة"
-                          ? 'برجاء اختيار الفصيلة'
-                          : null,
-                      elevation: 10,
-                      isDense: true,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0)),
-                          prefixIcon: Icon(
-                            Icons.local_hospital,
-                            size: 22,
-                          )),
-                      items: _fasila.map((String dropDownStringItem) {
-                        return DropdownMenuItem<String>(
-                          value: dropDownStringItem,
-                          child: Center(
-                            child: Text(
-                              dropDownStringItem,
-                              textDirection: TextDirection.ltr,
-                              style: TextStyle(
-                                fontFamily: 'Tajawal',
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (String newValueSelected) {
-                        // Your code to execute, when a menu item is selected from drop down
-                        _onDropDownItemSelected(newValueSelected);
-                      },
-                      value: _currentFasilaSelected,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    child: new TextFormField(
-                      validator: (text) {
-                        if (text.isEmpty) {
-                          return "برجاء كتابة الاسم";
-                        }
-                        if (text.length > 40) {
-                          return "الاسم طويل جدا";
-                        }
-                        if (text.length < 2) {
-                          return "الاسم قصير جدا";
-                        }
-                      },
-                      textAlign: TextAlign.center,
-                      controller: null,
-                      onChanged: (text) {
-                        setState(() {
-                          name = text;
-                        });
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'الاسم',
-                          labelStyle: TextStyle(
-                            fontFamily: 'Tajawal',
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          prefixIcon: Icon(Icons.account_circle)),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: new TextFormField(
-                      validator: (text) {
-                        if (text.contains(" ")) {
-                          return "لا يجب ان توجد مسافات في رقم التليفون";
-                        }
-                        if (text.isEmpty) {
-                          return "برجاء كتابة رقم التليفون";
-                        }
-                        if (text.length != 11) {
-                          return "رقم التليفون غير صحيح";
-                        }
-                      },
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      controller: null,
-                      onChanged: (text) {
-                        setState(() {
-                          phone = text;
-                        });
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'رقم التليفون',
-                          labelStyle: TextStyle(
-                            fontFamily: 'Tajawal',
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          prefixIcon: Icon(Icons.phone_android)),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: TextFormField(
-                        controller: null,
-                        validator: (text) {
-                          if (text.isEmpty) {
-                            return "برجاء تحديد العنوان";
-                          }
-                          if (text.length > 60) {
-                            return "العنوان طويل جدا";
-                          }
-                          if (text.length < 2) {
-                            return "العنوان قصير جدا";
-                          }
-                        },
-                        textAlign: TextAlign.center,
-                        onChanged: (text) {
-                          setState(() {
-                            city = text;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.add_location),
-                          labelText: 'المدينة',
-                          labelStyle: TextStyle(
-                            fontFamily: 'Tajawal',
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                      height: 120,
+                      child: Wavyyyy(
+                        title: "أضف متبرع الي بنك البلازما",
+                        backGroundColor: Colors.white,
+                        leftIcon: null,
+                        onPressedLeft: null,
+                        directionOfRightIcon: TextDirection.rtl,
+                        onPressedRight: null,
+                        rightIcon: null,
+                      )),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.all(15),
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: DropdownButtonFormField<String>(
+                            validator: (value) => value == "حدد الفصيلة"
+                                ? 'برجاء اختيار الفصيلة'
+                                : null,
+                            elevation: 10,
+                            isDense: true,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                prefixIcon: Icon(
+                                  Icons.local_hospital,
+                                  size: 22,
+                                )),
+                            items: _fasila.map((String dropDownStringItem) {
+                              return DropdownMenuItem<String>(
+                                value: dropDownStringItem,
+                                child: Center(
+                                  child: Text(
+                                    dropDownStringItem,
+                                    textDirection: TextDirection.ltr,
+                                    style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String newValueSelected) {
+                              // Your code to execute, when a menu item is selected from drop down
+                              _onDropDownItemSelected(newValueSelected);
+                            },
+                            value: _currentFasilaSelected,
                           ),
                         ),
-                      )),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  isLoading
-                      ? Image.asset(
-                    "assets/loading.gif",
-                    height: 47.0,
-                    width: 47.0,
-                  )
-                      : RaisedButton(
-                    child: Text(
-                      'حفظ',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Tajawal',
-                          fontSize: 20),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                          child: new TextFormField(
+                            validator: (text) {
+                              if (text.isEmpty) {
+                                return "برجاء كتابة الاسم";
+                              }
+                              if (text.length > 40) {
+                                return "الاسم طويل جدا";
+                              }
+                              if (text.length < 2) {
+                                return "الاسم قصير جدا";
+                              }
+                            },
+                            textAlign: TextAlign.center,
+                            controller: null,
+                            onChanged: (text) {
+                              setState(() {
+                                name = text;
+                              });
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'الاسم',
+                                labelStyle: TextStyle(
+                                  fontFamily: 'Tajawal',
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                prefixIcon: Icon(Icons.account_circle)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 10),
+                          child: new TextFormField(
+                            validator: (text) {
+                              if (text.contains(" ")) {
+                                return "لا يجب ان توجد مسافات في رقم التليفون";
+                              }
+                              if (text.isEmpty) {
+                                return "برجاء كتابة رقم التليفون";
+                              }
+                              if (text.length != 11) {
+                                return "رقم التليفون غير صحيح";
+                              }
+                            },
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
+                            controller: null,
+                            onChanged: (text) {
+                              setState(() {
+                                phone = text;
+                              });
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'رقم التليفون',
+                                labelStyle: TextStyle(
+                                  fontFamily: 'Tajawal',
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                prefixIcon: Icon(Icons.phone_android)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                            padding: EdgeInsets.only(top: 10),
+                            child: TextFormField(
+                              controller: null,
+                              validator: (text) {
+                                if (text.isEmpty) {
+                                  return "برجاء تحديد العنوان";
+                                }
+                                if (text.length > 60) {
+                                  return "العنوان طويل جدا";
+                                }
+                                if (text.length < 2) {
+                                  return "العنوان قصير جدا";
+                                }
+                              },
+                              textAlign: TextAlign.center,
+                              onChanged: (text) {
+                                setState(() {
+                                  city = text;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.add_location),
+                                labelText: 'المدينة',
+                                labelStyle: TextStyle(
+                                  fontFamily: 'Tajawal',
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                              ),
+                            )),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        isLoading
+                            ? Image.asset(
+                          "assets/loading.gif",
+                          height: 47.0,
+                          width: 47.0,
+                        )
+                            : RaisedButton(
+                          child: Text(
+                            'حفظ',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Tajawal',
+                                fontSize: 20),
+                          ),
+                          onPressed: () {
+                            validation();
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          color: Colors.green,
+                        ),
+                      ],
                     ),
-                    onPressed: () {
-                      validation();
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    color: Colors.green,
                   ),
                 ],
               ),

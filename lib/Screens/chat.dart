@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:icandoit/wavyyy.dart';
 import 'package:intl/intl.dart' as intl;
 import '../appBar_widget.dart';
 import '../user_model.dart';
@@ -43,96 +44,106 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: WaveAppBar(
-        title: "الشات العام  ",
-        backGroundColor: Colors.white,
-        leftIcon: null,
-        onPressedLeft: null,
-        onPressedRight: () {
-          Navigator.pop(context);
-        },
-        directionOfRightIcon: TextDirection.rtl,
-        rightIcon: Icons.arrow_back_ios,
-      ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Stack(
           children: <Widget>[
-            MessagesStream(),
             Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                height: 120,
+                child: Wavyyyy(
+                  title: "الشات العام  ",
+                  backGroundColor: Colors.white,
+                  leftIcon: null,
+                  onPressedLeft: null,
+                  onPressedRight: () {
+                    Navigator.pop(context);
+                  },
+                  directionOfRightIcon: TextDirection.rtl,
+                  rightIcon: Icons.arrow_back_ios,
+                )),
+            Padding(
+              padding: const EdgeInsets.only(top: 85),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
 
+                  MessagesStream(),
+                  Container(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
 
 
-                  Expanded(
-                    child: Container(
-                      height: 55,
-                      margin: EdgeInsets.only(top: 7),
-                      padding: EdgeInsets.only(bottom: 5, left: 3),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(top: 14, left: 16),
-                          hintText: 'اكتب هنا',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50.0),
+
+                        Expanded(
+                          child: Container(
+                            height: 55,
+                            margin: EdgeInsets.only(top: 7),
+                            padding: EdgeInsets.only(bottom: 5, left: 3),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(top: 14, left: 16),
+                                hintText: 'اكتب هنا',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                              ),
+                              controller: messageController,
+                              onChanged: (value) {
+                                messageText = value;
+                              },
+                            ),
                           ),
                         ),
-                        controller: messageController,
-                        onChanged: (value) {
-                          messageText = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FlatButton(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: FlatButton(
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
 
-                      color: Colors.red[900],
-                      colorBrightness: Brightness.dark,
+                            color: Colors.red[900],
+                            colorBrightness: Brightness.dark,
 
-                      highlightColor: Colors.red,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 3.0, vertical: 4.0),
-                      // gi
+                            highlightColor: Colors.red,
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 3.0, vertical: 4.0),
+                            // gi
 
-                      onPressed: () {
-                        var now = new DateTime.now();
-                        setState(() {
-                          messageModel = MessageModel(
-                            messageText: messageText,
-                            sender: loggedInUser.email,
-                            now: now,
-                          );
-                        });
+                            onPressed: () {
+                              var now = new DateTime.now();
+                              setState(() {
+                                messageModel = MessageModel(
+                                  messageText: messageText,
+                                  sender: loggedInUser.email,
+                                  now: now,
+                                );
+                              });
 
-                        if (messageController.text != "") {
-                          _fireStore
-                              .collection("messages")
-                              .document(now.toString())
-                              .setData(messageModel.toMap(messageModel));
+                              if (messageController.text != "") {
+                                _fireStore
+                                    .collection("messages")
+                                    .document(now.toString())
+                                    .setData(messageModel.toMap(messageModel));
 
-                          messageController.clear();
-                        }
-                      },
-                      child: Text(
-                        "Send",
-                        style: TextStyle(fontSize: 19),
-                      ),
+                                messageController.clear();
+                              }
+                            },
+                            child: Text(
+                              "Send",
+                              style: TextStyle(fontSize: 19),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
