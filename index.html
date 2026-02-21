@@ -52,6 +52,7 @@
       width: 100vw;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       background-color: #FFFFFF;
@@ -59,13 +60,36 @@
     }
 
     #splash img {
-      width: 100px;
+      width: 40vmin;
+      min-width: 150px;
+      max-width: 250px;
       height: auto;
+      margin-bottom: 30px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(153, 0, 0, 0.2);
+      border-left-color: #990000;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 
   <div id="splash">
     <img src="fainallogo.png" alt="Splash Logo" />
+    <div class="spinner"></div>
   </div>
 
   <script src="flutter_bootstrap.js" async></script>
